@@ -201,12 +201,16 @@ export const HEADER_QUERY = `#graphql
   query Header(
     $country: CountryCode
     $headerMenuHandle: String!
+    $headerMenuScroll: String!
     $language: LanguageCode
   ) @inContext(language: $language, country: $country) {
     shop {
       ...Shop
     }
-    menu(handle: $headerMenuHandle) {
+    main: menu(handle: $headerMenuHandle) {
+      ...Menu
+    }
+    scroll: menu(handle: $headerMenuScroll) {
       ...Menu
     }
   }

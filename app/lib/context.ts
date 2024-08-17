@@ -1,6 +1,7 @@
 import {createHydrogenContext} from '@shopify/hydrogen';
 import {AppSession} from '~/lib/session';
 import {CART_QUERY_FRAGMENT} from '~/lib/fragments';
+import { AdminApiClient, AdminRestApiClient, createAdminApiClient, createAdminRestApiClient } from '@shopify/admin-api-client';
 
 /**
  * The context implementation is separate from server.ts
@@ -36,8 +37,22 @@ export async function createAppLoadContext(
     },
   });
 
+  const admin:AdminApiClient = createAdminApiClient({
+    storeDomain: env.PUBLIC_STORE_DOMAIN,
+    apiVersion: env.PRIVATE_ADMIN_API_VERSION,
+    accessToken: env.PRIVATE_ADMIN_API_TOKEN,
+  });
+
+  const adminRest:AdminRestApiClient = createAdminRestApiClient({
+    storeDomain: env.PUBLIC_STORE_DOMAIN,
+    apiVersion: env.PRIVATE_ADMIN_API_VERSION,
+    accessToken: env.PRIVATE_ADMIN_API_TOKEN,
+  });
+
   return {
     ...hydrogenContext,
     // declare additional Remix loader context
+    admin,
+    adminRest
   };
 }

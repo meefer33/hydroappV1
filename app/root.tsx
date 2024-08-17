@@ -16,6 +16,11 @@ import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
 import {PageLayout} from '~/components/PageLayout';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
+import puckcss from '@measured/puck/dist/index.css?url';
+import theme from './styles/theme.css?url';
+import mantine from '@mantine/core/styles.css?url';
+import carousel from '@mantine/carousel/styles.css?url';
+import {GET_LAYOUT} from './graphql/GetLayout';
 
 export type RootLoader = typeof loader;
 
@@ -39,8 +44,10 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 
 export function links() {
   return [
-    {rel: 'stylesheet', href: resetStyles},
-    {rel: 'stylesheet', href: appStyles},
+    {rel: 'stylesheet', href: theme},
+    {rel: 'stylesheet', href: mantine},
+    {rel: 'stylesheet', href: carousel},
+    {rel: 'stylesheet', href: puckcss},
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
@@ -50,6 +57,16 @@ export function links() {
       href: 'https://shop.app',
     },
     {rel: 'icon', type: 'image/svg+xml', href: favicon},
+    {
+      rel: 'preconnect',
+      href: 'https://fonts.googleapis.com',
+      crossOrigin: 'anonymous',
+    },
+    {
+      rel: 'preconnect',
+      href: 'https://fonts.gstatic.com',
+      crossOrigin: 'anonymous',
+    },
   ];
 }
 
@@ -84,18 +101,22 @@ export async function loader(args: LoaderFunctionArgs) {
 async function loadCriticalData({context}: LoaderFunctionArgs) {
   const {storefront} = context;
 
-  const [header] = await Promise.all([
+  const [header, settings] = await Promise.all([
     storefront.query(HEADER_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
         headerMenuHandle: 'main-menu', // Adjust to your header menu handle
+        headerMenuScroll: 'header-scroll',
       },
     }),
     // Add other queries here, so that they are loaded in parallel
+    storefront.query(GET_LAYOUT),
   ]);
 
   return {
     header,
+    theme: JSON.parse(settings.metaobject.theme.reference.settings.value),
+    layout: JSON.parse(settings.metaobject.layout.value),
   };
 }
 
@@ -140,17 +161,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <Links />
       </head>
       <body>
-        {data ? (
-          <Analytics.Provider
-            cart={data.cart}
-            shop={data.shop}
-            consent={data.consent}
-          >
-            <PageLayout {...data}>{children}</PageLayout>
-          </Analytics.Provider>
-        ) : (
-          children
-        )}
+        <Outlet />
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
       </body>
