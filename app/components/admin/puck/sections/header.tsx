@@ -26,8 +26,14 @@ export const header = (theme:any = {}) => {
             type:"number"
           },
           logoColor: colorPicker('Logo Text Color',theme),
+          logoSubText: {
+            label: "Logo Text",
+            type:"text"
+          },
+          logoSubTextColor: colorPicker('Logo Sub Text Color',theme),
         },
       },
+      scrollBackground: colorPicker('Scroll Background Color',theme),
     },
     defaultProps: {
       padding: {
@@ -39,7 +45,6 @@ export const header = (theme:any = {}) => {
       },
     },
     render: ({...props}) => {
-      //const pinned = useHeadroom({fixedAt: 10});
       console.log(props);
 
       return <ThemeHeader {...props} />;

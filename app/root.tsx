@@ -1,5 +1,10 @@
 import {useNonce, getShopAnalytics, Analytics} from '@shopify/hydrogen';
-import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {
+  defer,
+  MetaDescriptor,
+  MetaFunction,
+  type LoaderFunctionArgs,
+} from '@shopify/remix-oxygen';
 import {
   Links,
   Meta,
@@ -10,6 +15,7 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   type ShouldRevalidateFunction,
+  useLoaderData,
 } from '@remix-run/react';
 import favicon from '~/assets/favicon.svg';
 import resetStyles from '~/styles/reset.css?url';
@@ -21,6 +27,7 @@ import theme from './styles/theme.css?url';
 import mantine from '@mantine/core/styles.css?url';
 import carousel from '@mantine/carousel/styles.css?url';
 import {GET_LAYOUT} from './graphql/GetLayout';
+import {loadFonts} from './lib/utils';
 
 export type RootLoader = typeof loader;
 
@@ -43,6 +50,8 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
 };
 
 export function links() {
+  //const data = useRouteLoaderData<RootLoader>('root');
+
   return [
     {rel: 'stylesheet', href: theme},
     {rel: 'stylesheet', href: mantine},
@@ -148,9 +157,11 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
   };
 }
 
-export function Layout({children}: {children?: React.ReactNode}) {
+export default function App() {
   const nonce = useNonce();
-  const data = useRouteLoaderData<RootLoader>('root');
+  const data: any = useLoaderData<typeof loader>();
+
+  const lf = loadFonts(data.theme.other.fonts);
 
   return (
     <html lang="en">
@@ -158,6 +169,9 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
+        {lf.map((font,i) => (
+          <link key={i} rel="stylesheet" href={font.href} />
+        ))}
         <Links />
       </head>
       <body>
@@ -167,10 +181,6 @@ export function Layout({children}: {children?: React.ReactNode}) {
       </body>
     </html>
   );
-}
-
-export default function App() {
-  return <Outlet />;
 }
 
 export function ErrorBoundary() {

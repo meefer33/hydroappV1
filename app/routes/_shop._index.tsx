@@ -1,36 +1,20 @@
-import {Config, Render, resolveAllData, usePuck} from '@measured/puck';
+import {Config, Render} from '@measured/puck';
 import {LoaderFunctionArgs} from '@remix-run/node';
 import {
-  Links,
-  MetaDescriptor,
-  MetaFunction,
-  Outlet,
   useLoaderData,
 } from '@remix-run/react';
 import {richTextSection} from '~/components/admin/puck/sections/richTextSection';
 import {section} from '~/components/admin/puck/sections/section';
-import {theme} from '~/components/admin/puck/sections/theme';
-import {parseCmsContent, parseContent} from '~/lib/parseContent';
-import {GetMetaobjectByHandle} from '~/graphql/admin/GetMetaobjectByHandle';
-import PuckLayout from '~/components/admin/puck/PuckLayout';
-import {header} from '~/components/admin/puck/sections/header';
-import {MantineProvider} from '@mantine/core';
+import {Box} from '@mantine/core';
 import {GetPage} from '~/graphql/GetPage';
-import {contentLayout} from '~/components/admin/puck/sections/contentLayout';
-import {CacheCustom, CacheNone} from '@shopify/hydrogen';
-import {cssResolver, loadFonts, updateSettings} from '~/lib/utils';
+import {updateSettings} from '~/lib/utils';
 import {imageSection} from '~/components/admin/puck/sections/imageSection';
 import {collectionGrid} from '~/components/admin/puck/sections/collectionGrid';
 import {productScroll} from '~/components/admin/puck/sections/productScroll';
 import {useState} from 'react';
 import {grid} from '~/components/admin/puck/sections/grid';
-import {Aside} from '~/components/layout/Aside';
+import { parseContent } from '~/lib/parseContent';
 
-export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return loadFonts(
-    data?.fields?.layout?.fields?.theme?.fields?.settings?.other?.fonts,
-  ) satisfies MetaDescriptor[];
-};
 
 export const loader = async ({context, params}: LoaderFunctionArgs) => {
   const {storefront} = context;
@@ -40,7 +24,7 @@ export const loader = async ({context, params}: LoaderFunctionArgs) => {
     variables: {
       handle: 'home',
     },
-    cache: CacheNone(),
+    //cache: CacheNone(),
   });
   const parsePage = getPage?.page?.metafield?.reference ? parseContent(getPage?.page?.metafield?.reference) : {};
 
@@ -64,13 +48,12 @@ export default function PreviewPage() {
       ProductScroll: productScroll(viewport, settings),
       CollectionGrid: collectionGrid(settings),
     },
-    root: contentLayout(data.fields?.layout?.fields?.layout),
   };
 
   return (
-    <>
+    <Box h="1900px">
       <Render config={config} data={data.fields?.content?.data || {}} />
-    </>
+    </Box>
   );
 }
 
@@ -78,17 +61,4 @@ export const handle = {
   breadcrumb: () => <span>Pages</span>,
 };
 
-/*
-    <MantineProvider
-      theme={data.fields.layout.fields.theme.fields.settings}
-      forceColorScheme={data.fields.layout.fields.theme.fields.settings.other.colorScheme}
-    >
-     <PuckLayout
-     config={config}
-     contentData={data.fields?.layout?.fields?.layout}
-     saveMeta={data}
-   />
- </MantineProvider>
 
-
-*/

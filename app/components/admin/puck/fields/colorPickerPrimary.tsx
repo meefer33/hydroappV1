@@ -40,7 +40,8 @@ export const colorPickerPrimary = (
             placeholder={label}
             //closeOnColorSwatchClick
             variant="unstyled"
-            value={value}
+            defaultValue={theme?.colors[color] ? theme?.colors[color][6] : ""}
+            fixOnBlur={false}
             onChangeEnd={(value) => {
               let generatedColorsArray: any = generateColors(value);
               generatedColorsArray = generatedColorsArray.map(

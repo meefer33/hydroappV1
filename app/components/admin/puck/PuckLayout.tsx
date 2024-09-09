@@ -1,9 +1,19 @@
-import {Config, Puck, resolveAllData} from '@measured/puck';
-import {AppShell, Box, Burger, Button, Group, ScrollArea} from '@mantine/core';
+import {Config, Puck, resolveAllData, usePuck} from '@measured/puck';
+import {
+  ActionIcon,
+  AppShell,
+  Box,
+  Burger,
+  Button,
+  Group,
+  LoadingOverlay,
+  ScrollArea,
+} from '@mantine/core';
 import {useDisclosure, useToggle} from '@mantine/hooks';
-import {RiComputerLine, RiSmartphoneLine} from '@remixicon/react';
+import {RiComputerLine, RiEyeLine, RiSmartphoneLine} from '@remixicon/react';
 import {useState} from 'react';
 import SavePuck from './SavePuck';
+import PuckPreview from './PuckPreview';
 
 //import AssistantBotAI from "../AssistantBotAI";
 
@@ -14,7 +24,7 @@ export default function PuckLayout({
   type = '',
   viewport = '100%',
   setViewport,
-  theme
+  theme,
 }: {
   config: Config;
   contentData?: any;
@@ -27,13 +37,15 @@ export default function PuckLayout({
   const [mobileOpened, {toggle: toggleMobile}] = useDisclosure();
   const [desktopOpened, {toggle: toggleDesktop}] = useDisclosure(true);
   const [viewportColor, toggle] = useToggle([true, false]);
+  const [isSaving, setIsSaving] = useState(false);
+  //const [disabled, {toggle: toggleDisabled}] = useDisclosure();
 
   //const updatedData = await resolveAllData(contentData?.data || {}, config);
-  console.log(saveMeta.fields?.settings?.other?.fonts);
+  //console.log(saveMeta.fields?.settings?.other?.fonts);
 
   return (
     <AppShell
-      //layout="alt"
+      layout="alt"
       header={{height: 60}}
       //footer={{height: 60}}
       navbar={{
@@ -47,7 +59,7 @@ export default function PuckLayout({
         collapsed: {mobile: !mobileOpened, desktop: !desktopOpened},
       }}
       padding="0"
-      //disabled={true}
+      //disabled={disabled}
     >
       <Puck
         iframe={{
@@ -57,19 +69,12 @@ export default function PuckLayout({
         data={contentData?.data || {}}
       >
         <AppShell.Header bg="gray.3" bd="0">
-          <Group h="100%" px="md" justify="space-between">
-            <Burger
-              opened={desktopOpened}
-              onClick={toggleDesktop}
-              visibleFrom="sm"
-              size="sm"
-              color="dark"
-            />
+          <Group h="100%" px="md" justify="end">
             <Group gap="xl" mr={50}>
               <Group gap="xs">
                 <Button
                   variant="transparent"
-                  c={viewportColor ? 'white' : 'black'}
+                  c={viewportColor ? 'gray.7' : 'gray.5'}
                   px={0}
                   onClick={() => {
                     setViewport('100%');
@@ -80,7 +85,7 @@ export default function PuckLayout({
                 </Button>
                 <Button
                   variant="transparent"
-                  c={viewportColor ? 'black' : 'white'}
+                  c={viewportColor ? 'gray.5' : 'gray.7'}
                   px={0}
                   onClick={() => {
                     setViewport('24.375rem');
@@ -90,7 +95,22 @@ export default function PuckLayout({
                   <RiSmartphoneLine size="30" />
                 </Button>
               </Group>
-              <SavePuck saveMeta={saveMeta} type={type} />
+              <Button
+                variant="transparent"
+                c={desktopOpened ? 'gray.5' : 'gray.7'}
+                px={0}
+                onClick={toggleDesktop}
+              >
+                <RiEyeLine
+                  //visibleFrom="sm"
+                  size="30"
+                />
+              </Button>
+              <SavePuck
+                saveMeta={saveMeta}
+                type={type}
+                setIsSaving={setIsSaving}
+              />
             </Group>
           </Group>
         </AppShell.Header>
@@ -120,15 +140,18 @@ export default function PuckLayout({
               fontFamily: theme?.other?.fonts?.body?.class,
             }}
           >
-            <Puck.Preview />
+             <LoadingOverlay visible={isSaving} zIndex={1000} overlayProps={{ radius: "sm", color:"#fff", backgroundOpacity: 1 }}  />
+         
+              {!desktopOpened ? (
+                <PuckPreview config={config} />
+              ) : (
+                <Puck.Preview />
+              )}
+             
           </Box>
         </AppShell.Main>
         <AppShell.Aside component={ScrollArea} bg="gray.3" bd="0" ff="inherit">
-          <Box
-          component={Puck.Fields}
-
-          />
-         
+          <Box component={Puck.Fields} />
         </AppShell.Aside>
       </Puck>
     </AppShell>

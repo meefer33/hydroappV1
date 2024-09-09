@@ -1,3 +1,4 @@
+import { Group } from '@mantine/core';
 import {Money} from '@shopify/hydrogen';
 import type {MoneyV2} from '@shopify/hydrogen/storefront-api-types';
 
@@ -9,19 +10,19 @@ export function ProductPrice({
   compareAtPrice?: MoneyV2 | null;
 }) {
   return (
-    <div className="product-price">
+    <>
       {compareAtPrice ? (
-        <div className="product-price-on-sale">
+        <Group>
           {price ? <Money data={price} /> : null}
           <s>
             <Money data={compareAtPrice} />
           </s>
-        </div>
+        </Group>
       ) : price ? (
         <Money data={price} />
       ) : (
         <span>&nbsp;</span>
       )}
-    </div>
+    </>
   );
 }

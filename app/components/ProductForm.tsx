@@ -1,11 +1,13 @@
+import {Box, Chip, Group, Title} from '@mantine/core';
 import {Link} from '@remix-run/react';
-import {type VariantOption, VariantSelector} from '@shopify/hydrogen';
 import type {
   ProductFragment,
   ProductVariantFragment,
 } from 'storefrontapi.generated';
 import {AddToCartButton} from '~/components/AddToCartButton';
 import {useAside} from '~/components/layout/Aside';
+import {checkVariantExistsByOptions} from '~/lib/utils';
+import {ProductPrice} from './ProductPrice';
 
 export function ProductForm({
   product,
@@ -16,21 +18,34 @@ export function ProductForm({
   selectedVariant: ProductFragment['selectedVariant'];
   variants: Array<ProductVariantFragment>;
 }) {
-  const {open} = useAside();
+  const {openDrawer} = useAside();
+  console.log('product', product, product.options, variants);
+  const hasVariants =
+    product.variants.nodes[0].selectedOptions[0].value === 'Default Title'
+      ? false
+      : true;
   return (
-    <div className="product-form">
-      <VariantSelector
-        handle={product.handle}
-        options={product.options.filter((option) => option.values.length > 1)}
-        variants={variants}
-      >
-        {({option}) => <ProductOptions key={option.name} option={option} />}
-      </VariantSelector>
-      <br />
+    <div>
+      {hasVariants && (
+        <Box pb="xl">
+        <VariantDisplay
+          product={product}
+          variants={variants}
+          selectedVariant={selectedVariant}
+        />
+        </Box>
+      )}
+      <Title order={3} c="accent">
+        {selectedVariant?.title}
+      </Title>
+      <ProductPrice
+        price={selectedVariant?.price}
+        compareAtPrice={selectedVariant?.compareAtPrice}
+      />
       <AddToCartButton
         disabled={!selectedVariant || !selectedVariant.availableForSale}
         onClick={() => {
-          open('cart');
+          openDrawer('Cart');
         }}
         lines={
           selectedVariant
@@ -50,31 +65,152 @@ export function ProductForm({
   );
 }
 
-function ProductOptions({option}: {option: VariantOption}) {
+function VariantDisplay({product, variants, selectedVariant}: any) {
+  return product.options.map((option: any, i: string) => {
+    const linkTo = `/products/${product.handle}?`;
+    return (
+      <ProductOptions
+        variants={variants}
+        selectedVariant={selectedVariant}
+        option={option}
+        selectedVariantOptionValue={selectedVariant.selectedOptions[i].value}
+        linkTo={linkTo}
+        selectedVariantIndex={i}
+      />
+    );
+  });
+}
+
+function ProductOptions({
+  variants,
+  selectedVariant,
+  option,
+  selectedVariantOptionValue,
+  linkTo,
+  selectedVariantIndex,
+}: any) {
   return (
-    <div className="product-options" key={option.name}>
+    <>
       <h5>{option.name}</h5>
-      <div className="product-options-grid">
-        {option.values.map(({value, isAvailable, isActive, to}) => {
-          return (
-            <Link
-              className="product-options-item"
-              key={option.name + value}
-              prefetch="intent"
-              preventScrollReset
-              replace
-              to={to}
-              style={{
-                border: isActive ? '1px solid black' : '1px solid transparent',
-                opacity: isAvailable ? 1 : 0.3,
-              }}
-            >
-              {value}
-            </Link>
-          );
-        })}
-      </div>
-      <br />
-    </div>
+      <Chip.Group>
+        <Group justify="start">
+          {option.optionValues.map((optionValue: any) => {
+            const isActive = optionValue.name === selectedVariantOptionValue;
+
+            let variantLink = linkTo;
+            const variantLinkSelectedOptions: any = [];
+
+            selectedVariant.selectedOptions.map((selectedOption: any) => {
+              variantLink = `${variantLink}${selectedOption.name}=${
+                selectedOption.name === option.name
+                  ? optionValue.name
+                  : selectedOption.value
+              }&`;
+              variantLinkSelectedOptions.push({
+                name: selectedOption.name,
+                value:
+                  selectedOption.name === option.name
+                    ? optionValue.name
+                    : selectedOption.value,
+              });
+            });
+
+            return checkVariantExistsByOptions(
+              variants,
+              variantLinkSelectedOptions,
+            ) ? (
+              <DisplayActiveVariant
+                option={option}
+                optionValue={optionValue}
+                variantLink={variantLink}
+                isActive={isActive}
+              />
+            ) : (
+              <NoMatchingVariant
+                option={option}
+                optionValue={optionValue}
+                selectedVariantIndex={selectedVariantIndex}
+                variants={variants}
+                isActive={isActive}
+                linkTo={linkTo}
+              />
+            );
+          })}
+        </Group>
+      </Chip.Group>
+    </>
+  );
+}
+
+function DisplayActiveVariant({
+  option,
+  optionValue,
+  variantLink,
+  isActive,
+}: any) {
+  return (
+    <Link
+      to={variantLink}
+      preventScrollReset
+      replace
+      prefetch="intent"
+      key={option.name + optionValue.name}
+    >
+      <Chip
+        checked={isActive}
+        value={option.name + optionValue.name}
+        color="accent"
+        variant="filled"
+      >
+        {optionValue.name}
+      </Chip>
+    </Link>
+  );
+}
+
+function NoMatchingVariant({
+  option,
+  optionValue,
+  selectedVariantIndex,
+  variants,
+  isActive,
+  linkTo,
+}: any) {
+  let variantLink = linkTo;
+  if (selectedVariantIndex === 0) {
+    const defaultVariantLink = variants.find((variant: any) =>
+      variant.selectedOptions.find((option: any, i: string) => {
+        return optionValue.name === option.value;
+      }),
+    );
+
+    defaultVariantLink.selectedOptions.map((selectedOption: any) => {
+      variantLink = `${variantLink}${selectedOption.name}=${
+        selectedOption.name === option.name
+          ? optionValue.name
+          : selectedOption.value
+      }&`;
+    });
+  }
+
+  return selectedVariantIndex === 0 ? (
+    <Link
+      to={variantLink}
+      preventScrollReset
+      replace
+      prefetch="intent"
+      key={option.name + optionValue.name}
+    >
+      <Chip
+        checked={isActive}
+        value={option.name + optionValue.name}
+        color="accent"
+        variant="filled"
+      >
+        {optionValue.name}
+      </Chip>
+    </Link>
+  ) : (
+    <Box td="line-through">{optionValue.name}</Box>
   );
 }

@@ -76,3 +76,11 @@ export  const cssResolver: CSSVariablesResolver = (theme) => ({
   "--mantine-color-text": theme.other.themes.dark.text_color
   },
 });
+
+export function  checkVariantExistsByOptions(variants:any, selectedOptions: any) {
+  return variants.some((variant: any) =>
+    variant.selectedOptions.every((option: any, i: string) => {
+      return selectedOptions[i].value === option.value;
+    }),
+  );
+};

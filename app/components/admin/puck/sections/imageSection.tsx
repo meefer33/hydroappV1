@@ -21,7 +21,6 @@ export const imageSection = () => {
       image: '',
     },
     render: ({...props}) => {
-      console.log(props);
 
       return (
         <>

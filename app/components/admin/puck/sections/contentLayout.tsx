@@ -7,9 +7,10 @@ import {RootLoader} from '~/root';
 import Header from '~/components/layout/Header';
 import {Aside} from '~/components/layout/Aside';
 
-export const contentLayout = (layout:any = {}) => {
+export const contentLayout = (layout:any = {},zindex='none') => {
   const data: any = useRouteLoaderData<RootLoader>('root');
-  const ld:any = layout?.data?.zones['root:header'][0].props;
+  let ld:any = layout?.data?.zones['root:header'][0].props;
+  ld.zindex=zindex
   const config = {
     fields: {},
 

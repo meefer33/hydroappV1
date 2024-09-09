@@ -96,7 +96,7 @@ export function grid(theme) {
     },
     render: ({section_background, padding, content}: Section) => {
       return (
-        <Container size={content.width} px={0}>
+        <Container size={content.width} bg={section_background}>
           <SimpleGrid
             type="container"
             cols={{base: 1, '48em': content.columns}}
@@ -104,8 +104,8 @@ export function grid(theme) {
             verticalSpacing={content.gap}
             pt={padding.padding_top}
             pb={padding.padding_bottom}
-            mx={0}
-            px={0}
+            //mx={0}
+            //px={0}
           >
             <div>
               <DropZone

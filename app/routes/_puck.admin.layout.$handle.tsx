@@ -44,6 +44,7 @@ export default function EditLayout() {
   const data: any = useLoaderData<typeof loader>();
   const [mode, toggle] = useToggle(['edit', 'view']);
   const [viewport, setViewport] = useState('100%');
+  
 console.log(data)
   const settings = updateSettingsEditMode(data?.fields?.theme?.fields?.settings);
   const config: Config | any = {
