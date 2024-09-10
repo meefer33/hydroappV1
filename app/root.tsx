@@ -116,6 +116,7 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
       variables: {
         headerMenuHandle: 'main-menu', // Adjust to your header menu handle
         headerMenuScroll: 'header-scroll',
+        headerMenuCatalog: 'catalog',
       },
     }),
     // Add other queries here, so that they are loaded in parallel

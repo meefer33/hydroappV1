@@ -164,9 +164,13 @@ const MENU_FRAGMENT = `#graphql
     title
     type
     url
+    
   }
   fragment ChildMenuItem on MenuItem {
     ...MenuItem
+    items {
+      ...MenuItem
+    }
   }
   fragment ParentMenuItem on MenuItem {
     ...MenuItem
@@ -202,6 +206,7 @@ export const HEADER_QUERY = `#graphql
     $country: CountryCode
     $headerMenuHandle: String!
     $headerMenuScroll: String!
+    $headerMenuCatalog: String!
     $language: LanguageCode
   ) @inContext(language: $language, country: $country) {
     shop {
@@ -211,6 +216,9 @@ export const HEADER_QUERY = `#graphql
       ...Menu
     }
     scroll: menu(handle: $headerMenuScroll) {
+      ...Menu
+    }
+    catalog: menu(handle: $headerMenuCatalog) {
       ...Menu
     }
   }

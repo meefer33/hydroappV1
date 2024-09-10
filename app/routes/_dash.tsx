@@ -5,10 +5,13 @@ import {DashboardLayout} from '~/components/admin/DashboardLayout';
 import {mainTheme} from '~/components/admin/mainTheme';
 import {GetMetaobjectDefinitionByType} from '~/graphql/admin/GetMetaobjectDefinitionByType';
 import  '@mantine/core/styles.css';
+import { GetMenus } from '~/graphql/admin/GetMenus';
 
 export const loader = async ({request, context}: LoaderFunctionArgs) => {
   const {admin} = context;
 
+  const menus = await admin.request(GetMenus)
+console.log(JSON.stringify(menus))
   const {data: mo} = await admin.request(GetMetaobjectDefinitionByType, {
     variables: {
       type: 'ha_theme_settings',

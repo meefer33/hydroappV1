@@ -1,5 +1,16 @@
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useLoaderData, type MetaFunction} from '@remix-run/react';
+import {GetPage} from '~/graphql/GetPage';
+import {parseContent} from '~/lib/parseContent';
+import {useState} from 'react';
+import {updateSettings} from '~/lib/utils';
+import {Config, Render} from '@measured/puck';
+import {section} from '~/components/admin/puck/sections/section';
+import {grid} from '~/components/admin/puck/sections/grid';
+import {richTextSection} from '~/components/admin/puck/sections/richTextSection';
+import {imageSection} from '~/components/admin/puck/sections/imageSection';
+import {productScroll} from '~/components/admin/puck/sections/productScroll';
+import {collectionGrid} from '~/components/admin/puck/sections/collectionGrid';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [{title: `Hydrogen | ${data?.page.title ?? ''}`}];
@@ -24,22 +35,18 @@ async function loadCriticalData({context, params}: LoaderFunctionArgs) {
     throw new Error('Missing page handle');
   }
 
-  const [{page}] = await Promise.all([
-    context.storefront.query(PAGE_QUERY, {
-      variables: {
-        handle: params.handle,
-      },
-    }),
-    // Add other queries here, so that they are loaded in parallel
-  ]);
+  const getPage = await context.storefront.query(GetPage, {
+    variables: {
+      handle: params.handle,
+    },
+    //cache: CacheNone(),
+  });
 
-  if (!page) {
+  if (!getPage) {
     throw new Response('Not Found', {status: 404});
   }
 
-  return {
-    page,
-  };
+  return getPage;
 }
 
 /**
@@ -52,17 +59,34 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 }
 
 export default function Page() {
-  const {page} = useLoaderData<typeof loader>();
+  const data: any = useLoaderData<typeof loader>();
+  const [viewport, setViewport] = useState('100%');
+console.log(data)
+  const parsePage = data.page?.metafield?.reference
+  ? parseContent(data.page?.metafield?.reference)
+  : {};
 
-  return (
-    <div className="page">
-      <header>
-        <h1>{page.title}</h1>
-      </header>
-      <main dangerouslySetInnerHTML={{__html: page.body}} />
-    </div>
+  const settings = updateSettings(
+    parsePage?.fields?.layout?.fields?.theme?.fields?.settings,
   );
+  console.log(data);
+  const config: Config | any = {
+    components: {
+      Section: section(settings),
+      Grid: grid(settings),
+      RichTextEditor: richTextSection(),
+      Image: imageSection(),
+      ProductScroll: productScroll(viewport, settings),
+      CollectionGrid: collectionGrid(settings),
+    },
+  };
+
+  return <Render config={config} data={parsePage.fields?.content?.data || {}} />;
 }
+
+export const handle = {
+  breadcrumb: () => <span>Pages</span>,
+};
 
 const PAGE_QUERY = `#graphql
   query Page(
