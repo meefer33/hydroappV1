@@ -1,4 +1,4 @@
-import {Config, Puck, resolveAllData, usePuck} from '@measured/puck';
+import {Config, DropZone, Puck, resolveAllData, usePuck} from '@measured/puck';
 import {
   ActionIcon,
   AppShell,
@@ -7,6 +7,7 @@ import {
   Button,
   Group,
   LoadingOverlay,
+  Modal,
   ScrollArea,
 } from '@mantine/core';
 import {useDisclosure, useToggle} from '@mantine/hooks';
@@ -14,6 +15,7 @@ import {RiComputerLine, RiEyeLine, RiSmartphoneLine} from '@remixicon/react';
 import {useState} from 'react';
 import SavePuck from './SavePuck';
 import PuckPreview from './PuckPreview';
+import LoadSectionModal from './LoadSectionModal';
 
 //import AssistantBotAI from "../AssistantBotAI";
 
@@ -38,11 +40,9 @@ export default function PuckLayout({
   const [desktopOpened, {toggle: toggleDesktop}] = useDisclosure(true);
   const [viewportColor, toggle] = useToggle([true, false]);
   const [isSaving, setIsSaving] = useState(false);
-  //const [disabled, {toggle: toggleDisabled}] = useDisclosure();
-
-  //const updatedData = await resolveAllData(contentData?.data || {}, config);
-  //console.log(saveMeta.fields?.settings?.other?.fonts);
-
+  const [loadSectionOpened, {open: loadSectionOpen, close: loadSectionClose}] =
+    useDisclosure(false);
+    const [loadSectionId, setLoadSectionId] = useState<string>('');
   return (
     <AppShell
       layout="alt"
@@ -62,12 +62,34 @@ export default function PuckLayout({
       //disabled={disabled}
     >
       <Puck
+        onAction={(action, appState, prevAppState) => {
+          console.log('New component was inserted', action, appState,prevAppState);
+          if(action.type === 'insert' && action.componentType === "Section") {
+            //insert into theme_components metaobjects
+            
+            setLoadSectionId(action.id)
+            loadSectionOpen();
+          }
+          if(action.type === 'remove' && action.zone === "root:main-content") {
+            //remove from theme_components metaobjects
+            const removeId = prevAppState?.data?.zones["root:main-content"][action.index].props?.id
+            console.log('removeId',removeId)
+          }
+         // loadSectionOpen();
+        }}
+        onChange={(data) => {
+          console.log("Puck data was updated", data);
+        }}
         iframe={{
           enabled: false,
         }}
         config={config}
-        data={contentData?.data || {}}
+        data={contentData || {}}
+        overrides={{
+          //puck:  ({ children }) => <DropZone zone="main-content" allow={['Section']} />,
+        }}
       >
+        <LoadSectionModal loadSectionOpened={loadSectionOpened} loadSectionClose={loadSectionClose} loadSectionId={loadSectionId} />
         <AppShell.Header bg="gray.3" bd="0">
           <Group h="100%" px="md" justify="end">
             <Group gap="xl" mr={50}>
@@ -140,14 +162,17 @@ export default function PuckLayout({
               fontFamily: theme?.other?.fonts?.body?.class,
             }}
           >
-             <LoadingOverlay visible={isSaving} zIndex={1000} overlayProps={{ radius: "sm", color:"#fff", backgroundOpacity: 1 }}  />
-         
-              {!desktopOpened ? (
-                <PuckPreview config={config} />
-              ) : (
-                <Puck.Preview />
-              )}
-             
+            <LoadingOverlay
+              visible={isSaving}
+              zIndex={1000}
+              overlayProps={{radius: 'sm', color: '#fff', backgroundOpacity: 1}}
+            />
+
+            {!desktopOpened ? (
+              <PuckPreview config={config} />
+            ) : (
+              <Box component={Puck.Preview} />
+            )}
           </Box>
         </AppShell.Main>
         <AppShell.Aside component={ScrollArea} bg="gray.3" bd="0" ff="inherit">

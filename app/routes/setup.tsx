@@ -1,11 +1,12 @@
-
-import { useLoaderData } from '@remix-run/react';
-import { LoaderFunctionArgs, redirect } from '@remix-run/server-runtime';
+import {useLoaderData} from '@remix-run/react';
+import {LoaderFunctionArgs, redirect} from '@remix-run/server-runtime';
+import { CreateMetafieldDefinition } from '~/graphql/admin/CreateMetafieldDefinition';
 import {CreateMetaobjectDefinition} from '~/graphql/admin/CreateMetaobjectDefinition';
 
 export const loader = async ({request, context}: LoaderFunctionArgs) => {
   const {admin} = context;
 
+  //Theme Settings
   const createMetaobject = await admin.request(CreateMetaobjectDefinition, {
     variables: {
       definition: {
@@ -47,6 +48,7 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
     };
   }
 
+  //Layout Settings
   const createMetaobject1 = await admin.request(CreateMetaobjectDefinition, {
     variables: {
       definition: {
@@ -99,6 +101,7 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
     };
   }
 
+  //Content
   const createMetaobject2 = await admin.request(CreateMetaobjectDefinition, {
     variables: {
       definition: {
@@ -150,6 +153,21 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
         createMetaobject2?.data?.metaobjectDefinitionCreate?.userErrors,
     };
   }
+
+  //create catalog to use as a smart collection
+  const createCatalog = await admin.request(CreateMetafieldDefinition, {
+    variables: {
+      definition: {
+        name: 'Catalog',
+        namespace: 'custom',
+        key: 'catalog',
+        description: 'Catalog catagories breadcrumb',
+        type: 'list.single_line_text_field',
+        ownerType: 'PRODUCT',
+        useAsCollectionCondition: true,
+      },
+    },
+  });
 
   return redirect('/');
 };

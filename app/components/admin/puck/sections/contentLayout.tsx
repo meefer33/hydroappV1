@@ -7,17 +7,18 @@ import {RootLoader} from '~/root';
 import Header from '~/components/layout/Header';
 import {Aside} from '~/components/layout/Aside';
 
-export const contentLayout = (layout:any = {},zindex='none') => {
+export const contentLayout = (layout: any = {}, zindex = 'none') => {
   const data: any = useRouteLoaderData<RootLoader>('root');
-  let ld:any = layout?.data?.zones['root:header'][0].props;
-  ld.zindex=zindex
+  let ld: any = layout?.zones['root:header'][0].props;
+  ld.zindex = zindex;
   const config = {
     fields: {},
 
-    render: ({children}:any) => {
+    render: ({children}: any) => {
       return (
         <>
           {data.header && <ThemeHeader {...ld} />}
+          
           {children}
         </>
       );

@@ -14,19 +14,26 @@ import {GetMetaobject} from '~/graphql/admin/GetMetaobject';
 import {parseCmsContent} from '~/lib/parseContent';
 import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
 import {themeSettings} from '~/components/admin/puck/themesettings';
+import { GetMetaobjectByHandle } from '~/graphql/admin/GetMetaobjectByHandle';
 
 export const loader = async ({context}: LoaderFunctionArgs) => {
   const {admin} = context;
 
-  const getMetaobject = await admin.request(GetMetaobject, {
+  const getMetaobjectTheme = await admin.request(GetMetaobject, {
+    variables: {
+      type: 'theme',
+    },
+  });
+  const parsedTheme = parseCmsContent(getMetaobjectTheme?.data?.metaobjects?.nodes);
+
+  const getMetaobjectHa = await admin.request(GetMetaobject, {
     variables: {
       type: 'ha_theme_settings',
     },
   });
-  //const getMetaobjectJson = await getMetaobject.json();
-  const parsed = parseCmsContent(getMetaobject?.data?.metaobjects?.nodes);
+  const parsed = parseCmsContent(getMetaobjectHa?.data?.metaobjects?.nodes);
 
-  return parsed;
+  return {parsed,parsedTheme};
 };
 
 export async function action({request, context}: ActionFunctionArgs) {
@@ -87,7 +94,39 @@ export default function Themes() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {data?.map((theme) => {
+          {data?.parsedTheme?.map((theme:any) => {
+            return (
+              <Table.Tr key={theme.id}>
+                <Table.Td>{theme.displayName}</Table.Td>
+                <Table.Td>
+                  {dayjs(theme.updatedAt).format('MM-DD-YYYY h:mm a')}
+                </Table.Td>
+                <Table.Td>
+                  <ActionIcon
+                    component={Link}
+                    to={`/admin/themes/${theme.handle}`}
+                   //target="_blank"
+                    size="sm"
+                  >
+                    <RiExternalLinkLine />
+                  </ActionIcon>
+                </Table.Td>
+              </Table.Tr>
+            );
+          })}
+        </Table.Tbody>
+      </Table>
+
+      <Table highlightOnHover>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>Name</Table.Th>
+            <Table.Th>Created At</Table.Th>
+            <Table.Th></Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {data?.parsed?.map((theme:any) => {
             return (
               <Table.Tr key={theme.id}>
                 <Table.Td>{theme.displayName}</Table.Td>

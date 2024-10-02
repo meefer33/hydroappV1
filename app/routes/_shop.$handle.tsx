@@ -1,8 +1,8 @@
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {useLoaderData, type MetaFunction} from '@remix-run/react';
+import {useLoaderData, useOutletContext, type MetaFunction} from '@remix-run/react';
 import {GetPage} from '~/graphql/GetPage';
 import {parseContent} from '~/lib/parseContent';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {updateSettings} from '~/lib/utils';
 import {Config, Render} from '@measured/puck';
 import {section} from '~/components/admin/puck/sections/section';
@@ -11,6 +11,7 @@ import {richTextSection} from '~/components/admin/puck/sections/richTextSection'
 import {imageSection} from '~/components/admin/puck/sections/imageSection';
 import {productScroll} from '~/components/admin/puck/sections/productScroll';
 import {collectionGrid} from '~/components/admin/puck/sections/collectionGrid';
+import { contentLayout } from '~/components/admin/puck/sections/contentLayout';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return [{title: `Hydrogen | ${data?.page.title ?? ''}`}];
@@ -61,27 +62,31 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 export default function Page() {
   const data: any = useLoaderData<typeof loader>();
   const [viewport, setViewport] = useState('100%');
-console.log(data)
+  console.log('page', data);
   const parsePage = data.page?.metafield?.reference
-  ? parseContent(data.page?.metafield?.reference)
-  : {};
+    ? parseContent(data.page?.metafield?.reference)
+    : {};
 
-  const settings = updateSettings(
-    parsePage?.fields?.layout?.fields?.theme?.fields?.settings,
-  );
+  const themeSettings = useOutletContext()
+
   console.log(data);
   const config: Config | any = {
     components: {
-      Section: section(settings),
-      Grid: grid(settings),
+      Section: section(themeSettings),
+      Grid: grid(themeSettings),
       RichTextEditor: richTextSection(),
       Image: imageSection(),
-      ProductScroll: productScroll(viewport, settings),
-      CollectionGrid: collectionGrid(settings),
+      ProductScroll: productScroll(viewport, themeSettings),
+      CollectionGrid: collectionGrid(themeSettings),
     },
+    //root: contentLayout(parsePage?.fields?.layout?.fields?.layout)
   };
 
-  return <Render config={config} data={parsePage.fields?.content?.data || {}} />;
+  return (
+    <>
+      <Render config={config} data={parsePage.fields?.content?.data || {}} />;
+    </>
+  );
 }
 
 export const handle = {

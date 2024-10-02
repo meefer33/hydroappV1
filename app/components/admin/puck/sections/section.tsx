@@ -1,6 +1,7 @@
 import {DropZone} from '@measured/puck';
 import {colorPicker} from '../fields/colorPicker';
 import {Container} from '@mantine/core';
+import {globalComponent} from '../fields/global';
 
 type Section = {
   section_background: string;
@@ -18,6 +19,16 @@ type Section = {
 export function section(theme) {
   const config = {
     fields: {
+      is_global: {
+        type: 'radio',
+        options: [
+          {label: 'Yes', value: true},
+          {label: 'No', value: false},
+        ],
+      },
+      global_name: {
+        type: 'text',
+      },
       section_background: colorPicker('Section Background Color', theme),
       padding: {
         type: 'object',
@@ -48,10 +59,22 @@ export function section(theme) {
     },
     defaultProps: {
       //section_background: "#ffffff",
+
+      is_global: false,
+      global_name: 'Section',
+
       padding: {
         padding_top: 'sm',
         padding_bottom: 'sm',
       },
+    },
+    resolveData: async ({props}: any) => {
+      if (props.is_global) {
+        return {props, readOnly: {is_global: true}};
+      }
+      return {
+        ...props,
+      };
     },
     render: ({section_background, padding, content}: Section) => {
       return (

@@ -1,6 +1,6 @@
-import {DropZone} from '@measured/puck';
+import {DropZone, usePuck} from '@measured/puck';
 import {colorPicker} from '../fields/colorPicker';
-import {Container, SimpleGrid} from '@mantine/core';
+import {Box, Container, SimpleGrid} from '@mantine/core';
 
 type Section = {
   section_background: string;
@@ -104,10 +104,9 @@ export function grid(theme) {
             verticalSpacing={content.gap}
             pt={padding.padding_top}
             pb={padding.padding_bottom}
-            //mx={0}
-            //px={0}
+       
           >
-            <div>
+            <Box pos="relative">
               <DropZone
                 zone="col-1"
                 allow={[
@@ -119,30 +118,24 @@ export function grid(theme) {
                   'CollectionGrid',
                 ]}
               />
-            </div>
+            </Box>
             {content.columns > 1 && (
-              <div>
-                <DropZone
-                  zone="col-2"
-                  allow={['RichTextEditor', 'Image', 'Grid', 'Section']}
-                />
-              </div>
+              <DropZone
+                zone="col-2"
+                allow={['RichTextEditor', 'Image', 'Grid', 'Section']}
+              />
             )}
             {content.columns > 2 && (
-              <div>
-                <DropZone
-                  zone="col-3"
-                  allow={['RichTextEditor', 'Image', 'Grid', 'Section']}
-                />
-              </div>
+              <DropZone
+                zone="col-3"
+                allow={['RichTextEditor', 'Image', 'Grid', 'Section']}
+              />
             )}
             {content.columns > 3 && (
-              <div>
-                <DropZone
-                  zone="col-4"
-                  allow={['RichTextEditor', 'Image', 'Grid', 'Section']}
-                />
-              </div>
+              <DropZone
+                zone="col-4"
+                allow={['RichTextEditor', 'Image', 'Grid', 'Section']}
+              />
             )}
           </SimpleGrid>
         </Container>

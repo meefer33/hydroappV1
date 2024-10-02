@@ -5,17 +5,42 @@ query GetMetaobjectByHandle($handle: MetaobjectHandleInput!) {
       key
       type
       value
+      jsonValue
+      references(first: 100) {
+        nodes{
+        ... on Metaobject {
+          handle
+          displayName
+          fields {
+            type
+            value
+            key
+          }
+        }
+        }
+      }
       reference {
-          ... on Metaobject {
-            handle
-            displayName
-            fields {
-              type
-              value
-              key
+        ... on Metaobject {
+          handle
+          displayName
+          fields {
+            type
+            value
+            key
+            reference {
+              ... on Metaobject {
+                handle
+                displayName
+                fields {
+                  type
+                  value
+                  key
+                }
+              }
             }
           }
         }
+      }
     }
     handle
     id

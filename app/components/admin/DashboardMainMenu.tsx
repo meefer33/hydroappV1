@@ -14,6 +14,13 @@ export default function DashboardMainMenu() {
       />
       <Mnav
         component={NavLink}
+        to="/admin/catalog"
+        label="catalog"
+        leftSection={<RiListView size="1rem" />}
+        variant="light"
+      />
+      <Mnav
+        component={NavLink}
         to="/bundles"
         label="bundles"
         leftSection={<RiListView size="1rem" />}

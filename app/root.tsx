@@ -81,15 +81,16 @@ export function links() {
 
 export async function loader(args: LoaderFunctionArgs) {
   // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
+  //const deferredData = loadDeferredData(args);
 
   // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
-  const {storefront, env} = args.context;
-
-  return defer({
-    ...deferredData,
+  const {storefront, customerAccount, cart, env}  = args.context;
+ 
+  return {
+    cart: cart.get(),
+    isLoggedIn: customerAccount.isLoggedIn(),
     ...criticalData,
     publicStoreDomain: env.PUBLIC_STORE_DOMAIN,
     shop: getShopAnalytics({
@@ -100,7 +101,7 @@ export async function loader(args: LoaderFunctionArgs) {
       checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
       storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
     },
-  });
+  };
 }
 
 /**
@@ -119,7 +120,7 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
         headerMenuCatalog: 'catalog',
       },
     }),
-    // Add other queries here, so that they are loaded in parallel
+    // get main layout and main theme
     storefront.query(GET_LAYOUT),
   ]);
 
@@ -162,7 +163,7 @@ export default function App() {
   const nonce = useNonce();
   const data: any = useLoaderData<typeof loader>();
 
-  const lf = loadFonts(data.theme.other.fonts);
+  //const lf = loadFonts(data?.theme?.other?.fonts);
 
   return (
     <html lang="en">
@@ -170,9 +171,9 @@ export default function App() {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
-        {lf.map((font,i) => (
+        {/*lf.map((font,i) => (
           <link key={i} rel="stylesheet" href={font.href} />
-        ))}
+        ))*/}
         <Links />
       </head>
       <body>

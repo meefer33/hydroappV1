@@ -367,7 +367,7 @@ export const mainTheme: MantineThemeOverride = {
       },
       "headings": {
         "class": "Abril Fatface, serif",
-        "url":"https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap"
+        "url":"https://fonts.googleapis.com/css2?family=New+Amsterdam&display=swap"
       }
     }
   },

@@ -15,6 +15,17 @@ query GetMetaobject($type: String!) {
               type
               value
               key
+              reference {
+                ... on Metaobject {
+                  handle
+                  displayName
+                  fields {
+                    type
+                    value
+                    key
+                  }
+                }
+              }
             }
           }
         }

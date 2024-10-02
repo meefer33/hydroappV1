@@ -44,7 +44,7 @@ export default function ThemeHeader({...props}) {
             top: 0,
             left: 0,
             right: 0,
-            zIndex: props?.zindex === 'editor'? -1 : 1,
+            //zIndex: props?.zindex === 'editor'? -1 : 1,
           },
         }}
       >
@@ -160,7 +160,7 @@ function HeaderMenu({rootData, props, pinned, mainWidth}: any) {
     <Container
       fluid
       px="0"
-      bg="white"
+      //bg="white"
       w="100%"
       styles={{
         root: {

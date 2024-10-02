@@ -8,6 +8,10 @@ export const PRODUCT_ITEM_FRAGMENT = `#graphql
     handle
     title
     description(truncateAt: 120)
+    metafield(key: "catalog", namespace: "custom") {
+      type
+      value
+    }
     featuredImage {
       id
       altText

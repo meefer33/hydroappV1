@@ -3,8 +3,10 @@ import {imagePicker} from '../fields/imagePicker';
 import {padding} from '../fields/padding';
 import ThemeHeader from '../theme/ThemeHeader';
 import { colorPicker } from '../fields/colorPicker';
+import { usePuck } from '@measured/puck';
 
 export const header = (theme:any = {}) => {
+  
   const config = {
     fields: {
       padding: padding(),
@@ -45,7 +47,7 @@ export const header = (theme:any = {}) => {
       },
     },
     render: ({...props}) => {
-      console.log(props);
+      //console.log('header',props);
 
       return <ThemeHeader {...props} />;
     },

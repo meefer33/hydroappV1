@@ -6,6 +6,14 @@ mutation UpsertMetaobject($handle: MetaobjectHandleInput!, $metaobject: Metaobje
   ) {
     metaobject {
       handle
+      id
+    }
+    userErrors {
+      code
+      field
+      message
+      elementIndex
+      elementKey
     }
   }
 }`;
