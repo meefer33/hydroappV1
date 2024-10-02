@@ -1,37 +1,51 @@
 import Padding from '../fields/Padding';
 import {FormProvider, useForm} from '../forms/ContextForm';
-import Heading from '../fields/Heading';
-import ImagePicker from '../fields/ImagePicker';
-import FieldsGroup from '../fields/FieldsGroup';
-import TextBox from '../fields/TextBox';
 import ColorPicker from '../fields/ColorPicker';
+import {sectionProps} from '../components/Section';
+import {useEffect} from 'react';
+import { useForceUpdate } from '@mantine/hooks';
+import { nanoid } from 'nanoid';
 
-export default function SectionForm({selectedItem,sections,handlers}: any) {
+export default function SectionForm({
+  sections,
+  handlers,
+  selectedItem,
+  savePage,
+  handle,
+  setUpdate
+}: any) {
+  const sectionIndex = sections?.findIndex(
+    (section: any) => section.id === selectedItem,
+  );
+  const section = sections?.find(
+    (section: any) => section.id === selectedItem,
+  );
 
-  const ind = sections?.findIndex((section:any)=>section.id === selectedItem)
-  console.log('sectfo',selectedItem,sections,ind)
+  
+  console.log('sectionform', section);
   const form = useForm({
     mode: 'uncontrolled',
-    initialValues: {
-      padding: {
-        top: 'sm',
-        bottom: 'sm'
-      },
-      bg_color:'primary',
-    },
+    initialValues: section?.data || sectionProps,
     onValuesChange: (values) => {
-      //saveLayout('default', form.getValues());
-      handlers.setItemProp(ind, 'data', values)
-      console.log('sectionform',form.getValues(),values)
+      setUpdate(true)
+      handlers.setItemProp(
+        sectionIndex,
+        'data',
+        form.getValues(),
+        values,
+      );
+      savePage(handle, sections);
+      setUpdate(false)
     },
   });
+
 
   return (
     <FormProvider form={form}>
       {selectedItem}
-      <form>
+      <form name={nanoid()}>
         <Padding label="Padding" />
-        <ColorPicker label="Section Background" field="bg_color" />
+        <ColorPicker label="Section Background" field="bgColor" />
       </form>
     </FormProvider>
   );

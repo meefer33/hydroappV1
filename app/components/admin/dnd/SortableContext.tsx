@@ -21,7 +21,7 @@ export default function DndSortableContext({sections, handlers, sortContainerId,
         {sections.map(({id,type,data}: any) => {
           return (
             <Box key={id}>
-              <SortableItem id={id} type={type} data={data} selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
+              <SortableItem id={id} type={type} data={data} selectedItem={selectedItem} setSelectedItem={setSelectedItem} handlers={handlers} sections={sections} />
             </Box>
           );
         })}

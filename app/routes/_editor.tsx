@@ -112,6 +112,38 @@ export default function Layout({children}: any) {
     );
   };
 
+  const savePage = (handle: any, page: any) => {
+    actionUpdateSettings.submit(
+      {
+        handle: {
+          type: 'pages',
+          handle: handle,
+        },
+        metaobject: {
+          fields: [
+            {
+              key: 'name',
+              value: handle,
+            },
+            {
+              key: 'page',
+              value: JSON.stringify(page),
+            },
+            {
+              key: 'layout',
+              value: layouts[0].id,
+            },
+          ],
+        },
+      },
+      {
+        method: 'PUT',
+        action: '/api/upsertMetaobject',
+        encType: 'application/json',
+      },
+    );
+  };
 
-  return <Outlet context={{themes, layouts, saveTheme, saveLayout}} />;
+
+  return <Outlet context={{themes, layouts, saveTheme, saveLayout, savePage}} />;
 }

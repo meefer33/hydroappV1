@@ -1,5 +1,6 @@
 import {LoaderFunctionArgs} from '@remix-run/node';
 import {
+  useFetcher,
   useLoaderData,
   useOutletContext,
   useRouteLoaderData,
@@ -39,6 +40,7 @@ import LayoutForm from '~/components/admin/dnd/forms/LayoutForm';
 import ThemeHeader from '~/components/admin/dnd/theme/Header';
 import Section from '~/components/admin/dnd/components/Section';
 import SectionForm from '~/components/admin/dnd/forms/SectionForm';
+import ShowForm from '~/components/admin/dnd/forms/ShowForm';
 
 export const loader = async ({context, params}: LoaderFunctionArgs) => {
   const {admin} = context;
@@ -54,26 +56,27 @@ export const loader = async ({context, params}: LoaderFunctionArgs) => {
   const content = parser(getContent?.data?.metaobjectByHandle);
   //if no content yet create the
 
-  return {content, breadcrumb};
+  return {content, breadcrumb, handle};
 };
 
 export default function EditContent() {
   const root: any = useRouteLoaderData<RootLoader>('root');
-  const {themes, layouts, saveTheme, saveLayout}: any = useOutletContext();
-  const {content, breadcrumb}: any = useLoaderData<typeof loader>();
+  const {themes, layouts,}: any =
+    useOutletContext();
+  const {content, breadcrumb, handle}: any = useLoaderData<typeof loader>();
   const [theme, setTheme] = useState(buildTheme(themes[0]?.fields?.theme));
   const [viewport, setViewport] = useState('100%');
   const [mobileOpened, {toggle: toggleMobile}] = useDisclosure();
   const [desktopOpened, {toggle: toggleDesktop}] = useDisclosure(true);
   const [viewportColor, toggle] = useToggle([true, false]);
-  const [isSaving, setIsSaving] = useState(false);
-
+  //const [isSaving, setIsSaving] = useState(false);
+  console.log('cp', content);
   //dnd state
   const sortContainerId = 'main';
-  const [items, setItems] = useState<ItemType[]>([]);
+  const [items, setItems] = useState<ItemType[]>(content || []);
   const [activeItem, setActiveItem] = useState<ItemType | null>(null);
   const [selectedItem, setSelectedItem] = useState();
-  const [sections, handlers] = useListState([]);
+  const [sections, handlers] = useListState(content?.fields?.page);
   const cssResolver: CSSVariablesResolver = (theme) => ({
     variables: {
       '--mantine-color-body':
@@ -99,6 +102,101 @@ export default function EditContent() {
       '--mantine-color-text': themes[0]?.fields?.theme?.themes?.dark?.textColor,
     },
   });
+
+ 
+  const actionUpdateSettings = useFetcher();
+  const isSaving = actionUpdateSettings.state !== 'idle';
+  const saveTheme = (handle: any, theme: any) => {
+    actionUpdateSettings.submit(
+      {
+        handle: {
+          type: 'themes',
+          handle: handle,
+        },
+        metaobject: {
+          fields: [
+            {
+              key: 'name',
+              value: handle,
+            },
+            {
+              key: 'theme',
+              value: JSON.stringify(theme),
+            },
+          ],
+        },
+      },
+      {
+        method: 'PUT',
+        action: '/api/upsertMetaobject',
+        encType: 'application/json',
+      },
+    );
+  };
+
+  const saveLayout = (handle: any, Layout: any) => {
+    actionUpdateSettings.submit(
+      {
+        handle: {
+          type: 'layouts',
+          handle: handle,
+        },
+        metaobject: {
+          fields: [
+            {
+              key: 'name',
+              value: handle,
+            },
+            {
+              key: 'layout',
+              value: JSON.stringify(Layout),
+            },
+            {
+              key: 'theme',
+              value: themes[0].id,
+            },
+          ],
+        },
+      },
+      {
+        method: 'PUT',
+        action: '/api/upsertMetaobject',
+        encType: 'application/json',
+      },
+    );
+  };
+
+  const savePage = (handle: any, page: any) => {
+    actionUpdateSettings.submit(
+      {
+        handle: {
+          type: 'pages',
+          handle: handle,
+        },
+        metaobject: {
+          fields: [
+            {
+              key: 'name',
+              value: handle,
+            },
+            {
+              key: 'page',
+              value: JSON.stringify(page),
+            },
+            {
+              key: 'layout',
+              value: layouts[0].id,
+            },
+          ],
+        },
+      },
+      {
+        method: 'PUT',
+        action: '/api/upsertMetaobject',
+        encType: 'application/json',
+      },
+    );
+  };
 
   return (
     <MantineProvider
@@ -231,12 +329,15 @@ export default function EditContent() {
             </AppShell.Main>
             <AppShell.Aside p="0" component={ScrollArea} bg="gray.4" c="dark">
               Active Item
-              {selectedItem}
-              <SectionForm    
-                sections={sections}
+              {selectedItem  && (
+                <ShowForm
+                  sections={sections}
                   handlers={handlers}
                   selectedItem={selectedItem}
-                  />
+                  savePage={savePage}
+                  handle={handle}
+                />
+              )}
             </AppShell.Aside>
           </AppShell>
         </DndKit>

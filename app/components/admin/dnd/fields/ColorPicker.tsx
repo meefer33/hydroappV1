@@ -7,12 +7,12 @@ export default function ColorPicker({
   field,
 }: any) {
   const form: any = useFormContext();
-
+console.log()
   return (
     <ColorInput
       variant="unstyled"
       label={label}
-      {...form.getInputProps(field, {withFocus: false})}
+      {...form.getInputProps(field, {withFocus: true})}
       placeholder={label}
       closeOnColorSwatchClick
       //defaultValue={theme?.colors[color] ? theme?.colors[color][6] : ''}
