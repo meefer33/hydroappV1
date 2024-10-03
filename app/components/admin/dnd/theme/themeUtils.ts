@@ -76,7 +76,6 @@ export const defaultLayout = {
 };
 
 export function loadFonts(fonts:any) {
-  console.log(fonts)
   const loadFonts = [];
   const ff = fonts?.bodyUrl;
   const ffh = fonts?.headingsUrl;

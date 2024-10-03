@@ -5,14 +5,16 @@ import {useFormContext} from '../forms/ContextForm';
 export default function ColorPicker({
   label,
   field,
+  section
 }: any) {
   const form: any = useFormContext();
-console.log()
+  
   return (
     <ColorInput
       variant="unstyled"
       label={label}
       {...form.getInputProps(field, {withFocus: true})}
+      //value={section?.data?.bgColor}
       placeholder={label}
       closeOnColorSwatchClick
       //defaultValue={theme?.colors[color] ? theme?.colors[color][6] : ''}

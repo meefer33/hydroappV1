@@ -4,11 +4,16 @@ import Heading from '../fields/Heading';
 import ImagePicker from '../fields/ImagePicker';
 import FieldsGroup from '../fields/FieldsGroup';
 import TextBox from '../fields/TextBox';
+import { useOutletContext } from '@remix-run/react';
+import { useEditorContext } from '../EditorContext';
 
-export default function LayoutForm({saveLayout, layout}: any) {
+export default function LayoutForm() {
+  const {saveLayout,layouts}: any = useOutletContext();
+  //const {setTheme, themeConfig}: any = useEditorContext();
+
   const form = useForm({
     mode: 'uncontrolled',
-    initialValues: layout,
+    initialValues: layouts[0]?.fields?.layout,
     onValuesChange: (values) => {
       saveLayout('default', form.getValues());
       //console.log('header',form.getValues(),values)

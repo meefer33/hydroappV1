@@ -5,56 +5,21 @@ import ColorPicker from '../fields/ColorPicker';
 import {buildTheme} from '../theme/themeUtils';
 import TextBox from '../fields/TextBox';
 import FieldsGroup from '../fields/FieldsGroup';
+import {useEditorContext} from '../EditorContext';
+import {useOutletContext} from '@remix-run/react';
 
-export default function ThemeForm({theme, setTheme, saveTheme, config}: any) {
-  //console.log('tf', theme, theme?.other?.colors?.primary);
+export default function ThemeForm() {
+  const {saveTheme}: any = useOutletContext();
+  const {setTheme, themeConfig}: any = useEditorContext();
+
   const form = useForm({
     mode: 'uncontrolled',
-    initialValues: config,
+    initialValues: themeConfig,
     onValuesChange: (values) => {
       setTheme(buildTheme(form.getValues()));
       saveTheme('default', form.getValues());
     },
   });
-
-  const nt = [
-    {
-      type: 'SegmentControl',
-      label: 'Color Scheme',
-      field: 'colorScheme',
-      default: 'light',
-    },
-    {
-      type: 'group',
-      name: 'themes',
-      items: [
-        {
-          type: 'group',
-          name: 'light',
-          items: [
-            {
-              type: 'colorPicker',
-              label: 'Background Color',
-              field: 'bgColor',
-              default: '#f8f9fa',
-            },
-          ],
-        },
-        {
-          type: 'group',
-          name: 'dark',
-          items: [
-            {
-              type: 'colorPicker',
-              label: 'Background Color',
-              field: 'bgColor',
-              default: '#f8f9fa',
-            },
-          ],
-        },
-      ],
-    },
-  ];
 
   return (
     <FormProvider form={form}>
@@ -81,10 +46,10 @@ export default function ThemeForm({theme, setTheme, saveTheme, config}: any) {
           <ColorPicker label="Info" field="colors.info" />
         </FieldsGroup>
         <FieldsGroup label="Fonts">
-          <TextBox label="Top" field="fonts.bodyClass" />
-          <TextBox label="Bottom" field="fonts.bodyUrl" />
-          <TextBox label="Left" field="fonts.headingsClass" />
-          <TextBox label="Right" field="fonts.headingsUrl" />
+          <TextBox label="Body Class" field="fonts.bodyClass" />
+          <TextBox label="Body Url" field="fonts.bodyUrl" />
+          <TextBox label="Headings Class" field="fonts.headingsClass" />
+          <TextBox label="Headings Url" field="fonts.headingsUrl" />
         </FieldsGroup>
       </form>
     </FormProvider>

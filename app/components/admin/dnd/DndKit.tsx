@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useContext, useState} from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -10,22 +10,16 @@ import {rectIntersection} from '@dnd-kit/core';
 import {arrayMove} from '@dnd-kit/sortable';
 import {nanoid} from 'nanoid';
 import {Box, Stack} from '@mantine/core';
+import { useEditorContext } from './EditorContext';
 
 export interface ItemType {
   id: UniqueIdentifier;
   color: string;
 }
 
-export default function DndKit({
-  sections,
-  handlers,
-  setActiveItem,
-  activeItem,
-  children,
-}: any) {
-  //const [activeItem, setActiveItem] = useState<ItemType | null>(null);
-  //const [activeItemOrigin, setActiveItemOrigin] = useState<string | null>(null);
-  //const [itemId, setItemId] = useState<UniqueIdentifier>(nanoid());
+export default function DndKit({children}: any) {
+  const {sections, handlers, setActiveItem, activeItem}:any =
+  useEditorContext();
 
   const handleDragEnd = ({active, over}: DragEndEvent) => {
     console.log('dragend', active.id, sections);

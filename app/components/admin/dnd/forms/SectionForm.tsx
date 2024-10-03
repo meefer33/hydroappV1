@@ -1,51 +1,68 @@
 import Padding from '../fields/Padding';
 import {FormProvider, useForm} from '../forms/ContextForm';
 import ColorPicker from '../fields/ColorPicker';
-import {sectionProps} from '../components/Section';
+import {nanoid} from 'nanoid';
+import {useEditorContext} from '../EditorContext';
+import {useOutletContext} from '@remix-run/react';
 import {useEffect} from 'react';
-import { useForceUpdate } from '@mantine/hooks';
-import { nanoid } from 'nanoid';
 
-export default function SectionForm({
-  sections,
-  handlers,
-  selectedItem,
-  savePage,
-  handle,
-  setUpdate
-}: any) {
+export const sectionProps = {
+  padding: {
+    top: 'sm',
+    bottom: 'sm',
+  },
+  bgColor: 'primary',
+};
+
+export default function SectionForm() {
+  const {savePage}: any = useOutletContext();
+  const {sections, handlers, selectedItem, handle, item}: any =
+    useEditorContext();
   const sectionIndex = sections?.findIndex(
     (section: any) => section.id === selectedItem,
   );
-  const section = sections?.find(
-    (section: any) => section.id === selectedItem,
-  );
+  const section = sections?.find((section: any) => section.id === selectedItem);
 
-  
-  console.log('sectionform', section);
   const form = useForm({
-    mode: 'uncontrolled',
-    initialValues: section?.data || sectionProps,
+    mode: 'controlled',
+    initialValues: {
+      padding: {
+        top: '',
+        bottom: '',
+      },
+      bgColor: '',
+    },
     onValuesChange: (values) => {
-      setUpdate(true)
-      handlers.setItemProp(
-        sectionIndex,
-        'data',
-        form.getValues(),
-        values,
-      );
-      savePage(handle, sections);
-      setUpdate(false)
+      handlers.setItemProp(sectionIndex, 'data', form.getValues());
+      save();
     },
   });
 
+  const save = () => {
+    savePage(handle, sections);
+  };
+
+  useEffect(() => {
+    form.setValues({
+      padding: {
+        top: item?.padding?.top ? item?.padding?.top : 'none',
+        bottom: item?.padding?.bottom ? item?.padding?.bottom : 'none' ,
+      },
+      bgColor: item?.bgColor,
+    });
+  }, [item]);
 
   return (
     <FormProvider form={form}>
       {selectedItem}
       <form name={nanoid()}>
-        <Padding label="Padding" />
-        <ColorPicker label="Section Background" field="bgColor" />
+      <Padding label="Padding" />
+        <ColorPicker
+          label="Section Background"
+          field="bgColor"
+          itemValue={item.bgColor}
+          section={section}
+        />
       </form>
     </FormProvider>
   );

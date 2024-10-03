@@ -3,21 +3,19 @@ import {CSS} from '@dnd-kit/utilities';
 import {Box, Button} from '@mantine/core';
 import Section from './components/Section';
 import {useForceUpdate} from '@mantine/hooks';
-import {useState} from 'react';
+import {useContext, useState} from 'react';
+import { useEditorContext } from './EditorContext';
+
 
 export default function SortableItem({
   id,
   type,
-  data,
-  selectedItem,
-  setSelectedItem,
-  handlers,
-  sections,
+  data
 }: any) {
   const {attributes, listeners, setNodeRef, transform, transition, isDragging} =
     useSortable({id});
-  const [update, setUpdate] = useState(false);
-  const forceUpdate = useForceUpdate();
+
+    const {setSelectedItem, setItem}: any  = useEditorContext();
 
   const getType = (type: any, data: any) => {
     switch (type) {
@@ -44,7 +42,7 @@ export default function SortableItem({
         onClick={() => {
           console.log('clicked', id, data);
           setSelectedItem(id);
-          handlers.setState(sections);
+          setItem(data);
         }}
       >
         {getType(type, data)}

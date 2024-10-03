@@ -10,7 +10,7 @@ export default function SelectBox({label="Choose", field, data=['none', 'sm', 'm
         label={label}
         placeholder="Pick value"
         data={data}
-        {...form.getInputProps(field, {withFocus: false})}
+        {...form.getInputProps(field)}
         variant="filled"
         styles={{
           input: {
