@@ -28,7 +28,7 @@ import {Aside} from '~/components/layout/Aside';
 import DndKit from './DndKit';
 import {useEditorContext} from './EditorContext';
 import {RootLoader} from '~/root';
-import DndSortableContext from './SortableContext';
+import DndSortableContext from './DndSortableContext';
 
 export default function EditorLayout({content,handle}: any) {
   const root: any = useRouteLoaderData<RootLoader>('root');
@@ -170,13 +170,14 @@ export default function EditorLayout({content,handle}: any) {
                   fontFamily: themes[0].fields?.theme.fonts.bodyClass,
                 }}
               >
-                <SelectOverlay>
+              
                   <ThemeHeader
                     layout={layouts[0].fields?.layout}
                     theme={themes[0].fields?.theme}
                   />
-                </SelectOverlay>
+           
                 <DndSortableContext />
+                
               </Box>
             </AppShell.Main>
             <AppShell.Aside p="0" component={ScrollArea} bg="gray.4" c="dark">

@@ -5,6 +5,10 @@ import {nanoid} from 'nanoid';
 import {useEditorContext} from '../EditorContext';
 import {useOutletContext} from '@remix-run/react';
 import {useEffect} from 'react';
+import FieldsGroup from '../fields/FieldsGroup';
+import {Title} from '@mantine/core';
+import SelectBox from '../fields/SelectBox';
+import SectionGroup from '../fields/SectionGroup';
 
 export const sectionProps = {
   padding: {
@@ -25,13 +29,6 @@ export default function SectionForm() {
 
   const form = useForm({
     mode: 'controlled',
-    initialValues: {
-      padding: {
-        top: '',
-        bottom: '',
-      },
-      bgColor: '',
-    },
     onValuesChange: (values) => {
       handlers.setItemProp(sectionIndex, 'data', form.getValues());
       save();
@@ -42,27 +39,11 @@ export default function SectionForm() {
     savePage(handle, sections);
   };
 
-  useEffect(() => {
-    form.setValues({
-      padding: {
-        top: item?.padding?.top ? item?.padding?.top : 'none',
-        bottom: item?.padding?.bottom ? item?.padding?.bottom : 'none' ,
-      },
-      bgColor: item?.bgColor,
-    });
-  }, [item]);
-
   return (
     <FormProvider form={form}>
       {selectedItem}
       <form name={nanoid()}>
-      <Padding label="Padding" />
-        <ColorPicker
-          label="Section Background"
-          field="bgColor"
-          itemValue={item.bgColor}
-          section={section}
-        />
+        <SectionGroup item={item} isOpen/>
       </form>
     </FormProvider>
   );

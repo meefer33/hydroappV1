@@ -6,11 +6,12 @@ import {nanoid} from 'nanoid';
 import {useEditorContext} from './EditorContext';
 import {useListState} from '@mantine/hooks';
 import {useEffect} from 'react';
+import SelectOverlay from './SelectOverlay';
+import AddSection from './AddSection';
 
-export default function DndSortableContext() {
-  const {sections, handlers, sortContainerId}: any = useEditorContext();
+export default function GridSortable({sections,  sortContainerId}:any) {
 
-  const {setNodeRef} = useDroppable({id: sortContainerId});
+const {setNodeRef} = useDroppable({id: sortContainerId});
 
   const addSection = () => {
     handlers.prepend({id: nanoid(), type: 'section', data: {}});
@@ -18,19 +19,13 @@ export default function DndSortableContext() {
 
   return (
     <SortableContext items={sections} strategy={rectSortingStrategy}>
-      <Button onClick={addSection} variant="filled">
-        Button
-      </Button>
-      <Box w={'100%'} mih={'500px'} ref={setNodeRef}>
+      <Box w={'100%'} ref={setNodeRef}>
         {sections &&
           sections?.map(({id, type, data}: any) => {
-            return (
-              <Box key={id}>
-                <SortableItem id={id} type={type} data={data} />
-              </Box>
-            );
+            return <SortableItem key={id} id={id} type={type} data={data} />;
           })}
       </Box>
+      <AddSection/>
     </SortableContext>
   );
 }

@@ -2,8 +2,8 @@ import {Box, Button, Collapse, Stack, UnstyledButton} from '@mantine/core';
 import Label from './Label';
 import {useDisclosure} from '@mantine/hooks';
 
-export default function FieldsGroup({label = 'Fields', children}: any) {
-  const [opened, {toggle}] = useDisclosure(false);
+export default function FieldsGroup({label = 'Fields',isOpen=false, children}: any) {
+  const [opened, {toggle}] = useDisclosure(isOpen);
   return (
     <>
       <UnstyledButton w={'100%'} onClick={toggle} >

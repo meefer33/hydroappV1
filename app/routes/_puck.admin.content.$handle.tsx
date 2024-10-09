@@ -25,13 +25,8 @@ import {
   Stack,
   Text,
 } from '@mantine/core';
-import DND, {ItemType} from '~/components/admin/dnd/DND';
-import DropZone from '~/components/admin/dnd/DropZone';
-import DraggableItem from '~/components/admin/dnd/DraggableItem';
 import {UniqueIdentifier} from '@dnd-kit/core/dist/types';
 import {nanoid} from 'nanoid';
-import DndSortableContext from '~/components/admin/dnd/SortableContext';
-import {DragOverlay} from '@dnd-kit/core';
 
 import DndKit from '~/components/admin/dnd/DndKit';
 
@@ -63,21 +58,9 @@ export default function EditContent() {
     data?.fields?.layout?.fields?.theme?.fields?.settings,
   );
 
-  const sortContainerId = 'main';
-  const [items, setItems] = useState<ItemType[]>([]);
-  const [activeItem, setActiveItem] = useState<ItemType | null>(null);
-  const [itemId, setItemId] = useState<UniqueIdentifier>(nanoid());
-  //console.log('themeContent', data);
-  const [sections, handlers] = useListState([]);
 
   return (
-    <DndKit
-      sortContainerId={sortContainerId}
-      activeItem={activeItem}
-      setActiveItem={setActiveItem}
-      sections={sections}
-      handlers={handlers}
-    >
+
       <AppShell
         layout="alt"
         header={{height: 60}}
@@ -115,12 +98,11 @@ export default function EditContent() {
         
         </AppShell.Navbar>
         <AppShell.Main>
-          <DndSortableContext sections={sections} handlers={handlers} sortContainerId={sortContainerId} />
         </AppShell.Main>
         <AppShell.Aside p="md">Aside</AppShell.Aside>
         <AppShell.Footer p="md">Footer</AppShell.Footer>
       </AppShell>
-    </DndKit>
+
   );
 }
 

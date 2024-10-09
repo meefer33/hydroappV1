@@ -11,16 +11,13 @@ import {arrayMove} from '@dnd-kit/sortable';
 import {nanoid} from 'nanoid';
 import {Box, Stack} from '@mantine/core';
 import { useEditorContext } from './EditorContext';
-import AddSection from './AddSection';
 
 export interface ItemType {
   id: UniqueIdentifier;
   color: string;
 }
 
-export default function DndKit({children}: any) {
-  const {sections, handlers, setActiveItem, activeItem}:any =
-  useEditorContext();
+export default function DndKit({sections, handlers, setActiveItem, activeItem,children}: any) {
 
   const handleDragEnd = ({active, over}: DragEndEvent) => {
     console.log('dragend', active.id, sections);
@@ -54,7 +51,7 @@ export default function DndKit({children}: any) {
     >
       {children}
       <DragOverlay>
-        {activeItem ? <Box h={50} bg="blue.2" /> : null}
+        {activeItem ? <Box h={50} w={50} bg="green.2" /> : null}
       </DragOverlay>
     </DndContext>
   );

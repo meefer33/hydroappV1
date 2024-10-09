@@ -1,7 +1,7 @@
 import {Select} from '@mantine/core';
 import {useFormContext} from '../forms/ContextForm';
 
-export default function SelectBox({label="Choose", field, data=['none', 'sm', 'md', 'lg', 'xl']}: any) {
+export default function SelectBox({label="Choose", field, data=['0', 'sm', 'md', 'lg', 'xl']}: any) {
     const form:any = useFormContext();
 
   return (

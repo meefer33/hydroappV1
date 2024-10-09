@@ -9,9 +9,8 @@ import {
 import {rectIntersection} from '@dnd-kit/core';
 import {arrayMove} from '@dnd-kit/sortable';
 import {nanoid} from 'nanoid';
-import {Box, Stack} from '@mantine/core';
+import {Box, Container, Stack} from '@mantine/core';
 import { useEditorContext } from './EditorContext';
-import AddSection from './AddSection';
 
 export interface ItemType {
   id: UniqueIdentifier;
@@ -54,7 +53,7 @@ export default function DndKit({children}: any) {
     >
       {children}
       <DragOverlay>
-        {activeItem ? <Box h={50} bg="blue.2" /> : null}
+        {activeItem ? <Container fluid h={50}  bg="green.2" /> : null}
       </DragOverlay>
     </DndContext>
   );
