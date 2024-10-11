@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Anchor,
   Box,
   Button,
@@ -7,12 +8,15 @@ import {
   Divider,
   Group,
   HoverCard,
+  Modal,
   Popover,
   SimpleGrid,
   Text,
 } from '@mantine/core';
-import { useEditorContext } from './EditorContext';
-import { nanoid } from 'nanoid';
+import {useEditorContext} from './EditorContext';
+import {nanoid} from 'nanoid';
+import {RiAddCircleFill} from '@remixicon/react';
+import {useDisclosure} from '@mantine/hooks';
 
 export const sectionProps = {
   padding: {
@@ -23,66 +27,24 @@ export const sectionProps = {
 };
 
 export default function AddSection({props}: any) {
-    const {sections, handlers, sortContainerId}: any = useEditorContext();
+  const {sections, handlers, sortContainerId}: any = useEditorContext();
+  const [opened, {open, close}] = useDisclosure(false);
 
-    const addSection = (type:any) => {
-        handlers.append({id: nanoid(), type: type, data: {}});
-      };
-      
+  const addSection = (type: any) => {
+    handlers.append({id: nanoid(), type: type, data: {}});
+  };
+
   return (
-
-      <Popover 
-        //width={600}
-        position="bottom"
+    <>
+      <ActionIcon
+        bg="gray.7"
+        variant="filled"
         radius="md"
-        shadow="md"
-        withinPortal
+        aria-label="Add Section"
+        size="md"
       >
-        <Popover.Target>
-          <Button variant="filled">Add Section</Button>
-        </Popover.Target>
-
-        <Popover.Dropdown style={{overflow: 'hidden'}}>
-          <Group justify="space-between" px="md">
-            <Text fw={500}>Features</Text>
-            <Anchor href="#" fz="xs">
-              View all
-            </Anchor>
-          </Group>
-
-          <Divider my="sm" />
-
-          <SimpleGrid cols={2} spacing={0}>
-            
-          </SimpleGrid>
-
-          <div >
-         
-              <div>
-              <Group justify="space-between">
-                <Text fw={500} fz="sm">
-                  Section
-                </Text>
-                <Text size="xs" c="dimmed">
-                </Text>
-                <Button variant="default" onClick={()=>addSection('section')}>Add</Button>
-                </Group>
-              </div>
-              <div>
-              <Group justify="space-between">
-                <Text fw={500} fz="sm">
-                  Grid Section
-                </Text>
-                <Text size="xs" c="dimmed">
-                </Text>
-                <Button variant="default" onClick={()=>addSection('sectionGrid')}>Add</Button>
-                </Group>
-              </div>
-              
-            
-          </div>
-        </Popover.Dropdown>
-      </Popover>
- 
+        <RiAddCircleFill size={20} onClick={() => open()} />
+      </ActionIcon>
+    </>
   );
 }

@@ -5,9 +5,15 @@ import Section from './components/Section';
 import {useForceUpdate, useHover} from '@mantine/hooks';
 import {useContext, useState} from 'react';
 import {useEditorContext} from './EditorContext';
-import {RiAddCircleFill, RiDeleteBack2Line, RiDragMoveLine, RiPencilFill} from '@remixicon/react';
+import {
+  RiAddCircleFill,
+  RiDeleteBack2Line,
+  RiDragMoveLine,
+  RiPencilFill,
+} from '@remixicon/react';
+import AddSection from './AddSection';
 
-export default function SortableItem({id, type, data,index}: any) {
+export default function SortableItem({id, type, data, index, open}: any) {
   const {attributes, listeners, setNodeRef, transform, transition, isDragging} =
     useSortable({id});
   const {hovered, ref} = useHover();
@@ -26,7 +32,7 @@ export default function SortableItem({id, type, data,index}: any) {
     <Box ref={ref} pos="relative">
       {hovered && <Overlay color="#a5d8ff" backgroundOpacity={0.6} />}
       {hovered && (
-        <Box pos="absolute" top="0px" left="45%" style={{zIndex: 999}}>
+        <Box pos="absolute" top="0px" left="45%" style={{zIndex: 900}}>
           <ActionIcon.Group>
             <ActionIcon
               bg="gray.7"
@@ -34,14 +40,10 @@ export default function SortableItem({id, type, data,index}: any) {
               radius="md"
               aria-label="Add Section"
               size="md"
-              onClick={() => {
-                console.log('clicked', id, data);
-                setSelectedItem(id);
-                setItem(data);
-              }}
             >
-              <RiAddCircleFill size={20} />
+              <RiAddCircleFill size={20} onClick={() => open()} />
             </ActionIcon>
+
             <ActionIcon
               bg="gray.7"
               variant="filled"
@@ -64,7 +66,7 @@ export default function SortableItem({id, type, data,index}: any) {
               size="md"
               onClick={() => {
                 console.log('clicked', index);
-                handlers.remove(index, 1)
+                handlers.remove(index, 1);
               }}
             >
               <RiDeleteBack2Line size={20} />
