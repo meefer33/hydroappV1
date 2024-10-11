@@ -1,14 +1,6 @@
 import {Container} from '@mantine/core';
 
-export const sectionProps = {
-  padding: {
-    top: 'sm',
-    bottom: 'sm',
-  },
-  bgColor: 'primary',
-};
-
-export default function Section({props}: any) {
+export default function Section({props,children}: any) {
   return (
     <Container
       fluid
@@ -17,7 +9,8 @@ export default function Section({props}: any) {
       pb={props?.padding?.bottom}
       bg={props?.bgColor}
     >
-      Section item
+      Section
+      {children}
     </Container>
   );
 }

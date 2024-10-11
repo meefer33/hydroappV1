@@ -1,11 +1,16 @@
-import {Title} from '@mantine/core';
+import {Box, Group, SimpleGrid, Title} from '@mantine/core';
 import {useFormContext} from '../forms/ContextForm';
 import FieldsGroup from './FieldsGroup';
 import SelectBox from './SelectBox';
 import ColorPicker from './ColorPicker';
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 
-export default function SectionGroup({label = 'Section', isOpen = false, item,section}: any) {
+export default function SectionGroup({
+  label = 'Section',
+  isOpen = false,
+  item,
+  section,
+}: any) {
   const form: any = useFormContext();
 
   useEffect(() => {
@@ -23,10 +28,14 @@ export default function SectionGroup({label = 'Section', isOpen = false, item,se
   return (
     <FieldsGroup label={label} isOpen={isOpen}>
       <Title order={5}>Padding</Title>
-      <SelectBox label="Top" field="padding.top" />
-      <SelectBox label="Bottom" field="padding.bottom" />
-      <SelectBox label="Left" field="padding.left" />
-      <SelectBox label="Right" field="padding.right" />
+      <Box m="sm">
+      <SimpleGrid cols={2}>
+        <SelectBox label="Top" field="padding.top" />
+        <SelectBox label="Bottom" field="padding.bottom" />
+        <SelectBox label="Left" field="padding.left" />
+        <SelectBox label="Right" field="padding.right" />
+      </SimpleGrid>
+      </Box>
       <ColorPicker
         label="Section Background"
         field="bgColor"

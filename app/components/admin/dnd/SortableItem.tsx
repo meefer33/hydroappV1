@@ -12,6 +12,7 @@ import {
   RiPencilFill,
 } from '@remixicon/react';
 import AddSection from './AddSection';
+import SectionGrid from './components/SectionGrid';
 
 export default function SortableItem({id, type, data, index, open}: any) {
   const {attributes, listeners, setNodeRef, transform, transition, isDragging} =
@@ -23,6 +24,8 @@ export default function SortableItem({id, type, data, index, open}: any) {
     switch (type) {
       case 'section':
         return <Section props={data} />;
+      case 'grid':
+        return <SectionGrid props={data} />;
       default:
         return null;
     }

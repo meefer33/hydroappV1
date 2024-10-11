@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import SectionForm from './SectionForm';
 import {useEditorContext} from '../EditorContext';
+import GridForm from './GridForm';
 
 export default function ShowForm() {
   const {sections, selectedItem, activeItem}: any = useEditorContext();
@@ -13,6 +14,8 @@ export default function ShowForm() {
     switch (type) {
       case 'section':
         return <SectionForm />;
+        case 'grid':
+          return <GridForm />;
       default:
         return null;
     }
