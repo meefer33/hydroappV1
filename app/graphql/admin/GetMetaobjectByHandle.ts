@@ -10,7 +10,6 @@ query GetMetaobjectByHandle($handle: MetaobjectHandleInput!) {
         nodes{
         ... on Metaobject {
           handle
-          displayName
           fields {
             type
             value

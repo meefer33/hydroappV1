@@ -1,7 +1,6 @@
 import {Config, usePuck} from '@measured/puck';
 import {LoaderFunctionArgs} from '@remix-run/node';
 import {MetaDescriptor, MetaFunction, useLoaderData} from '@remix-run/react';
-import {richTextSection} from '~/components/admin/puck/sections/richTextSection';
 import {section} from '~/components/admin/puck/sections/section';
 import {theme} from '~/components/admin/puck/sections/theme';
 import {parseContent} from '~/lib/parseContent';
@@ -40,7 +39,7 @@ export default function EditTheme() {
   const config: Config | any = {
     components: {
       Section: section(settings),
-      RichTextEditor: richTextSection(),
+
     },
     root: theme(settings, data.handle ),
   };

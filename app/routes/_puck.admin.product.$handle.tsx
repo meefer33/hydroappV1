@@ -7,7 +7,6 @@ import {
   Outlet,
   useLoaderData,
 } from '@remix-run/react';
-import {richTextSection} from '~/components/admin/puck/sections/richTextSection';
 import {section} from '~/components/admin/puck/sections/section';
 import {theme} from '~/components/admin/puck/sections/theme';
 import {parseCmsContent, parseContent} from '~/lib/parseContent';
@@ -83,7 +82,6 @@ export default function EditProduct() {
     components: {
       Section: section(settings),
       Grid: grid(settings),
-      RichTextEditor: richTextSection(),
       Image: imageSection(),
       ProductScroll: productScroll(viewport, settings),
       CollectionGrid: collectionGrid(settings),

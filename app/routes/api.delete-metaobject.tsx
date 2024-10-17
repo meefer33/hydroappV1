@@ -1,14 +1,14 @@
 import type {ActionFunctionArgs} from '@remix-run/node';
-import {UpsertMetaobject} from '~/graphql/admin/UpsertMetaobject';
+import { CreateMetaobject } from '~/graphql/admin/CreateMetaobject';
+import { DeleteMetaobject } from '~/graphql/admin/DeleteMetaobject';
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {admin} = context;
   const data: any = await request.json();
 
-  const response = await admin.request(UpsertMetaobject, {
+  const response = await admin.request(DeleteMetaobject, {
     variables: {
-      handle: data.handle,
-      metaobject: data.metaobject,
+      id: data.id,
     },
   });
 

@@ -1,6 +1,7 @@
 import {LoaderFunctionArgs} from '@remix-run/server-runtime';
 import { GetMetaobjectByHandle } from '~/graphql/admin/GetMetaobjectByHandle';
 import { GetMetaobjectById } from '~/graphql/admin/GetMetaobjectById';
+import { GetMetaobjectTypeHandle } from '~/graphql/GetMetaobjectTypeHandle';
 import { parser } from '~/lib/parseContent';
 
 export const loader = async ({request, context}: LoaderFunctionArgs) => {
@@ -8,13 +9,12 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
 
   const url = new URL(request.url);
   const searchParams = new URLSearchParams(url.search);
-  const id = searchParams.get('id') || '';
+  const handle = searchParams.get('handle') || '';
 
-  const response = await admin.request(GetMetaobjectById, {
-    variables: {
-      id: id,
-    },
+  const response = await context.storefront.query(GetMetaobjectTypeHandle, {
+    variables: {type: 'content', handle: handle},
+    cache: context.storefront.CacheNone()
   });
 
-  return parser(response.data.metaobject);
+  return parser(response.metaobject);
 };

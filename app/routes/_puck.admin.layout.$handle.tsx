@@ -6,7 +6,6 @@ import {
   Outlet,
   useLoaderData,
 } from '@remix-run/react';
-import {richTextSection} from '~/components/admin/puck/sections/richTextSection';
 import {section} from '~/components/admin/puck/sections/section';
 import {theme} from '~/components/admin/puck/sections/theme';
 import {parseContent} from '~/lib/parseContent';
@@ -51,7 +50,6 @@ console.log(data)
     components: {
       Header: header(settings),
       Section: section(settings),
-      RichTextEditor: richTextSection(),
     },
     root: theme(settings, data.fields.theme.handle, true),
   };

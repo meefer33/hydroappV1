@@ -1,5 +1,6 @@
 import type { ActionFunctionArgs} from "@remix-run/node";
 import { UpdateMetaobject } from "~/graphql/admin/UpdateMetaobject";
+import { parser } from "~/lib/parseContent";
 
 
 export async function action({ request,context }: ActionFunctionArgs) {
@@ -13,7 +14,6 @@ export async function action({ request,context }: ActionFunctionArgs) {
       },
   });
 
- 
-  return response
+  return parser(response?.data?.metaobjectUpdate?.metaobject)
 
 }

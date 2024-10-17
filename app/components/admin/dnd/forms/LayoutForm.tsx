@@ -5,11 +5,9 @@ import ImagePicker from '../fields/ImagePicker';
 import FieldsGroup from '../fields/FieldsGroup';
 import TextBox from '../fields/TextBox';
 import { useOutletContext } from '@remix-run/react';
-import { useEditorContext } from '../EditorContext';
 
 export default function LayoutForm() {
   const {saveLayout,layouts}: any = useOutletContext();
-  //const {setTheme, themeConfig}: any = useEditorContext();
 
   const form = useForm({
     mode: 'uncontrolled',

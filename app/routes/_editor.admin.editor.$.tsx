@@ -1,10 +1,9 @@
 import {LoaderFunctionArgs} from '@remix-run/node';
-import {useLoaderData} from '@remix-run/react';
+import {useLoaderData, useOutletContext} from '@remix-run/react';
 import {parser} from '~/lib/parseContent';
-import {GetMetaobjectByHandle} from '~/graphql/admin/GetMetaobjectByHandle';
-
-import {EditorProvider} from '~/components/admin/dnd/EditorContext';
 import EditorLayout from '~/components/admin/dnd/EditorLayout';
+import {GetMetaobjectTypeHandle} from '~/graphql/GetMetaobjectTypeHandle';
+import {useEffect} from 'react';
 
 export const loader = async ({context, params}: LoaderFunctionArgs) => {
   const {admin} = context;
@@ -12,24 +11,24 @@ export const loader = async ({context, params}: LoaderFunctionArgs) => {
   let handle = params['*']?.split('/').pop();
 
   //get content page
-  const getContent = await admin.request(GetMetaobjectByHandle, {
-    variables: {
-      handle: {type: 'pages', handle: handle},
-    },
+  const getContent = await context.storefront.query(GetMetaobjectTypeHandle, {
+    variables: {type: 'content', handle: handle},
+    cache: context.storefront.CacheNone(),
   });
-  const content = parser(getContent?.data?.metaobjectByHandle);
-  //if no content yet create the
+  const content = parser(getContent?.metaobject);
 
-  return {content, breadcrumb, handle};
+  return {content, breadcrumb, getContent};
 };
 
 export default function EditContent() {
-  const {content, breadcrumb, handle}: any = useLoaderData<typeof loader>();
-  return (
-    <EditorProvider>
-      <EditorLayout content={content?.fields?.page} handle={handle} />
-    </EditorProvider>
-  );
+  const {content, breadcrumb,getContent}: any = useLoaderData<typeof loader>();
+  const {setEditorContent}: any = useOutletContext();
+//console.log('getContent',getContent)
+  useEffect(() => {
+    setEditorContent(content);
+  }, [content]);
+
+  return <EditorLayout />;
 }
 
 export const handle = {

@@ -2,19 +2,17 @@ import {Title} from '@mantine/core';
 import {FormProvider, useForm} from './ContextForm';
 import SegmentControl from '../fields/SegmentControl';
 import ColorPicker from '../fields/ColorPicker';
-import {buildTheme} from '../theme/themeUtils';
+import {buildTheme, defaultTheme} from '../theme/themeUtils';
 import TextBox from '../fields/TextBox';
 import FieldsGroup from '../fields/FieldsGroup';
-import {useEditorContext} from '../EditorContext';
 import {useOutletContext} from '@remix-run/react';
 
 export default function ThemeForm() {
-  const {saveTheme}: any = useOutletContext();
-  const {setTheme, themeConfig}: any = useEditorContext();
-
+  const {saveTheme, setTheme, themes}: any = useOutletContext();
+console.log('theme',themes)
   const form = useForm({
     mode: 'uncontrolled',
-    initialValues: themeConfig,
+    initialValues: themes[0]?.fields?.theme,
     onValuesChange: (values) => {
       setTheme(buildTheme(form.getValues()));
       saveTheme('default', form.getValues());

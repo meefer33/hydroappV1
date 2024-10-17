@@ -7,7 +7,6 @@ import {updateSettings} from '~/lib/utils';
 import {Config, Render} from '@measured/puck';
 import {section} from '~/components/admin/puck/sections/section';
 import {grid} from '~/components/admin/puck/sections/grid';
-import {richTextSection} from '~/components/admin/puck/sections/richTextSection';
 import {imageSection} from '~/components/admin/puck/sections/imageSection';
 import {productScroll} from '~/components/admin/puck/sections/productScroll';
 import {collectionGrid} from '~/components/admin/puck/sections/collectionGrid';
@@ -74,7 +73,6 @@ export default function Page() {
     components: {
       Section: section(themeSettings),
       Grid: grid(themeSettings),
-      RichTextEditor: richTextSection(),
       Image: imageSection(),
       ProductScroll: productScroll(viewport, themeSettings),
       CollectionGrid: collectionGrid(themeSettings),

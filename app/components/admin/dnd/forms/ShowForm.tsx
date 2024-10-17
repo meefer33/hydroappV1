@@ -1,25 +1,21 @@
-import {useState} from 'react';
-import SectionForm from './SectionForm';
-import {useEditorContext} from '../EditorContext';
-import GridForm from './GridForm';
+import { useOutletContext } from '@remix-run/react';
+import SectionBlocks from './SectionBlocks';
+import { Box } from '@mantine/core';
+import Blocks from './Blocks';
 
 export default function ShowForm() {
-  const {sections, selectedItem, activeItem}: any = useEditorContext();
-  const formType = sections?.find(
-    (section: any) => section.id === selectedItem,
-  );
-  //console.log('activeItem', activeItem);
-
+  const {item}: any = useOutletContext();
+//console.log('item',item)
   const getForm = (type: any) => {
     switch (type) {
-      case 'section':
-        return <SectionForm />;
-        case 'grid':
-          return <GridForm />;
+      case 'section_blocks':
+        return <SectionBlocks />;
+        case 'blocks':
+          return <Blocks />;
       default:
         return null;
     }
   };
 
-  return getForm(formType?.type);
+  return <Box p="xs">{getForm(item?.type)}</Box>
 }

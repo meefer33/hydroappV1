@@ -1,47 +1,63 @@
 export const GetPage = `#graphql
 query GetPage($handle:String!) { 
   page(handle: $handle) {
-    id
-    title
     handle
-    metafield(key: "ha_theme_content", namespace: "custom") {
-      key
-      id
-      value
-      type
-      reference {
-        ... on Metaobject {
-          id
-          type
-          handle
-          fields {
+    title
+    seo {
+      description
+      title
+    }
+    updatedAt
+    metafield(key: "content", namespace: "custom") {
+      references(first: 10) {
+        nodes {
+          ... on Metaobject {
+            id
+            handle
             type
-            value
-            reference {
-              ... on Metaobject {
-                id
-                type
-                handle
-                fields {
-                  type
-                  value
-                  key
-                  reference {
-                    ... on Metaobject {
-                      id
+            fields {
+              type
+              value
+              key
+              references(first: 10) {
+                nodes {
+                  ... on Metaobject {
+                    id
+                    handle
+                    type
+                    fields {
                       type
-                      handle
-                      fields {
-                        key
-                        type
-                        value
+                      value
+                      key
+                      references(first: 10) {
+                        nodes {
+                          ... on Metaobject {
+                            id
+                            type
+                            fields {
+                              type
+                              value
+                              key
+                              reference {
+                                ... on MediaImage {
+                                  id
+                                  image {
+                                    url
+                                    width
+                                    height
+                                    altText
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
                       }
                     }
                   }
                 }
               }
             }
-            key
           }
         }
       }

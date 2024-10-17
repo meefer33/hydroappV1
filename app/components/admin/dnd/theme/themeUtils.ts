@@ -1,5 +1,11 @@
 import {generateColors} from '@mantine/colors-generator';
-import {createTheme, CSSVariablesResolver, DEFAULT_THEME, mergeMantineTheme} from '@mantine/core';
+import {
+  createTheme,
+  DEFAULT_THEME,
+  mergeMantineTheme,
+} from '@mantine/core';
+import { useOutletContext } from '@remix-run/react';
+import { nanoid } from 'nanoid';
 
 export const defaultTheme = {
   colorScheme: 'light',
@@ -50,7 +56,6 @@ export const buildTheme = (themeSettings: any = defaultTheme) => {
   return mt;
 };
 
-
 export const defaultLayout = {
   padding: {
     top: 'sm',
@@ -75,7 +80,7 @@ export const defaultLayout = {
   },
 };
 
-export function loadFonts(fonts:any) {
+export function loadFonts(fonts: any) {
   const loadFonts = [];
   const ff = fonts?.bodyUrl;
   const ffh = fonts?.headingsUrl;
@@ -94,27 +99,52 @@ export function loadFonts(fonts:any) {
   return loadFonts;
 }
 
-export  const cssResolver: CSSVariablesResolver = (theme:any) => ({
-  variables: {
-    "--mantine-color-body":
-      theme?.colorScheme === "dark"
-        ? theme?.themes?.dark?.bgColor
-        : theme?.themes?.light?.bgColor,
-    "--mantine-color-text":
-      theme.colorScheme === "dark"
-        ? theme?.themes?.dark?.textColor
-        : theme?.themes?.light?.textColor,
-    "--divider-color":
-      theme?.colorScheme === "dark"
-        ? "--mantine-color-dark-4"
-        : "--mantine-color-dark-4",
-  },
-  light: {
-    "--mantine-color-body": theme?.themes?.light?.bgColor,
-    "--mantine-color-text": theme?.themes?.light?.textColor
-  },
-  dark: {
-    "--mantine-color-body": theme?.themes?.dark?.bgColor,
-  "--mantine-color-text": theme?.themes?.dark?.textColor
-  },
-});
+export const getCssResolve = (themes: any) => {
+  const cssResolve = {
+    variables: {
+      '--mantine-color-body':
+        themes[0]?.fields?.theme?.colorScheme === 'dark'
+          ? themes[0]?.fields?.theme?.themes?.dark?.bgColor
+          : themes[0]?.fields?.theme?.themes?.light?.bgColor,
+      '--mantine-color-text':
+        themes[0]?.fields?.theme.colorScheme === 'dark'
+          ? themes[0]?.fields?.theme?.themes?.dark?.textColor
+          : themes[0]?.fields?.theme?.themes?.light?.textColor,
+      '--divider-color':
+        themes[0]?.fields?.theme?.colorScheme === 'dark'
+          ? '--mantine-color-dark-4'
+          : '--mantine-color-dark-4',
+    },
+    light: {
+      '--mantine-color-body': themes[0]?.fields?.theme?.themes?.light?.bgColor,
+      '--mantine-color-text':
+        themes[0]?.fields?.theme?.themes?.light?.textColor,
+    },
+    dark: {
+      '--mantine-color-body': themes[0]?.fields?.theme?.themes?.dark?.bgColor,
+      '--mantine-color-text': themes[0]?.fields?.theme?.themes?.dark?.textColor,
+    },
+  };
+  return cssResolve;
+};
+
+
+export const getMeta = async (id: any) => {
+  const metaobject: any = await fetch(
+    `/api/get-metaobject?id=${id || ''}`,
+  ).then((res) => res.json());
+  return metaobject;
+};
+
+export const loadMeta = async (selectedItem: any, form: any) => {
+  const values = await getMeta(selectedItem);
+  console.log('useeffect update', values);
+  form.setValues(values?.fields?.settings);
+};
+
+export const getMetaContent = async (handle: any) => {
+  const metaobject: any = await fetch(
+    `/api/get-meta-content?handle=${handle || ''}&stamp=${nanoid()}`,{cache: "no-store"}
+  ).then((res) => res.json());
+  return metaobject;
+};

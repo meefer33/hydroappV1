@@ -21,7 +21,7 @@ export function ProductForm({
   const {openDrawer} = useAside();
   console.log('product', product, product.options, variants);
   const hasVariants =
-    product.variants.nodes[0].selectedOptions[0].value === 'Default Title'
+    product?.variants?.nodes[0]?.selectedOptions[0]?.value === 'Default Title'
       ? false
       : true;
   return (
@@ -179,12 +179,12 @@ function NoMatchingVariant({
   let variantLink = linkTo;
   if (selectedVariantIndex === 0) {
     const defaultVariantLink = variants.find((variant: any) =>
-      variant.selectedOptions.find((option: any, i: string) => {
+      variant?.selectedOptions?.find((option: any, i: string) => {
         return optionValue.name === option.value;
       }),
     );
 
-    defaultVariantLink.selectedOptions.map((selectedOption: any) => {
+    defaultVariantLink?.selectedOptions?.map((selectedOption: any) => {
       variantLink = `${variantLink}${selectedOption.name}=${
         selectedOption.name === option.name
           ? optionValue.name

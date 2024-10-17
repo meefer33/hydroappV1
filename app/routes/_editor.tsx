@@ -1,15 +1,16 @@
-import {MetaDescriptor, MetaFunction, Outlet, useFetcher, useLoaderData} from '@remix-run/react';
-import {LoaderFunctionArgs, redirect} from '@remix-run/server-runtime';
-import {useEffect} from 'react';
+import { useDisclosure } from '@mantine/hooks';
 import {
-  defaultTheme,
-  defaultLayout,
-  loadFonts,
-} from '~/components/admin/dnd/theme/themeUtils';
+  MetaDescriptor,
+  MetaFunction,
+  Outlet,
+  useFetcher,
+  useLoaderData,
+} from '@remix-run/react';
+import {LoaderFunctionArgs, redirect} from '@remix-run/server-runtime';
+import {useState} from 'react';
+import {loadFonts, buildTheme} from '~/components/admin/dnd/theme/themeUtils';
 import {GetMetaobject} from '~/graphql/admin/GetMetaobject';
-import { GetMetaobjectByHandle } from '~/graphql/admin/GetMetaobjectByHandle';
 import {parser} from '~/lib/parseContent';
-
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
   return loadFonts(
@@ -17,10 +18,8 @@ export const meta: MetaFunction<typeof loader> = ({data}) => {
   ) satisfies MetaDescriptor[];
 };
 
-export const loader = async ({context,params}: LoaderFunctionArgs) => {
+export const loader = async ({context}: LoaderFunctionArgs) => {
   const {admin} = context;
-  let breadcrumb = params['*'];
-  let handle = params['*']?.split('/').pop();
 
   //get all themes
   const getThemes = await admin.request(GetMetaobject, {
@@ -30,7 +29,7 @@ export const loader = async ({context,params}: LoaderFunctionArgs) => {
   });
   let themes = parser(getThemes?.data?.metaobjects);
   //if no themes than create default
-  if(!themes[0]){
+  if (!themes[0]) {
     return redirect('/create-defaults');
   }
 
@@ -41,16 +40,20 @@ export const loader = async ({context,params}: LoaderFunctionArgs) => {
     },
   });
   const layouts = parser(getLayouts?.data?.metaobjects);
-  if(!layouts[0]){
+  if (!layouts[0]) {
     return redirect('/create-defaults');
   }
 
   return {themes, layouts};
 };
 
-export default function Layout({children}: any) {
+export default function Layout() {
   const {themes, layouts}: any = useLoaderData<typeof loader>();
-
+  const [theme, setTheme] = useState(buildTheme(themes[0]?.fields?.theme));
+  const [item, setItem]: any = useState();
+  const [editorContent, setEditorContent]: any = useState();
+  const [opened, { open, close }] = useDisclosure(false);
+  const [metaData, setMetaData]: any = useState();
   const actionUpdateSettings = useFetcher();
   const saveTheme = (handle: any, theme: any) => {
     actionUpdateSettings.submit(
@@ -112,38 +115,25 @@ export default function Layout({children}: any) {
     );
   };
 
-  const savePage = (handle: any, page: any) => {
-    actionUpdateSettings.submit(
-      {
-        handle: {
-          type: 'pages',
-          handle: handle,
-        },
-        metaobject: {
-          fields: [
-            {
-              key: 'name',
-              value: handle,
-            },
-            {
-              key: 'page',
-              value: JSON.stringify(page),
-            },
-            {
-              key: 'layout',
-              value: layouts[0].id,
-            },
-          ],
-        },
-      },
-      {
-        method: 'PUT',
-        action: '/api/upsertMetaobject',
-        encType: 'application/json',
-      },
-    );
-  };
-
-
-  return <Outlet context={{themes, layouts, saveTheme, saveLayout, savePage}} />;
+  return (
+    <Outlet
+      context={{
+        themes,
+        layouts,
+        theme,
+        setTheme,
+        item,
+        setItem,
+        saveTheme,
+        saveLayout,
+        editorContent, 
+        setEditorContent,
+        modalIsOpen: opened,
+        openModal: open,
+        closeModal: close,
+        metaData, 
+        setMetaData
+      }}
+    />
+  );
 }

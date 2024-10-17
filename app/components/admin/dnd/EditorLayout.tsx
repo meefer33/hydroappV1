@@ -8,6 +8,7 @@ import {
   CSSVariablesResolver,
   Group,
   MantineProvider,
+  Modal,
   ScrollArea,
   Tabs,
 } from '@mantine/core';
@@ -20,55 +21,24 @@ import {
   RiSmartphoneLine,
 } from '@remixicon/react';
 import ThemeForm from '~/components/admin/dnd/forms/ThemeForm';
-import SelectOverlay from '~/components/admin/dnd/SelectOverlay';
 import LayoutForm from '~/components/admin/dnd/forms/LayoutForm';
 import ThemeHeader from '~/components/admin/dnd/theme/Header';
 import ShowForm from '~/components/admin/dnd/forms/ShowForm';
 import {Aside} from '~/components/layout/Aside';
-import DndKit from './DndKit';
-import {useEditorContext} from './EditorContext';
 import {RootLoader} from '~/root';
-import DndSortableContext from './DndSortableContext';
+import DndMeta from './DndMeta';
+import { getCssResolve } from './theme/themeUtils';
+import MetaContent from './theme/MetaContent';
+import ButtonAddSection from './ButtonAddSection';
+import ModalAddSection from './ModalAddSection';
 
-export default function EditorLayout({content, handle}: any) {
+export default function EditorLayout() {
   const root: any = useRouteLoaderData<RootLoader>('root');
-  const {themes, layouts}: any = useOutletContext();
-  const {theme, handlers, setHandle, sections, item}: any = useEditorContext();
+  const {themes, layouts, theme, editorContent}: any = useOutletContext();
   const [viewport, setViewport] = useState('100%');
   const [desktopOpened, {toggle: toggleDesktop}] = useDisclosure(true);
   const [viewportColor, toggle] = useToggle([true, false]);
-
-  const cssResolver: CSSVariablesResolver = (theme) => ({
-    variables: {
-      '--mantine-color-body':
-        themes[0]?.fields?.theme?.colorScheme === 'dark'
-          ? themes[0]?.fields?.theme?.themes?.dark?.bgColor
-          : themes[0]?.fields?.theme?.themes?.light?.bgColor,
-      '--mantine-color-text':
-        themes[0]?.fields?.theme.colorScheme === 'dark'
-          ? themes[0]?.fields?.theme?.themes?.dark?.textColor
-          : themes[0]?.fields?.theme?.themes?.light?.textColor,
-      '--divider-color':
-        themes[0]?.fields?.theme?.colorScheme === 'dark'
-          ? '--mantine-color-dark-4'
-          : '--mantine-color-dark-4',
-    },
-    light: {
-      '--mantine-color-body': themes[0]?.fields?.theme?.themes?.light?.bgColor,
-      '--mantine-color-text':
-        themes[0]?.fields?.theme?.themes?.light?.textColor,
-    },
-    dark: {
-      '--mantine-color-body': themes[0]?.fields?.theme?.themes?.dark?.bgColor,
-      '--mantine-color-text': themes[0]?.fields?.theme?.themes?.dark?.textColor,
-    },
-  });
-
-  useEffect(() => {
-    handlers.setState(content);
-    setHandle(handle);
-    console.log('sect', sections);
-  }, []);
+  const cssResolver: CSSVariablesResolver = (theme) => getCssResolve(themes)
 
   return (
     <MantineProvider
@@ -138,10 +108,10 @@ export default function EditorLayout({content, handle}: any) {
             </Group>
           </AppShell.Header>
           <AppShell.Navbar p="0" component={ScrollArea} bg="gray.4" c="dark">
-            <Tabs variant="default" defaultValue="settings">
+            <Tabs variant="default" defaultValue="content">
               <Tabs.List>
                 <Tabs.Tab
-                  value="gallery"
+                  value="content"
                   leftSection={<RiEdit2Fill size={16} />}
                 ></Tabs.Tab>
                 <Tabs.Tab
@@ -150,7 +120,10 @@ export default function EditorLayout({content, handle}: any) {
                 ></Tabs.Tab>
               </Tabs.List>
 
-              <Tabs.Panel value="gallery">Gallery tab content</Tabs.Panel>
+              <Tabs.Panel value="content">
+                <DndMeta content={editorContent?.fields?.content} id={editorContent?.id} updateKey='content'/>
+                <ButtonAddSection data={editorContent} />
+              </Tabs.Panel>
 
               <Tabs.Panel value="settings">
                 <ThemeForm />
@@ -174,9 +147,7 @@ export default function EditorLayout({content, handle}: any) {
                 layout={layouts[0].fields?.layout}
                 theme={themes[0].fields?.theme}
               />
-              <DndKit>
-                <DndSortableContext />
-              </DndKit>
+              <MetaContent content={editorContent?.fields?.content}/>
             </Box>
           </AppShell.Main>
           <AppShell.Aside p="0" component={ScrollArea} bg="gray.4" c="dark">
@@ -185,6 +156,7 @@ export default function EditorLayout({content, handle}: any) {
           </AppShell.Aside>
         </AppShell>
       </Aside.Provider>
+      <ModalAddSection/>
     </MantineProvider>
   );
 }
