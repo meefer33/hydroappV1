@@ -15,6 +15,6 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
       id: id,
     },
   });
-
+  
   return parser(response.data.metaobject);
 };

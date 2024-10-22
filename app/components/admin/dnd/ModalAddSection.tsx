@@ -9,7 +9,7 @@ import {
 } from '@mantine/core';
 import {useOutletContext} from '@remix-run/react';
 import {RiAddBoxLine} from '@remixicon/react';
-import useThemeUtils from './theme/useThemeUtils';
+import useThemeUtils from './useEditorUtils';
 
 export default function ModalAddSection() {
   const {modalIsOpen, closeModal, metaData}: any = useOutletContext();
@@ -52,6 +52,15 @@ const AddSection = () => {
           <ActionIcon
             variant="transparent"
             onClick={() => addEditorContent('section_blocks', 'content')}
+          >
+            <RiAddBoxLine size="24" />
+          </ActionIcon>
+        </Group>
+        <Group justify="space-between">
+          <Title order={5}>Collection Display</Title>
+          <ActionIcon
+            variant="transparent"
+            onClick={() => addEditorContent('section_collection', 'content')}
           >
             <RiAddBoxLine size="24" />
           </ActionIcon>

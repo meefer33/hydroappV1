@@ -1,9 +1,25 @@
+import {generateColors} from '@mantine/colors-generator';
+import {createTheme, DEFAULT_THEME, mergeMantineTheme} from '@mantine/core';
 import {useOutletContext} from '@remix-run/react';
-import { nanoid } from 'nanoid';
+import {nanoid} from 'nanoid';
+import {defaultTheme} from './theme/lib/theme';
 
 export default function useThemeUtils() {
-  const {item, editorContent, setEditorContent, metaData, closeModal, setItem}: any =
-    useOutletContext();
+  const {
+    theme,
+    editorContent,
+    setEditorContent,
+    metaData,
+    closeModal,
+    setItem,
+  }: any = useOutletContext();
+
+  const loadMeta = async (selectedItem: any, form: any) => {
+    const values: any = await fetch(
+      `/api/get-metaobject?id=${selectedItem || ''}`,
+    ).then((res) => res.json());
+    form.setValues(values?.fields?.settings);
+  };
 
   const updateMetaVersion = async () => {
     const response = await fetch('/api/UpdateMetaobject', {
@@ -20,13 +36,14 @@ export default function useThemeUtils() {
               value: nanoid(),
             },
           ],
-        }
+        },
       }),
     });
 
     const data: any = await response.json();
+    console.log('uv', data);
     return data;
-  }
+  };
 
   const saveMeta = async (id: any, meta: any) => {
     const response = await fetch('/api/UpdateMetaobject', {
@@ -41,7 +58,7 @@ export default function useThemeUtils() {
     });
 
     //const status = response.status;
-    await response.json();
+    const d = await response.json();
     const data: any = await updateMetaVersion();
     return data;
   };
@@ -71,7 +88,7 @@ export default function useThemeUtils() {
     return data;
   };
 
-  const addEditorContent = async (type: any,field:any) => {
+  const addEditorContent = async (type: any, field: any) => {
     const response = await fetch('/api/create-metaobject', {
       method: 'POST',
       headers: {
@@ -84,7 +101,6 @@ export default function useThemeUtils() {
 
     //const status = response.status;
     const data: any = await response.json();
-    console.log(data?.data?.metaobjectCreate?.metaobject?.id);
 
     const sectionIds: any = [];
     metaData?.fields[field]?.map((section: any) => {
@@ -105,7 +121,7 @@ export default function useThemeUtils() {
   };
 
   const deleteEditorContent = async (id: any) => {
-    setItem(null)
+    setItem(null);
     const response = await fetch('/api/delete-metaobject', {
       method: 'POST',
       headers: {
@@ -118,9 +134,15 @@ export default function useThemeUtils() {
 
     await response.json();
     const data: any = await updateMetaVersion();
-    setEditorContent(data)
+    setEditorContent(data);
     return true;
-  }
+  };
 
-  return {saveMeta, saveSettings, addEditorContent, deleteEditorContent};
+  return {
+    loadMeta,
+    saveMeta,
+    saveSettings,
+    addEditorContent,
+    deleteEditorContent,
+  };
 }

@@ -3,17 +3,14 @@ import {useDroppable} from '@dnd-kit/core';
 import SortableItem from './SortableItem';
 import {Box} from '@mantine/core';
 import {nanoid} from 'nanoid';
+import { useOutletContext } from '@remix-run/react';
+import { useState } from 'react';
 
 export default function DndSortableContext({
   sections,
-  handlers,
+  handlers
 }: any) {
   const {setNodeRef} = useDroppable({id: nanoid()});
-
-  const addSection = (type: any) => {
-    handlers.prepend({id: nanoid(), type: type, data: {}});
-    close();
-  };
 
   return (
     <>

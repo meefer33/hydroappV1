@@ -44,7 +44,10 @@ function parseReferences(v:any) {
       if(v.reference){
         return parseContent(v.reference);
       }
-      
+    case 'collection_reference':
+      if(v.reference){
+        return v.reference;
+      }  
     case 'file_reference':
       if (v.reference?.image) {
         return v.reference?.image;

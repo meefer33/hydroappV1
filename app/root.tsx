@@ -28,6 +28,7 @@ import mantine from '@mantine/core/styles.css?url';
 import carousel from '@mantine/carousel/styles.css?url';
 import {GET_LAYOUT} from './graphql/GetLayout';
 import {loadFonts} from './lib/utils';
+import tiptap from '@mantine/tiptap/styles.css?url';
 
 export type RootLoader = typeof loader;
 
@@ -56,6 +57,7 @@ export function links() {
     {rel: 'stylesheet', href: theme},
     {rel: 'stylesheet', href: mantine},
     {rel: 'stylesheet', href: carousel},
+    {rel: 'stylesheet', href: tiptap},
     {rel: 'stylesheet', href: puckcss},
     {
       rel: 'preconnect',

@@ -7,11 +7,6 @@ query GetImages($search: String) {
         reverse: true
     ) {
       nodes {
-        preview {
-        image {
-          url
-        }
-      }
         ... on MediaImage {
           id
           updatedAt

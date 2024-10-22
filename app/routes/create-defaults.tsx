@@ -1,16 +1,19 @@
 import {useLoaderData} from '@remix-run/react';
 import {LoaderFunctionArgs, redirect} from '@remix-run/server-runtime';
-import { defaultLayout, defaultTheme } from '~/components/admin/dnd/theme/themeUtils';
-import { CreateMetafieldDefinition } from '~/graphql/admin/CreateMetafieldDefinition';
+import {
+  defaultLayout,
+  defaultTheme,
+} from '~/components/admin/dnd/theme/lib/theme';
+import {CreateMetafieldDefinition} from '~/graphql/admin/CreateMetafieldDefinition';
 import {CreateMetaobjectDefinition} from '~/graphql/admin/CreateMetaobjectDefinition';
-import { UpsertMetaobject } from '~/graphql/admin/UpsertMetaobject';
+import {UpsertMetaobject} from '~/graphql/admin/UpsertMetaobject';
 
 export const loader = async ({request, context}: LoaderFunctionArgs) => {
   const {admin} = context;
 
   const themes = await admin.request(UpsertMetaobject, {
     variables: {
-      handle: {type:'themes',handle:'default'},
+      handle: {type: 'themes', handle: 'default'},
       metaobject: {
         fields: [
           {
@@ -28,7 +31,7 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
 
   const layouts = await admin.request(UpsertMetaobject, {
     variables: {
-      handle: {type:'layouts',handle:'default'},
+      handle: {type: 'layouts', handle: 'default'},
       metaobject: {
         fields: [
           {
@@ -47,8 +50,6 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
       },
     },
   });
-
-
 
   return redirect('/admin/editor');
 };

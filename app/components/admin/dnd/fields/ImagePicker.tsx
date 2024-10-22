@@ -143,6 +143,7 @@ export default function ImagePicker({label = 'Text Box', field}: any) {
   }, [fileCreate.data]);
 
   const setLogo = (logo: any) => {
+  
     form.setFieldValue(field, logo);
   };
 
@@ -246,8 +247,9 @@ export default function ImagePicker({label = 'Text Box', field}: any) {
                   <Box
                     component="button"
                     onClick={() => {
-                      setLogo(file?.image);
+                      setLogo(file);
                       close();
+                      
                     }}
                   >
                     <Image

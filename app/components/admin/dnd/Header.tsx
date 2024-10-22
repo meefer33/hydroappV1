@@ -91,7 +91,7 @@ function Logo({logo, layout, pinned, theme}: any) {
               layout?.heading?.textColor ? layout?.heading?.textColor : ''
             }`}
             fz={50}
-            mb={'0'}
+            mb="0"
             ff={theme?.fonts?.headingsClass}
           >
             <Box
@@ -114,7 +114,7 @@ function Logo({logo, layout, pinned, theme}: any) {
                 ? layout?.heading?.subTextSpacing
                 : 0
             }
-            //ff={theme?.fonts?.headingsClass}
+            ff={theme?.fonts?.headingsClass}
           >
             <Box mt="-10">{layout?.heading?.subText}</Box>
           </Title>

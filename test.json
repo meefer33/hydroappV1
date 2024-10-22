@@ -1,0 +1,577 @@
+{
+  "handle": "home",
+  "id": "gid://shopify/Metaobject/63419809843",
+  "type": "content",
+  "fields": [
+    {
+      "key": "name",
+      "type": "single_line_text_field",
+      "value": "home",
+      "reference": null,
+      "references": null
+    },
+    {
+      "key": "content_data",
+      "type": "json",
+      "value": null,
+      "reference": null,
+      "references": null
+    },
+    {
+      "key": "layout",
+      "type": "metaobject_reference",
+      "value": "gid://shopify/Metaobject/59518418995",
+      "reference": {
+        "id": "gid://shopify/Metaobject/59518418995",
+        "type": "ha_theme_layouts",
+        "handle": "main",
+        "fields": [
+          {"key": "name", "type": "single_line_text_field", "value": "main"},
+          {
+            "key": "layout",
+            "type": "json",
+            "value": "{\"root\":{\"props\":{\"colorScheme\":\"light\",\"colors\":{\"primary_color\":\"#6ca876\",\"accent_color\":\"#fab005\",\"negative_color\":\"#e64980\",\"positive_color\":\"#4c6ef5\",\"notice_color\":\"#fab005\",\"info_color\":\"#be4bdb\"},\"light_theme\":{\"bg_color\":\"#f8f9fa\",\"text_color\":\"#828282\"},\"dark_theme\":{\"bg_color\":\"#3b3b3b\",\"text_color\":\"#dee2e6\"},\"fonts\":{\"font_body_class\":\"\\\"Oswald\\\", sans-serif\",\"font_body_url\":\"https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap\",\"font_headings_class\":\"\\\"New Amsterdam\\\", sans-serif\",\"font_headings_url\":\"https://fonts.googleapis.com/css2?family=New+Amsterdam&display=swap\"}}},\"content\":[],\"zones\":{\"root:header\":[{\"type\":\"Header\",\"props\":{\"padding\":{\"padding_top\":\"none\",\"padding_bottom\":\"none\"},\"logo\":{\"logoImage\":{\"altText\":\"\",\"id\":\"gid://shopify/ImageSource/24019582025779\",\"url\":\"https://cdn.shopify.com/s/files/1/0593/5048/2995/files/sunlifesolar_a2b24436-ba54-4ce8-bb5d-0a2bf86d00bf.png?v=1723803087\",\"height\":569,\"width\":556},\"logoWidth\":98,\"logoText\":\"SUN LIFE\",\"logoColor\":\"#6ca876\",\"logoSubText\":\"SOLAR POWER\",\"logoTextSpacing\":2,\"logoSubTextColor\":\"#868e96\"},\"id\":\"Header-0c9e2bc7-c3be-4795-a4fa-2a0b50f9c79b\",\"scrollBackground\":\"#f1f3f5\"}}],\"root:footer\":[]}}"
+          },
+          {
+            "key": "theme",
+            "type": "metaobject_reference",
+            "value": "gid://shopify/Metaobject/59518386227"
+          }
+        ]
+      },
+      "references": null
+    },
+    {
+      "key": "sections",
+      "type": "list.metaobject_reference",
+      "value": null,
+      "reference": null,
+      "references": null
+    },
+    {
+      "key": "content",
+      "type": "list.mixed_reference",
+      "value": "[\"gid://shopify/Metaobject/65832058931\",\"gid://shopify/Metaobject/66077524019\",\"gid://shopify/Metaobject/65861386291\",\"gid://shopify/Metaobject/66188836915\"]",
+      "reference": null,
+      "references": {
+        "nodes": [
+          {
+            "id": "gid://shopify/Metaobject/65832058931",
+            "handle": "sungold-power-24-v-3000",
+            "type": "section_blocks",
+            "fields": [
+              {
+                "type": "single_line_text_field",
+                "value": "sungold power 24v 3000",
+                "key": "name",
+                "reference": null,
+                "references": null
+              },
+              {
+                "type": "json",
+                "value": "{\"name\":\"sungold power\",\"padding\":\"xl\",\"bg\":\"#15aabf\",\"cols\":{\"mobile\":1,\"tablet\":2,\"desktop\":2},\"spacing\":\"xl\"}",
+                "key": "settings",
+                "reference": null,
+                "references": null
+              },
+              {
+                "type": "list.metaobject_reference",
+                "value": "[\"gid://shopify/Metaobject/65942847539\",\"gid://shopify/Metaobject/65832026163\"]",
+                "key": "blocks",
+                "reference": null,
+                "references": {
+                  "nodes": [
+                    {
+                      "id": "gid://shopify/Metaobject/65942847539",
+                      "handle": "blocks-x9mjmr4r",
+                      "type": "blocks",
+                      "fields": [
+                        {
+                          "type": "single_line_text_field",
+                          "value": null,
+                          "key": "name",
+                          "references": null
+                        },
+                        {
+                          "type": "json",
+                          "value": "{\"name\":\"\",\"padding\":\"xl\",\"bg\":\"primary\"}",
+                          "key": "settings",
+                          "references": null
+                        },
+                        {
+                          "type": "list.mixed_reference",
+                          "value": "[\"gid://shopify/Metaobject/65942814771\"]",
+                          "key": "blocks",
+                          "references": {
+                            "nodes": [
+                              {
+                                "id": "gid://shopify/Metaobject/65942814771",
+                                "type": "block_rich_text",
+                                "fields": [
+                                  {
+                                    "type": "single_line_text_field",
+                                    "value": null,
+                                    "key": "name",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "rich_text_field",
+                                    "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Hello Moto\"}]}]}",
+                                    "key": "text",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "json",
+                                    "value": "{\"rte\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"attrs\":{\"textAlign\":\"left\"},\"content\":[{\"type\":\"text\",\"text\":\"hello moto \"},{\"type\":\"text\",\"marks\":[{\"type\":\"bold\"}],\"text\":\"goodbye \"},{\"type\":\"text\",\"text\":\"moto\"}]}]}}",
+                                    "key": "settings",
+                                    "reference": null
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "list.mixed_reference",
+                          "value": null,
+                          "key": "block_items",
+                          "references": null
+                        }
+                      ]
+                    },
+                    {
+                      "id": "gid://shopify/Metaobject/65832026163",
+                      "handle": "sungold-power-24-v-3000",
+                      "type": "blocks",
+                      "fields": [
+                        {
+                          "type": "single_line_text_field",
+                          "value": "sungold power 24v 3000",
+                          "key": "name",
+                          "references": null
+                        },
+                        {
+                          "type": "json",
+                          "value": "{\"name\":\"\",\"padding\":\"xl\",\"bg\":\"#228be6\"}",
+                          "key": "settings",
+                          "references": null
+                        },
+                        {
+                          "type": "list.mixed_reference",
+                          "value": "[\"gid://shopify/Metaobject/65942814771\"]",
+                          "key": "blocks",
+                          "references": {
+                            "nodes": [
+                              {
+                                "id": "gid://shopify/Metaobject/65942814771",
+                                "type": "block_rich_text",
+                                "fields": [
+                                  {
+                                    "type": "single_line_text_field",
+                                    "value": null,
+                                    "key": "name",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "rich_text_field",
+                                    "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Hello Moto\"}]}]}",
+                                    "key": "text",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "json",
+                                    "value": "{\"rte\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"attrs\":{\"textAlign\":\"left\"},\"content\":[{\"type\":\"text\",\"text\":\"hello moto \"},{\"type\":\"text\",\"marks\":[{\"type\":\"bold\"}],\"text\":\"goodbye \"},{\"type\":\"text\",\"text\":\"moto\"}]}]}}",
+                                    "key": "settings",
+                                    "reference": null
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "list.mixed_reference",
+                          "value": "[\"gid://shopify/Metaobject/65942814771\"]",
+                          "key": "block_items",
+                          "references": {
+                            "nodes": [
+                              {
+                                "id": "gid://shopify/Metaobject/65942814771",
+                                "type": "block_rich_text",
+                                "fields": [
+                                  {
+                                    "type": "single_line_text_field",
+                                    "value": null,
+                                    "key": "name",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "rich_text_field",
+                                    "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Hello Moto\"}]}]}",
+                                    "key": "text",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "json",
+                                    "value": "{\"rte\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"attrs\":{\"textAlign\":\"left\"},\"content\":[{\"type\":\"text\",\"text\":\"hello moto \"},{\"type\":\"text\",\"marks\":[{\"type\":\"bold\"}],\"text\":\"goodbye \"},{\"type\":\"text\",\"text\":\"moto\"}]}]}}",
+                                    "key": "settings",
+                                    "reference": null
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "gid://shopify/Metaobject/66077524019",
+            "handle": "section-blocks-jfjju9gf",
+            "type": "section_blocks",
+            "fields": [
+              {
+                "type": "single_line_text_field",
+                "value": null,
+                "key": "name",
+                "reference": null,
+                "references": null
+              },
+              {
+                "type": "json",
+                "value": "{\"name\":\"\",\"padding\":\"xl\",\"bg\":\"#82c91e\",\"cols\":{\"mobile\":1,\"tablet\":2,\"desktop\":2},\"spacing\":\"xl\"}",
+                "key": "settings",
+                "reference": null,
+                "references": null
+              },
+              {
+                "type": "list.metaobject_reference",
+                "value": "[\"gid://shopify/Metaobject/66079326259\"]",
+                "key": "blocks",
+                "reference": null,
+                "references": {
+                  "nodes": [
+                    {
+                      "id": "gid://shopify/Metaobject/66079326259",
+                      "handle": "blocks-inexvj51",
+                      "type": "blocks",
+                      "fields": [
+                        {
+                          "type": "single_line_text_field",
+                          "value": null,
+                          "key": "name",
+                          "references": null
+                        },
+                        {
+                          "type": "json",
+                          "value": "{\"name\":\"\",\"padding\":\"sm\",\"bg\":\"#fa5252\"}",
+                          "key": "settings",
+                          "references": null
+                        },
+                        {
+                          "type": "list.mixed_reference",
+                          "value": "[\"gid://shopify/Metaobject/66145124403\"]",
+                          "key": "blocks",
+                          "references": {
+                            "nodes": [
+                              {
+                                "id": "gid://shopify/Metaobject/66145124403",
+                                "type": "block_image",
+                                "fields": [
+                                  {
+                                    "type": "single_line_text_field",
+                                    "value": null,
+                                    "key": "name",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "json",
+                                    "value": "{\"image\":{\"id\":\"gid://shopify/MediaImage/24275238551603\",\"updatedAt\":\"2024-10-12T11:24:40Z\",\"image\":{\"altText\":\"\",\"id\":\"gid://shopify/ImageSource/24282459144243\",\"url\":\"https://cdn.shopify.com/s/files/1/0593/5048/2995/files/sungold24v3000.webp?v=1728732280\",\"height\":1440,\"width\":1440}},\"width\":\"100\"}",
+                                    "key": "settings",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "file_reference",
+                                    "value": "gid://shopify/MediaImage/24275238551603",
+                                    "key": "image",
+                                    "reference": {
+                                      "id": "gid://shopify/MediaImage/24275238551603",
+                                      "image": {
+                                        "url": "https://cdn.shopify.com/s/files/1/0593/5048/2995/files/sungold24v3000.webp?v=1728732280",
+                                        "width": 1440,
+                                        "height": 1440,
+                                        "altText": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "list.mixed_reference",
+                          "value": "[\"gid://shopify/Metaobject/66145124403\"]",
+                          "key": "block_items",
+                          "references": {
+                            "nodes": [
+                              {
+                                "id": "gid://shopify/Metaobject/66145124403",
+                                "type": "block_image",
+                                "fields": [
+                                  {
+                                    "type": "single_line_text_field",
+                                    "value": null,
+                                    "key": "name",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "json",
+                                    "value": "{\"image\":{\"id\":\"gid://shopify/MediaImage/24275238551603\",\"updatedAt\":\"2024-10-12T11:24:40Z\",\"image\":{\"altText\":\"\",\"id\":\"gid://shopify/ImageSource/24282459144243\",\"url\":\"https://cdn.shopify.com/s/files/1/0593/5048/2995/files/sungold24v3000.webp?v=1728732280\",\"height\":1440,\"width\":1440}},\"width\":\"100\"}",
+                                    "key": "settings",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "file_reference",
+                                    "value": "gid://shopify/MediaImage/24275238551603",
+                                    "key": "image",
+                                    "reference": {
+                                      "id": "gid://shopify/MediaImage/24275238551603",
+                                      "image": {
+                                        "url": "https://cdn.shopify.com/s/files/1/0593/5048/2995/files/sungold24v3000.webp?v=1728732280",
+                                        "width": 1440,
+                                        "height": 1440,
+                                        "altText": ""
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "gid://shopify/Metaobject/65861386291",
+            "handle": "section-blocks-lsaaliu1",
+            "type": "section_blocks",
+            "fields": [
+              {
+                "type": "single_line_text_field",
+                "value": null,
+                "key": "name",
+                "reference": null,
+                "references": null
+              },
+              {
+                "type": "json",
+                "value": "{\"name\":\"sb\",\"padding\":\"sm\",\"bg\":\"#e64980\",\"cols\":{\"mobile\":1,\"tablet\":2,\"desktop\":3},\"spacing\":\"xl\"}",
+                "key": "settings",
+                "reference": null,
+                "references": null
+              },
+              {
+                "type": "list.metaobject_reference",
+                "value": "[\"gid://shopify/Metaobject/65832026163\"]",
+                "key": "blocks",
+                "reference": null,
+                "references": {
+                  "nodes": [
+                    {
+                      "id": "gid://shopify/Metaobject/65832026163",
+                      "handle": "sungold-power-24-v-3000",
+                      "type": "blocks",
+                      "fields": [
+                        {
+                          "type": "single_line_text_field",
+                          "value": "sungold power 24v 3000",
+                          "key": "name",
+                          "references": null
+                        },
+                        {
+                          "type": "json",
+                          "value": "{\"name\":\"\",\"padding\":\"xl\",\"bg\":\"#228be6\"}",
+                          "key": "settings",
+                          "references": null
+                        },
+                        {
+                          "type": "list.mixed_reference",
+                          "value": "[\"gid://shopify/Metaobject/65942814771\"]",
+                          "key": "blocks",
+                          "references": {
+                            "nodes": [
+                              {
+                                "id": "gid://shopify/Metaobject/65942814771",
+                                "type": "block_rich_text",
+                                "fields": [
+                                  {
+                                    "type": "single_line_text_field",
+                                    "value": null,
+                                    "key": "name",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "rich_text_field",
+                                    "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Hello Moto\"}]}]}",
+                                    "key": "text",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "json",
+                                    "value": "{\"rte\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"attrs\":{\"textAlign\":\"left\"},\"content\":[{\"type\":\"text\",\"text\":\"hello moto \"},{\"type\":\"text\",\"marks\":[{\"type\":\"bold\"}],\"text\":\"goodbye \"},{\"type\":\"text\",\"text\":\"moto\"}]}]}}",
+                                    "key": "settings",
+                                    "reference": null
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "list.mixed_reference",
+                          "value": "[\"gid://shopify/Metaobject/65942814771\"]",
+                          "key": "block_items",
+                          "references": {
+                            "nodes": [
+                              {
+                                "id": "gid://shopify/Metaobject/65942814771",
+                                "type": "block_rich_text",
+                                "fields": [
+                                  {
+                                    "type": "single_line_text_field",
+                                    "value": null,
+                                    "key": "name",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "rich_text_field",
+                                    "value": "{\"type\":\"root\",\"children\":[{\"type\":\"paragraph\",\"children\":[{\"type\":\"text\",\"value\":\"Hello Moto\"}]}]}",
+                                    "key": "text",
+                                    "reference": null
+                                  },
+                                  {
+                                    "type": "json",
+                                    "value": "{\"rte\":{\"type\":\"doc\",\"content\":[{\"type\":\"paragraph\",\"attrs\":{\"textAlign\":\"left\"},\"content\":[{\"type\":\"text\",\"text\":\"hello moto \"},{\"type\":\"text\",\"marks\":[{\"type\":\"bold\"}],\"text\":\"goodbye \"},{\"type\":\"text\",\"text\":\"moto\"}]}]}}",
+                                    "key": "settings",
+                                    "reference": null
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "gid://shopify/Metaobject/66188836915",
+            "handle": "section-collection-uuj0wy7m",
+            "type": "section_collection",
+            "fields": [
+              {
+                "type": "single_line_text_field",
+                "value": null,
+                "key": "name",
+                "reference": null,
+                "references": null
+              },
+              {
+                "type": "json",
+                "value": "{\"name\":\"\",\"padding\":\"xl\",\"bg\":\"\",\"slides\":{\"spacing\":\"md\",\"tablet\":\"50%\",\"desktop\":\"25%\"},\"collection\":\"gid://shopify/Collection/283327856691\"}",
+                "key": "settings",
+                "reference": null,
+                "references": null
+              },
+              {
+                "type": "collection_reference",
+                "value": "gid://shopify/Collection/283327856691",
+                "key": "collection",
+                "reference": {
+                  "handle": "hybrid-inverters",
+                  "id": "gid://shopify/Collection/283327856691",
+                  "title": "Hybrid Inverters",
+                  "description": "",
+                  "image": null,
+                  "products": {
+                    "nodes": [
+                      {
+                        "handle": "srne-hybrid-solar-inverter-3-3kw-24v-80a",
+                        "id": "gid://shopify/Product/7426813100083",
+                        "description": "Brand Name: SRNEType: DC/AC InvertersOrigin: Mainland ChinaSize: 378mm*280mm*103mmOutput Frequency: 50HZ/60HZOutput Type: SINGLEis_customized: YesO...",
+                        "featuredImage": {
+                          "url": "https://cdn.shopify.com/s/files/1/0593/5048/2995/files/A867fd63b02c0410e97ea91023e982251O.webp?v=1726655991",
+                          "id": "gid://shopify/ProductImage/31905804484659",
+                          "altText": null
+                        },
+                        "title": "SRNE Hybrid Solar Inverter 3.3KW 24V 80A",
+                        "tags": []
+                      },
+                      {
+                        "handle": "srne-hybrid-solar-inverter-5kw-48v-100a",
+                        "id": "gid://shopify/Product/7426810249267",
+                        "description": "Brand Name: SRNEType: DC/AC InvertersOrigin: Mainland ChinaSize: 426mm*322mm*126mmOutput Frequency: 50HZ/60HZOutput Type: SINGLEis_customized: YesO...",
+                        "featuredImage": {
+                          "url": "https://cdn.shopify.com/s/files/1/0593/5048/2995/files/S48e832e5faec4c8a91e229864dc87be6z.webp?v=1726655034",
+                          "id": "gid://shopify/ProductImage/31905793736755",
+                          "altText": null
+                        },
+                        "title": "SRNE Hybrid Solar Inverter 5KW 48V 100A",
+                        "tags": []
+                      },
+                      {
+                        "handle": "srne-solar-hybrid-inversor-5kw-48v-80a",
+                        "id": "gid://shopify/Product/7426811396147",
+                        "description": "Brand Name: NoEnName_NullOrigin: Mainland ChinaCertification: CECertification: RoHSSize: 486mm*408mm*201mmOutput Frequency: 50Hz ± 0.3Hz/60Hz ± 0.3...",
+                        "featuredImage": {
+                          "url": "https://cdn.shopify.com/s/files/1/0593/5048/2995/files/Scfc5d79001944770923e24eb608b7d1cZ.webp?v=1726655686",
+                          "id": "gid://shopify/ProductImage/31905797996595",
+                          "altText": null
+                        },
+                        "title": "SRNE Solar Hybrid Inversor 5KW 48V 80A",
+                        "tags": []
+                      },
+                      {
+                        "handle": "srne-solar-hybrid-inverter-3-5kw-48v-80a",
+                        "id": "gid://shopify/Product/7426809987123",
+                        "description": "Brand Name: SnatermType: DC/AC InvertersOrigin: Mainland ChinaSize: 430mm*338mm*126mmOutput Frequency: 50hz or 60hzOutput Type: SINGLEis_customized...",
+                        "featuredImage": {
+                          "url": "https://cdn.shopify.com/s/files/1/0593/5048/2995/files/Sabdd9a3b6ab947a3b62571fc4835c4bdp.webp?v=1726654854",
+                          "id": "gid://shopify/ProductImage/31905793048627",
+                          "altText": null
+                        },
+                        "title": "SRNE Solar Hybrid Inverter 3.5KW 48V 80A",
+                        "tags": []
+                      }
+                    ]
+                  }
+                },
+                "references": null
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "key": "version",
+      "type": "single_line_text_field",
+      "value": "bEqxQ6yNn35wYQ0rZva_z",
+      "reference": null,
+      "references": null
+    }
+  ]
+}

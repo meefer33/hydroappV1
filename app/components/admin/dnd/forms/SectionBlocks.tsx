@@ -1,13 +1,11 @@
 import {FormProvider, useForm} from '../forms/ContextForm';
-import ColorPicker from '../fields/ColorPicker';
 import {nanoid} from 'nanoid';
 import {useOutletContext} from '@remix-run/react';
 import {useEffect} from 'react';
-import SelectBox from '../fields/SelectBox';
 import NumberSlider from '../fields/NumberSlider';
-import {getMetaContent, loadMeta} from '../theme/themeUtils';
-import TextBox from '../fields/TextBox';
-import useThemeUtils from '../theme/useThemeUtils';
+import useThemeUtils from '../useEditorUtils';
+import SectionGroup from '../fields/SectionGroup';
+import FieldsGroup from '../fields/FieldsGroup';
 
 export const sectionProps = {
   padding: {
@@ -18,14 +16,14 @@ export const sectionProps = {
 };
 
 export default function SectionBlocks() {
-  const {item, editorContent, setEditorContent}: any =
-    useOutletContext();
-  const {saveMeta, saveSettings} = useThemeUtils();
+  const {item, editorContent, setEditorContent}: any = useOutletContext();
+  const {loadMeta, saveSettings} = useThemeUtils();
 
   const form = useForm({
     mode: 'controlled',
     initialValues: {
       name: '',
+      contentWidth: 'lg',
       padding: 'xl',
       bg: 'primary',
       cols: {
@@ -49,13 +47,12 @@ export default function SectionBlocks() {
     <FormProvider form={form}>
       {item?.fields?.settings?.name || item?.handle}
       <form name={nanoid()}>
-        <TextBox label="Name" field="name" />
-        <SelectBox label="Padding" field="padding" />
-        <SelectBox label="Spacing" field="spacing" />
-        <ColorPicker label="Section Background" field="bg" />
-        <NumberSlider label="Columns Mobile" max={12} field="cols.mobile" />
-        <NumberSlider label="Columns Tablet" max={12} field="cols.tablet" />
-        <NumberSlider label="Columns Desktop" max={12} field="cols.desktop" />
+        <SectionGroup label="Section" isOpen={true} />
+        <FieldsGroup label="Columns" isOpen={true}>
+          <NumberSlider label="Columns Mobile" max={12} field="cols.mobile" />
+          <NumberSlider label="Columns Tablet" max={12} field="cols.tablet" />
+          <NumberSlider label="Columns Desktop" max={12} field="cols.desktop" />
+        </FieldsGroup>
       </form>
     </FormProvider>
   );

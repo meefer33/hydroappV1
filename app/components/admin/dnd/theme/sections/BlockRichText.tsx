@@ -1,6 +1,20 @@
-import {Box, Container, SimpleGrid} from '@mantine/core';
-import {RichText} from '@shopify/hydrogen';
+import {TypographyStylesProvider} from '@mantine/core';
 
 export default function BlockRichText({content}: any) {
-  return <RichText data={content?.fields?.text} />;
+  /*
+  const output = useMemo(() => {
+    return generateHTML(content?.fields?.settings.rte, [
+      StarterKit,
+      Underline,
+      Link,
+      //Highlight,
+      TextAlign.configure({types: ['heading', 'paragraph']}),
+    ]);
+  }, [content?.fields?.settings.rte]);
+  */
+  return (
+    <TypographyStylesProvider>
+      <div dangerouslySetInnerHTML={{__html: content?.fields?.settings.rte}} />
+    </TypographyStylesProvider>
+  );
 }

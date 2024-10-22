@@ -1,71 +1,59 @@
-import {MantineProvider} from '@mantine/core';
-import {Config, Render} from '@measured/puck';
-import {
-  MetaDescriptor,
-  MetaFunction,
-  Outlet,
-  useLoaderData,
-  useMatch,
-  useMatches,
-  useRouteLoaderData,
-} from '@remix-run/react';
-import {LoaderFunctionArgs} from '@remix-run/server-runtime';
-import {Analytics} from '@shopify/hydrogen';
-import {contentLayout} from '~/components/admin/puck/sections/contentLayout';
-import {header} from '~/components/admin/puck/sections/header';
-import {theme} from '~/components/admin/puck/sections/theme';
-import ThemeHeader from '~/components/admin/puck/theme/ThemeHeader';
+import type {
+  CartApiQueryFragment,
+  FooterQuery,
+  HeaderQuery,
+} from 'storefrontapi.generated';
+import {Box, CSSVariablesResolver, MantineProvider} from '@mantine/core';
 import {Aside} from '~/components/layout/Aside';
-
-import {ShopLayout} from '~/components/layout/ShopLayout';
-import {GetLayoutTheme} from '~/graphql/GetLayoutTheme';
-import {parseContent} from '~/lib/parseContent';
-import {cssResolver, loadFonts, updateSettings} from '~/lib/utils';
+import Header from '~/components/layout/Header';
+import Footer from '~/components/layout/Footer';
+import {Outlet, useRouteLoaderData} from '@remix-run/react';
 import {RootLoader} from '~/root';
+import useThemeUtils from '~/components/admin/dnd/useEditorUtils';
+import { buildTheme, getCssResolve } from '~/components/admin/dnd/theme/lib/theme';
 
-export const loader = async ({context}: LoaderFunctionArgs) => {
-  const {storefront} = context;
-  const handle = 'main';
-
-  const layout = await storefront.query(GetLayoutTheme, {
-    variables: {
-      handle: handle,
-    },
-  });
-  const parseLayout = JSON.parse(layout.metaobject.layout.value);
-  const theme = JSON.parse(
-    layout?.metaobject?.theme?.reference?.settings?.value,
-  );
-
-  return {parseLayout, theme};
-};
+interface ShopLayoutProps {
+  cart: Promise<CartApiQueryFragment | null>;
+  footer: Promise<FooterQuery | null>;
+  header: HeaderQuery;
+  isLoggedIn: Promise<boolean>;
+  publicStoreDomain: string;
+  children?: React.ReactNode;
+  theme: any;
+  layout: any;
+}
 
 export default function Layout({children}: any) {
-  const data: any = useLoaderData<typeof loader>();
-
-  const settings = updateSettings(data.theme);
-  const ld: any = data?.parseLayout?.data?.zones['root:header'][0].props;
-  const config: Config | any = {
-    root: contentLayout(data?.parseLayout),
-  };
+  const root: any = useRouteLoaderData<RootLoader>('root');
+ 
+  const bdTheme = buildTheme(root.theme);
+  const cssResolver: CSSVariablesResolver = (theme) => getCssResolve(bdTheme);
 
   return (
     <>
-      {data ? (
+      {root ? (
         <MantineProvider
-          theme={settings}
-          forceColorScheme={data?.theme?.other?.colorScheme}
+          theme={bdTheme}
+          forceColorScheme={root?.theme?.other?.colorScheme}
           cssVariablesResolver={cssResolver}
         >
           <Aside.Provider>
             <Aside
-              cart={data.cart}
-              header={data.header}
-              publicStoreDomain={data.publicStoreDomain}
+              cart={root?.cart}
+              header={root?.header}
+              publicStoreDomain={root?.publicStoreDomain}
             />
-            <Render config={config} data={{}} />
-            <Outlet context={settings}/>
 
+            <Header />
+
+            <Box mih={900}>
+              <Outlet />
+            </Box>
+            <Footer
+              footer={root?.footer}
+              header={root?.header}
+              publicStoreDomain={root?.publicStoreDomain}
+            />
           </Aside.Provider>
         </MantineProvider>
       ) : (

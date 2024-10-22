@@ -23,7 +23,7 @@ export const loader = async ({context, params}: LoaderFunctionArgs) => {
 export default function EditContent() {
   const {content, breadcrumb,getContent}: any = useLoaderData<typeof loader>();
   const {setEditorContent}: any = useOutletContext();
-//console.log('getContent',getContent)
+console.log('getContent',getContent)
   useEffect(() => {
     setEditorContent(content);
   }, [content]);

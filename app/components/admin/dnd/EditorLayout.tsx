@@ -1,9 +1,9 @@
 import {useOutletContext, useRouteLoaderData} from '@remix-run/react';
 import {useDisclosure, useToggle} from '@mantine/hooks';
-import {useEffect, useState} from 'react';
 import {
   AppShell,
   Box,
+  Burger,
   Button,
   CSSVariablesResolver,
   Group,
@@ -22,24 +22,36 @@ import {
 } from '@remixicon/react';
 import ThemeForm from '~/components/admin/dnd/forms/ThemeForm';
 import LayoutForm from '~/components/admin/dnd/forms/LayoutForm';
-import ThemeHeader from '~/components/admin/dnd/theme/Header';
+import ThemeHeader from '~/components/admin/dnd/Header';
 import ShowForm from '~/components/admin/dnd/forms/ShowForm';
 import {Aside} from '~/components/layout/Aside';
 import {RootLoader} from '~/root';
 import DndMeta from './DndMeta';
-import { getCssResolve } from './theme/themeUtils';
-import MetaContent from './theme/MetaContent';
 import ButtonAddSection from './ButtonAddSection';
 import ModalAddSection from './ModalAddSection';
+import { getCssResolve } from './theme/lib/theme';
+import MetaContentEditor from './MetaContentEditor';
+import MetaContent from './theme/MetaContent';
 
 export default function EditorLayout() {
   const root: any = useRouteLoaderData<RootLoader>('root');
-  const {themes, layouts, theme, editorContent}: any = useOutletContext();
-  const [viewport, setViewport] = useState('100%');
-  const [desktopOpened, {toggle: toggleDesktop}] = useDisclosure(true);
-  const [viewportColor, toggle] = useToggle([true, false]);
-  const cssResolver: CSSVariablesResolver = (theme) => getCssResolve(themes)
+  const {
+    themes,
+    layouts,
+    theme,
+    editorContent,
+    metaData,
+    viewport,
+    setViewport,
+    setItem
+  }: any = useOutletContext();
 
+  const [mobileOpened, {toggle: toggleMobile}] = useDisclosure();
+  const [desktopOpened, {toggle: toggleDesktop}] = useDisclosure(true);
+
+  const [viewportColor, toggle] = useToggle([true, false]);
+  const cssResolver: CSSVariablesResolver = (theme) => getCssResolve(themes);
+  console.log('metaData', theme);
   return (
     <MantineProvider
       theme={theme}
@@ -54,17 +66,21 @@ export default function EditorLayout() {
         />
 
         <AppShell
+          //layout="alt"
           header={{height: 60}}
+          //footer={{height: 60}}
           navbar={{
             width: 300,
             breakpoint: 'sm',
-            // collapsed: {mobile: !opened},
+            collapsed: {mobile: !mobileOpened, desktop: !desktopOpened},
           }}
           aside={{
             width: 300,
-            breakpoint: 'md',
-            collapsed: {desktop: false, mobile: true},
+            breakpoint: 'sm',
+            collapsed: {mobile: !mobileOpened, desktop: !desktopOpened},
           }}
+          padding="0"
+          //disabled={disabled}
         >
           <AppShell.Header bg="gray.4" c="dark">
             <Group h="100%" px="md" justify="end">
@@ -108,6 +124,14 @@ export default function EditorLayout() {
             </Group>
           </AppShell.Header>
           <AppShell.Navbar p="0" component={ScrollArea} bg="gray.4" c="dark">
+            <Group>
+              <Burger
+                opened={mobileOpened}
+                onClick={toggleMobile}
+                hiddenFrom="sm"
+                size="sm"
+              />
+            </Group>
             <Tabs variant="default" defaultValue="content">
               <Tabs.List>
                 <Tabs.Tab
@@ -121,7 +145,11 @@ export default function EditorLayout() {
               </Tabs.List>
 
               <Tabs.Panel value="content">
-                <DndMeta content={editorContent?.fields?.content} id={editorContent?.id} updateKey='content'/>
+                <DndMeta
+                  content={editorContent?.fields?.content}
+                  id={editorContent?.id}
+                  updateKey="content"
+                />
                 <ButtonAddSection data={editorContent} />
               </Tabs.Panel>
 
@@ -147,7 +175,7 @@ export default function EditorLayout() {
                 layout={layouts[0].fields?.layout}
                 theme={themes[0].fields?.theme}
               />
-              <MetaContent content={editorContent?.fields?.content}/>
+              <MetaContentEditor content={editorContent?.fields?.content}  />
             </Box>
           </AppShell.Main>
           <AppShell.Aside p="0" component={ScrollArea} bg="gray.4" c="dark">
@@ -156,7 +184,7 @@ export default function EditorLayout() {
           </AppShell.Aside>
         </AppShell>
       </Aside.Provider>
-      <ModalAddSection/>
+      <ModalAddSection />
     </MantineProvider>
   );
 }

@@ -1,4 +1,4 @@
-import { useDisclosure } from '@mantine/hooks';
+import {useDisclosure} from '@mantine/hooks';
 import {
   MetaDescriptor,
   MetaFunction,
@@ -8,18 +8,32 @@ import {
 } from '@remix-run/react';
 import {LoaderFunctionArgs, redirect} from '@remix-run/server-runtime';
 import {useState} from 'react';
-import {loadFonts, buildTheme} from '~/components/admin/dnd/theme/themeUtils';
+import { buildTheme } from '~/components/admin/dnd/theme/lib/theme';
 import {GetMetaobject} from '~/graphql/admin/GetMetaobject';
+import {GetCollections} from '~/graphql/GetCollections';
 import {parser} from '~/lib/parseContent';
 
 export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return loadFonts(
-    data?.themes[0]?.fields?.theme?.fonts,
-  ) satisfies MetaDescriptor[];
+  const loadFonts = [];
+  const ff = data?.themes[0]?.fields?.theme?.fonts?.bodyUrl;
+  const ffh = data?.themes[0]?.fields?.theme?.fonts?.headingsUrl;
+  ff &&
+    loadFonts.push({
+      tagName: 'link',
+      rel: 'stylesheet',
+      href: ff,
+    });
+  ffh &&
+    loadFonts.push({
+      tagName: 'link',
+      rel: 'stylesheet',
+      href: ffh,
+    });
+  return loadFonts satisfies MetaDescriptor[];
 };
 
 export const loader = async ({context}: LoaderFunctionArgs) => {
-  const {admin} = context;
+  const {admin, storefront} = context;
 
   //get all themes
   const getThemes = await admin.request(GetMetaobject, {
@@ -44,16 +58,22 @@ export const loader = async ({context}: LoaderFunctionArgs) => {
     return redirect('/create-defaults');
   }
 
-  return {themes, layouts};
+  //get all collections
+  const getCollections = await storefront.query(GetCollections);
+  const collections = parser(getCollections?.collections);
+
+  return {themes, layouts, collections};
 };
 
 export default function Layout() {
-  const {themes, layouts}: any = useLoaderData<typeof loader>();
+  const {themes, layouts, collections}: any = useLoaderData<typeof loader>();
   const [theme, setTheme] = useState(buildTheme(themes[0]?.fields?.theme));
   const [item, setItem]: any = useState();
+  const [selectedItem, setSelectedItem] = useState(null);
   const [editorContent, setEditorContent]: any = useState();
-  const [opened, { open, close }] = useDisclosure(false);
+  const [opened, {open, close}] = useDisclosure(false);
   const [metaData, setMetaData]: any = useState();
+  const [viewport, setViewport] = useState('100%');
   const actionUpdateSettings = useFetcher();
   const saveTheme = (handle: any, theme: any) => {
     actionUpdateSettings.submit(
@@ -124,15 +144,20 @@ export default function Layout() {
         setTheme,
         item,
         setItem,
+        selectedItem, 
+        setSelectedItem,
         saveTheme,
         saveLayout,
-        editorContent, 
+        editorContent,
         setEditorContent,
         modalIsOpen: opened,
         openModal: open,
         closeModal: close,
-        metaData, 
-        setMetaData
+        metaData,
+        setMetaData,
+        collections,
+        viewport,
+        setViewport,
       }}
     />
   );

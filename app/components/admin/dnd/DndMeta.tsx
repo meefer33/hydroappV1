@@ -11,7 +11,7 @@ import {Box} from '@mantine/core';
 import {useListState} from '@mantine/hooks';
 import DndSortableContext from './DndSortableContext';
 import {useOutletContext} from '@remix-run/react';
-import useThemeUtils from './theme/useThemeUtils';
+import useThemeUtils from './useEditorUtils';
 
 export interface ItemType {
   id: UniqueIdentifier;
@@ -19,9 +19,9 @@ export interface ItemType {
 }
 
 export default function DndMeta({content, id, updateKey}: any) {
-  const {editorContent, setEditorContent,item}: any = useOutletContext();
+  const {editorContent, setEditorContent, item}: any = useOutletContext();
   const [sections, handlers]: any = useListState(content);
-  const [activeItem, setActiveItem] = useState(null)
+  const [activeItem, setActiveItem] = useState(null);
   const {saveMeta} = useThemeUtils();
 
   useEffect(() => {
@@ -61,12 +61,12 @@ export default function DndMeta({content, id, updateKey}: any) {
 
   return (
     <DndContext
-      onDragStart={({active}:any) => {
+      onDragStart={({active}: any) => {
         setActiveItem(active?.data);
       }}
       onDragOver={onDragOver}
       onDragCancel={() => {
-       setActiveItem(null);
+        setActiveItem(null);
       }}
       onDragEnd={handleDragEnd}
       collisionDetection={rectIntersection}
@@ -74,7 +74,7 @@ export default function DndMeta({content, id, updateKey}: any) {
       {sections && (
         <DndSortableContext sections={sections} handlers={handlers} />
       )}
-        <DragOverlay>
+      <DragOverlay>
         {activeItem ? <Box h={50} bg="blue.2" /> : null}
       </DragOverlay>
     </DndContext>

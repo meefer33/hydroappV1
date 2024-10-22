@@ -13,44 +13,54 @@ import {RiDeleteBinLine, RiExpandUpDownFill} from '@remixicon/react';
 import {useOutletContext} from '@remix-run/react';
 import DndMeta from './DndMeta';
 import ButtonAddSection from './ButtonAddSection';
-import useThemeUtils from './theme/useThemeUtils';
+import useThemeUtils from './useEditorUtils';
 
 export default function SortableItem({id, type, data}: any) {
   const {attributes, listeners, setNodeRef, transform, transition, isDragging} =
     useSortable({id});
-  const {setItem}: any = useOutletContext();
+  const {item,setItem,selectedItem, setSelectedItem}: any = useOutletContext();
   const {deleteEditorContent} = useThemeUtils();
-
+console.log('setSelectedItem',selectedItem,id)
   return (
     <>
       <Box
         bg="gray.0"
-        p={4}
-        m={6}
+       //bd={`${selectedItem === id ? '2px solid blue.3':''}`}
+        p={2}
+        m={10}
         ref={setNodeRef}
         style={{
           transform: CSS.Transform.toString(transform),
           transition,
           // border: hovered ? '1px solid blue' : '',
           opacity: isDragging ? 0.5 : 1,
+          border: selectedItem === id ? '2px solid blue' : ''
         }}
       >
         <Group justify="space-between">
-          <Box
-            onClick={() => {
-              console.log('clicked', id, data);
-              setItem(data);
-            }}
-          >
-            <Stack gap="xs">
-              <Box>{type}</Box>
-              <Box>
-                <Text size="xs" c="gray.6">
-                  {data?.fields?.settings?.name || data?.handle}
-                </Text>
-              </Box>
-            </Stack>
-          </Box>
+          <Stack gap="0">
+            <Box>
+              <Button
+                //fullWidth
+                size="xs"
+                variant="filled"
+                color="blue.3"
+                radius="0"
+                onClick={() => {
+                  console.log('clicked', id, data);
+                  setItem(data);
+                  setSelectedItem(id)
+                }}
+              >
+                {type}{' '}
+              </Button>
+            </Box>
+            <Box>
+              <Text size="xs">
+                {data?.fields?.settings?.name || data?.handle}
+              </Text>
+            </Box>
+          </Stack>
 
           <Group gap="2">
             <Button
@@ -74,10 +84,12 @@ export default function SortableItem({id, type, data}: any) {
             radius={0}
             chevronSize={30}
             styles={{
-              content: {padding: '2px'},
+              content: {padding: '4px'},
             }}
+            multiple 
+            defaultValue={[selectedItem]}
           >
-            <Accordion.Item key={id} value={data.type}>
+            <Accordion.Item key={id} value={id}>
               <Accordion.Control>{data.type}</Accordion.Control>
               <Accordion.Panel bg="gray.2">
                 <DndMeta
