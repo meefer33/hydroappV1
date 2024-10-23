@@ -18,16 +18,13 @@ import {
   useFetcher,
   useLoaderData,
 } from '@remix-run/react';
-import {RiExternalLinkLine} from '@remixicon/react';
-import {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
-import {GetMetaobject} from '~/graphql/admin/GetMetaobject';
-import {parseCmsContent, parseContent} from '~/lib/parseContent';
-import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
-import {themeSettings} from '~/components/admin/puck/themesettings';
 import {GetMetaobjectByHandle} from '~/graphql/admin/GetMetaobjectByHandle';
-import ImagePicker from '~/components/admin/imagePicker';
+
 import {useForm} from '@mantine/form';
 import {useState} from 'react';
+import ImagePicker from '~/components/admin/ImagePicker';
+import { parseContent } from '~/lib/parseContent';
+import { LoaderFunctionArgs } from '@remix-run/server-runtime';
 
 export const loader = async ({context, params}: LoaderFunctionArgs) => {
   const {admin} = context;
