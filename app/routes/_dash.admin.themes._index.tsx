@@ -13,8 +13,6 @@ import {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
 import {GetMetaobject} from '~/graphql/admin/GetMetaobject';
 import {parseCmsContent} from '~/lib/parseContent';
 import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
-import {themeSettings} from '~/components/admin/puck/themesettings';
-import { GetMetaobjectByHandle } from '~/graphql/admin/GetMetaobjectByHandle';
 
 export const loader = async ({context}: LoaderFunctionArgs) => {
   const {admin} = context;
@@ -48,7 +46,7 @@ export async function action({request, context}: ActionFunctionArgs) {
         handle: name,
         fields: [
           {key: 'name', value: name},
-          {key: 'settings', value: JSON.stringify(themeSettings)},
+          //{key: 'settings', value: JSON.stringify(themeSettings)},
         ],
       },
     },

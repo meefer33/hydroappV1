@@ -145,11 +145,13 @@ export default function EditorLayout() {
               </Tabs.List>
 
               <Tabs.Panel value="content">
+                <Box p="sm">
                 <DndMeta
                   content={editorContent?.fields?.content}
                   id={editorContent?.id}
                   updateKey="content"
                 />
+                </Box>
                 <ButtonAddSection data={editorContent} />
               </Tabs.Panel>
 

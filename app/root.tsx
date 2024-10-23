@@ -1,8 +1,5 @@
-import {useNonce, getShopAnalytics, Analytics} from '@shopify/hydrogen';
+import {useNonce, getShopAnalytics} from '@shopify/hydrogen';
 import {
-  defer,
-  MetaDescriptor,
-  MetaFunction,
   type LoaderFunctionArgs,
 } from '@shopify/remix-oxygen';
 import {
@@ -11,23 +8,17 @@ import {
   Outlet,
   Scripts,
   useRouteError,
-  useRouteLoaderData,
   ScrollRestoration,
   isRouteErrorResponse,
   type ShouldRevalidateFunction,
   useLoaderData,
 } from '@remix-run/react';
 import favicon from '~/assets/favicon.svg';
-import resetStyles from '~/styles/reset.css?url';
-import appStyles from '~/styles/app.css?url';
-import {PageLayout} from '~/components/PageLayout';
 import {FOOTER_QUERY, HEADER_QUERY} from '~/lib/fragments';
-import puckcss from '@measured/puck/dist/index.css?url';
 import theme from './styles/theme.css?url';
 import mantine from '@mantine/core/styles.css?url';
 import carousel from '@mantine/carousel/styles.css?url';
 import {GET_LAYOUT} from './graphql/GetLayout';
-import {loadFonts} from './lib/utils';
 import tiptap from '@mantine/tiptap/styles.css?url';
 
 export type RootLoader = typeof loader;
@@ -58,7 +49,6 @@ export function links() {
     {rel: 'stylesheet', href: mantine},
     {rel: 'stylesheet', href: carousel},
     {rel: 'stylesheet', href: tiptap},
-    {rel: 'stylesheet', href: puckcss},
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
@@ -164,8 +154,6 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
 export default function App() {
   const nonce = useNonce();
   const data: any = useLoaderData<typeof loader>();
-
-  //const lf = loadFonts(data?.theme?.other?.fonts);
 
   return (
     <html lang="en">

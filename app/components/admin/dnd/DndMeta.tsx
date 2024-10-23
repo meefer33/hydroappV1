@@ -74,9 +74,7 @@ export default function DndMeta({content, id, updateKey}: any) {
       {sections && (
         <DndSortableContext sections={sections} handlers={handlers} />
       )}
-      <DragOverlay>
-        {activeItem ? <Box h={50} bg="blue.2" /> : null}
-      </DragOverlay>
+
     </DndContext>
   );
 }

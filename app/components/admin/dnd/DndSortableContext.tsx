@@ -13,7 +13,7 @@ export default function DndSortableContext({
   const {setNodeRef} = useDroppable({id: nanoid()});
 
   return (
-    <>
+    <Box>
       <SortableContext items={sections} strategy={rectSortingStrategy}>
         <Box w={'100%'} ref={setNodeRef}>
           {sections?.map((item: any, i: any) => {
@@ -30,6 +30,6 @@ export default function DndSortableContext({
           })}
         </Box>
       </SortableContext>
-    </>
+    </Box>
   );
 }
