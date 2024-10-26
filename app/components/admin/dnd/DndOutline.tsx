@@ -12,6 +12,7 @@ import {useListState} from '@mantine/hooks';
 import DndOutlineSortable from './DndOutlineSortable';
 import {useOutletContext} from '@remix-run/react';
 import useThemeUtils from './useEditorUtils';
+import ButtonAddSection from './ButtonAddSection';
 
 export interface ItemType {
   id: UniqueIdentifier;
@@ -20,7 +21,7 @@ export interface ItemType {
 
 export default function DndOutline({content, id, updateKey}: any) {
   const {editorContent, setEditorContent, item}: any = useOutletContext();
-  const [sections, handlers]: any = useListState(content);
+  const [sections, handlers]: any = useListState(content?.fields?.content);
   const [activeItem, setActiveItem] = useState(null);
   const {saveMeta} = useThemeUtils();
 
@@ -74,6 +75,7 @@ export default function DndOutline({content, id, updateKey}: any) {
       {sections && (
         <DndOutlineSortable sections={sections} handlers={handlers} />
       )}
+  
     </DndContext>
   );
 }

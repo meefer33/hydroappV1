@@ -41,7 +41,6 @@ export default function useThemeUtils() {
     });
 
     const data: any = await response.json();
-    console.log('uv', data);
     return data;
   };
 

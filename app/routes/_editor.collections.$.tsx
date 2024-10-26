@@ -20,7 +20,6 @@ import {RootLoader} from '~/root';
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   let handle = params['*']?.split('/').pop();
-  console.log(handle?.split('/').pop());
   //let {handle} = params;
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {

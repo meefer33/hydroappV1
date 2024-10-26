@@ -5,7 +5,6 @@ import {Image} from '@shopify/hydrogen';
 export default function SectionCollectionDisplay({content}: any) {
   const settings = content?.fields?.settings;
   const collection = content?.fields?.collection;
-console.log('content',content)
   return (
     <Container fluid px={0} py={settings?.padding} bg={settings?.bg}>
       <Container size={settings?.contentWidth}>

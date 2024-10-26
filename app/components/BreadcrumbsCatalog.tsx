@@ -14,7 +14,6 @@ export default function BreadcrumbsCatalog({catalogMenu}: any) {
       const breadcrumbPath = url.split('/');
 
       if (breadcrumbPath[2] === path) {
-        console.log(breadcrumbPath[2], item.title);
         items = item.items;
         bc = `${bc}/${breadcrumbPath[2]}`;
         return <Anchor component={Link} key={path} to={bc} underline="never" fz="xs">{item.title}</Anchor>;

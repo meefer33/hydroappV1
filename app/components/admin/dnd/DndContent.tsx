@@ -1,5 +1,7 @@
 import {useEffect, useState} from 'react';
 import {
+  closestCenter,
+  closestCorners,
   DndContext,
   DragEndEvent,
   DragOverEvent,
@@ -18,14 +20,13 @@ export interface ItemType {
   color: string;
 }
 
-export default function DndContent({content, id, updateKey}: any) {
+export default function DndContent({content, id, updateKey, type="single", zones={}}: any) {
   const {editorContent, setEditorContent, item}: any = useOutletContext();
   const [sections, handlers]: any = useListState(content);
   const [activeItem, setActiveItem] = useState(null);
   const {saveMeta} = useThemeUtils();
 
   useEffect(() => {
-    //console.log('useeffect DNDmeta', content?.fields?.content);
     handlers.setState(content);
   }, [content]);
 
@@ -69,14 +70,12 @@ export default function DndContent({content, id, updateKey}: any) {
         setActiveItem(null);
       }}
       onDragEnd={handleDragEnd}
-      collisionDetection={rectIntersection}
+      collisionDetection={closestCorners}
     >
       {sections && (
-        <DndContentSortable sections={sections} handlers={handlers} />
+        <DndContentSortable sections={sections} handlers={handlers} type={type} zones={zones} />
       )}
-      <DragOverlay>
-        {activeItem ? <Box w="100%" bg="blue.3" h="50"></Box> : ''}
-      </DragOverlay>
+
     </DndContext>
   );
 }

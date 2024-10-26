@@ -47,7 +47,6 @@ export default function Header({
   const layoutProps = layout.data.zones['root:header'][0].props;
   const primaryDomainUrl = header.shop.primaryDomain.url;
   const {openDrawer} = useAside();
-  console.log(width);
   return (
     <>
       <Container

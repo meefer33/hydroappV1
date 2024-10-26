@@ -17,7 +17,6 @@ export default function ModalAddSection() {
   // console.log(editorContent);
   const getType = () => {
     if (metaData?.type) {
-      console.log('mdt', metaData?.type);
       switch (metaData?.type) {
         case 'content':
           return <AddSection />;

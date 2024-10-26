@@ -1,34 +1,43 @@
-import {Button} from '@mantine/core';
+import {ActionIcon, Box, Button, Container, Group} from '@mantine/core';
 import {useOutletContext} from '@remix-run/react';
+import {RiAddCircleLine, RiAddLine} from '@remixicon/react';
 
 export default function ButtonAddSection({data = {}}: any) {
   const {openModal, setMetaData}: any = useOutletContext();
   const changeTypeName = (type: any) => {
     switch (type) {
       case 'content':
-        return 'Add New Section';
+        return <AddButton data={data}>Add New Section</AddButton>;
       case 'section_blocks':
-        return 'Insert New Block';
+        return <AddButton data={data}>Insert New Block</AddButton>;
       case 'blocks':
-        return 'Insert New Block Item';
+        return <AddButton data={data}>Insert New Block Item</AddButton>;
       default:
         return <></>;
     }
   };
-  return (
-    <Button
-      fullWidth
-      size="xs"
-      variant="filled"
-      color="gray.7"
-      radius="0"
-      onClick={() => {
-        openModal();
-        setMetaData(data);
-        console.log('metaData', data);
-      }}
-    >
-      {changeTypeName(data.type)}
-    </Button>
-  );
+  return changeTypeName(data.type);
 }
+
+const AddButton = ({data, children}) => {
+  const {openModal, setMetaData}: any = useOutletContext();
+  return (
+    <Container fluid>
+      <Group justify="center" pos="relative">     
+          <ActionIcon
+            variant="filled"
+            color="gray.7"
+            size="sm"
+            radius="xl"
+            aria-label="Settings"
+            onClick={() => {
+              openModal();
+              setMetaData(data);
+            }}
+          >
+            <RiAddLine size="18" />
+          </ActionIcon>
+      </Group>
+    </Container>
+  );
+};

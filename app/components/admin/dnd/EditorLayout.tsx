@@ -1,22 +1,26 @@
 import {useOutletContext, useRouteLoaderData} from '@remix-run/react';
-import {useDisclosure, useToggle} from '@mantine/hooks';
 import {
+  useDisclosure,
+  useToggle,
+} from '@mantine/hooks';
+import {
+  ActionIcon,
   AppShell,
   Box,
   Burger,
-  Button,
+
+  Container,
   CSSVariablesResolver,
   Group,
   MantineProvider,
-  Modal,
   ScrollArea,
   Tabs,
 } from '@mantine/core';
 
 import {
   RiComputerLine,
-  RiEdit2Fill,
   RiEyeLine,
+  RiLayoutGridLine,
   RiSettings2Fill,
   RiSmartphoneLine,
 } from '@remixicon/react';
@@ -26,24 +30,21 @@ import ThemeHeader from '~/components/admin/dnd/Header';
 import ShowForm from '~/components/admin/dnd/forms/ShowForm';
 import {Aside} from '~/components/layout/Aside';
 import {RootLoader} from '~/root';
-import DndMeta from './DndMeta';
 import ButtonAddSection from './ButtonAddSection';
 import ModalAddSection from './ModalAddSection';
-import { getCssResolve } from './theme/lib/theme';
-import MetaContentEditor from './MetaContentEditor';
-import MetaContent from './theme/MetaContent';
+import {getCssResolve} from './theme/lib/theme';
+import DndOutline from './DndOutline';
 
-export default function EditorLayout() {
+export default function EditorLayout({children}) {
   const root: any = useRouteLoaderData<RootLoader>('root');
+
   const {
     themes,
     layouts,
     theme,
     editorContent,
-    metaData,
     viewport,
     setViewport,
-    setItem
   }: any = useOutletContext();
 
   const [mobileOpened, {toggle: toggleMobile}] = useDisclosure();
@@ -51,24 +52,61 @@ export default function EditorLayout() {
 
   const [viewportColor, toggle] = useToggle([true, false]);
   const cssResolver: CSSVariablesResolver = (theme) => getCssResolve(themes);
-  console.log('metaData', theme);
+  //console.log('metaData', editorContent);
   return (
     <MantineProvider
       theme={theme}
       forceColorScheme={theme?.other?.colorScheme}
       cssVariablesResolver={cssResolver}
     >
+      <Container
+        pos="fixed"
+        top="0"
+        //right="0"
+        w="100%"
+        fluid
+        style={{
+          zIndex: 999,
+        }}
+      >
+        <Group pt="2" justify="center">
+          <ActionIcon.Group>
+            <ActionIcon
+              color="gray.7"
+              size="lg"
+              onClick={() => {
+                setViewport('100%');
+                toggle();
+              }}
+            >
+              <RiComputerLine size="24" />
+            </ActionIcon>
+            <ActionIcon
+              color="gray.7"
+              size="lg"
+              onClick={() => {
+                setViewport('24.375rem');
+                toggle();
+              }}
+            >
+              <RiSmartphoneLine size="24" />
+            </ActionIcon>
+            <ActionIcon color="gray.7" size="lg" onClick={toggleDesktop}>
+              <RiEyeLine
+                size="24"
+              />
+            </ActionIcon>
+          </ActionIcon.Group>
+        </Group>
+      </Container>
       <Aside.Provider>
         <Aside
           cart={root.cart}
           header={root.header}
           publicStoreDomain={root.publicStoreDomain}
         />
-
         <AppShell
-          //layout="alt"
-          header={{height: 60}}
-          //footer={{height: 60}}
+          layout="alt"
           navbar={{
             width: 300,
             breakpoint: 'sm',
@@ -79,51 +117,11 @@ export default function EditorLayout() {
             breakpoint: 'sm',
             collapsed: {mobile: !mobileOpened, desktop: !desktopOpened},
           }}
-          padding="0"
-          //disabled={disabled}
+         p="0"
+         m="0"
+          bg={'var(--mantine-color-body)'}
         >
-          <AppShell.Header bg="gray.4" c="dark">
-            <Group h="100%" px="md" justify="end">
-              <Group gap="xl" mr={50}>
-                <Group gap="xs">
-                  <Button
-                    variant="transparent"
-                    c={viewportColor ? 'gray.7' : 'gray.5'}
-                    px={0}
-                    onClick={() => {
-                      setViewport('100%');
-                      toggle();
-                    }}
-                  >
-                    <RiComputerLine size="30" />
-                  </Button>
-                  <Button
-                    variant="transparent"
-                    c={viewportColor ? 'gray.5' : 'gray.7'}
-                    px={0}
-                    onClick={() => {
-                      setViewport('24.375rem');
-                      toggle();
-                    }}
-                  >
-                    <RiSmartphoneLine size="30" />
-                  </Button>
-                </Group>
-                <Button
-                  variant="transparent"
-                  c={desktopOpened ? 'gray.5' : 'gray.7'}
-                  px={0}
-                  onClick={toggleDesktop}
-                >
-                  <RiEyeLine
-                    //visibleFrom="sm"
-                    size="30"
-                  />
-                </Button>
-              </Group>
-            </Group>
-          </AppShell.Header>
-          <AppShell.Navbar p="0" component={ScrollArea} bg="gray.4" c="dark">
+          <AppShell.Navbar p="0" component={ScrollArea} bg="gray.3">
             <Group>
               <Burger
                 opened={mobileOpened}
@@ -132,11 +130,16 @@ export default function EditorLayout() {
                 size="sm"
               />
             </Group>
-            <Tabs variant="default" defaultValue="content">
+            <Tabs
+              variant="pills"
+              defaultValue="content"
+              radius="0"
+              color="gray.7"
+            >
               <Tabs.List>
                 <Tabs.Tab
                   value="content"
-                  leftSection={<RiEdit2Fill size={16} />}
+                  leftSection={<RiLayoutGridLine size={16} />}
                 ></Tabs.Tab>
                 <Tabs.Tab
                   value="settings"
@@ -146,11 +149,11 @@ export default function EditorLayout() {
 
               <Tabs.Panel value="content">
                 <Box p="sm">
-                <DndMeta
-                  content={editorContent?.fields?.content}
-                  id={editorContent?.id}
-                  updateKey="content"
-                />
+                  <DndOutline
+                    content={editorContent?.fields?.content}
+                    id={editorContent?.id}
+                    updateKey="content"
+                  />
                 </Box>
                 <ButtonAddSection data={editorContent} />
               </Tabs.Panel>
@@ -161,9 +164,8 @@ export default function EditorLayout() {
               </Tabs.Panel>
             </Tabs>
           </AppShell.Navbar>
-          <AppShell.Main component={ScrollArea}>
+          <AppShell.Main>
             <Box
-              h={'calc(100vh - var(--app-shell-header-offset, 0rem) - 40px'}
               px={0}
               mx="auto"
               style={{
@@ -171,16 +173,19 @@ export default function EditorLayout() {
                 transform: `scaleX(${viewport})`,
                 transition: 'width 400ms ease',
                 fontFamily: themes[0].fields?.theme.fonts.bodyClass,
+                bgColor: 'var(--mantine-color-body)',
               }}
             >
-              <ThemeHeader
-                layout={layouts[0].fields?.layout}
-                theme={themes[0].fields?.theme}
-              />
-              <MetaContentEditor content={editorContent?.fields?.content}  />
+              <Box bg={'var(--mantine-color-body)'}>
+                <ThemeHeader
+                  layout={layouts[0].fields?.layout}
+                  theme={themes[0].fields?.theme}
+                />
+                {children}
+              </Box>
             </Box>
           </AppShell.Main>
-          <AppShell.Aside p="0" component={ScrollArea} bg="gray.4" c="dark">
+          <AppShell.Aside p="0" component={ScrollArea} bg="gray.3" c="dark">
             Active Item
             <ShowForm />
           </AppShell.Aside>

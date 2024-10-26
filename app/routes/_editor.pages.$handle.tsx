@@ -4,20 +4,21 @@ import {parser} from '~/lib/parseContent';
 import EditorLayout from '~/components/admin/dnd/EditorLayout';
 import {GetMetaobjectTypeHandle} from '~/graphql/GetMetaobjectTypeHandle';
 import {useEffect} from 'react';
-import { GetPage } from '~/graphql/GetPage';
-import { GetMetaobjectById } from '~/graphql/admin/GetMetaobjectById';
+import {GetPage} from '~/graphql/GetPage';
+import {GetMetaobjectById} from '~/graphql/admin/GetMetaobjectById';
+import DndContent from '~/components/admin/dnd/DndContent';
 
 export const loader = async ({context, params}: LoaderFunctionArgs) => {
   const {admin} = context;
   let breadcrumb = params['*'];
   //let handle = params['*']?.split('/').pop();
-  let handle = params.handle
+  let handle = params.handle;
 
-    //get content page
-    const getPage = await context.storefront.query(GetPage, {
-        variables: {handle: handle}
-      });
-      const page = getPage?.page?.content?.value;
+  //get content page
+  const getPage = await context.storefront.query(GetPage, {
+    variables: {handle: handle},
+  });
+  const page = getPage?.page?.metafield?.value;
 
   //get content page
   const getContent = await context.storefront.query(GetMetaobjectById, {
@@ -30,16 +31,24 @@ export const loader = async ({context, params}: LoaderFunctionArgs) => {
 };
 
 export default function EditContent() {
-  const {content, breadcrumb,getContent}: any = useLoaderData<typeof loader>();
-  const {setEditorContent}: any = useOutletContext();
-
+  const {content, breadcrumb, getContent}: any = useLoaderData<typeof loader>();
+  const {setEditorContent,editorContent}: any = useOutletContext();
+//console.log('page',page)
   useEffect(() => {
     setEditorContent(content);
   }, [content]);
 
-  return <EditorLayout><></></EditorLayout>;
+  return (
+    <EditorLayout>
+      <DndContent
+        content={editorContent?.fields?.content}
+        id={editorContent?.id}
+        updateKey="content"
+      />
+    </EditorLayout>
+  );
 }
 
-export const handle:any = {
+export const handle: any = {
   breadcrumb: () => <span>Layouts</span>,
 };

@@ -16,11 +16,10 @@ import {
   RiMenLine,
 } from '@remixicon/react';
 import {useOutletContext} from '@remix-run/react';
-import DndMeta from './DndOutline';
-import ButtonAddSection from './ButtonAddSection';
 import useThemeUtils from './useEditorUtils';
-import {useHover} from '@mantine/hooks';
 import {useState} from 'react';
+import DndOutline from './DndOutline';
+import ButtonAddSection from './ButtonAddSection';
 
 export default function DndOutlineSortableItem({id, type, data}: any) {
   const {attributes, listeners, setNodeRef, transform, transition, isDragging} =
@@ -61,7 +60,6 @@ export default function DndOutlineSortableItem({id, type, data}: any) {
       >
         <Box
           onClick={() => {
-            console.log('clicked', id, data);
             setItem(data);
             setSelectedItem(id);
           }}
@@ -104,7 +102,7 @@ export default function DndOutlineSortableItem({id, type, data}: any) {
       </Group>
       {data.type === 'section_blocks' || data.type === 'blocks' ? (
         <Box ml={10}>
-          <DndMeta
+          <DndOutline
             content={
               data.type === 'blocks'
                 ? data?.fields?.block_items
@@ -113,6 +111,7 @@ export default function DndOutlineSortableItem({id, type, data}: any) {
             id={data?.id}
             updateKey="blocks"
           />
+          <ButtonAddSection data={data} />
         </Box>
       ) : (
         ''

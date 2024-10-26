@@ -60,7 +60,6 @@ export default function SortableItem({id, type, data}: any) {
       >
         <Box
           onClick={() => {
-            console.log('clicked', id, data);
             setItem(data);
             setSelectedItem(id);
           }}

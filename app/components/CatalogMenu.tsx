@@ -6,13 +6,11 @@ import {RootLoader} from '~/root';
 export default function CatalogMenu({catalogMenu,breadcrumb}: any) {
   //const root: any = useRouteLoaderData<RootLoader>('root');
   // const catalogMenu = root?.header?.catalog?.items;
-  console.log('menu',catalogMenu)
   return (
     <Box visibleFrom='sm'>
       {catalogMenu.map((item: any) => {
         const url = new URL(item.url).pathname;
         const path = url.split('/');
-        console.log(url,path,breadcrumb)
         
         if (item?.items?.length) {
           return (

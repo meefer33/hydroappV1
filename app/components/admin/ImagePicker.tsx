@@ -129,7 +129,6 @@ export default function ImagePicker({fileUrl,setFileUrl}:any) {
 
   useEffect(() => {
     if (fileCreate.data) {
-      console.log('fileCreate', fileCreate);
       const splitId = fileCreate?.data?.data?.fileCreate.files[0].id.split('/');
       setFilesToUpload([]);
       //setQueryValue(`id:${splitId[4]}`);
@@ -139,7 +138,6 @@ export default function ImagePicker({fileUrl,setFileUrl}:any) {
 
   const setLogo = (logo) => {
     setFileUrl(logo);
-    console.log(logo)
   };
 
   return (

@@ -134,7 +134,6 @@ export default function ImagePicker({label = 'Text Box', field}: any) {
 
   useEffect(() => {
     if (fileCreate.data) {
-      console.log('fileCreate', fileCreate);
       const splitId = fileCreate?.data?.data?.fileCreate.files[0].id.split('/');
       setFilesToUpload([]);
       //setQueryValue(`id:${splitId[4]}`);

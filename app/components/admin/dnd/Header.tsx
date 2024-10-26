@@ -7,6 +7,7 @@ import {
   Container,
   Group,
   Menu,
+  Portal,
   rem,
   SimpleGrid,
   Title,
@@ -29,7 +30,6 @@ const bpWidth = 992;
 
 export default function ThemeHeader({layout, theme}: any) {
   const rootData = useRouteLoaderData<RootLoader>('root');
-  const {ref, width, height} = useElementSize();
   const pinned = useHeadroom({fixedAt: 120});
   const props = {
     padding: {
@@ -40,37 +40,79 @@ export default function ThemeHeader({layout, theme}: any) {
       logoImage: '',
     },
   };
-  //console.log('header',props,theme)
+  //console.log('width',width)
   return (
-    <Box h={height}>
-      <Container
-        ref={ref}
-        fluid
-        px="0"
-        styles={{
-          root: {
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            //zIndex: props?.zindex === 'editor'? -1 : 1,
-          },
-        }}
-      >
-        <HeaderMenu
-          rootData={rootData}
-          props={props}
-          pinned={pinned}
-          mainWidth={width}
-          layout={layout}
-          theme={theme}
-        />
-      </Container>
+    <HeaderMenu
+      rootData={rootData}
+      props={props}
+      layout={layout}
+      theme={theme}
+      pinned={pinned}
+    />
+  );
+}
+
+function HeaderMenu({rootData, props, layout, theme, pinned}: any) {
+  const {ref, width, height} = useElementSize();
+    return (
+    <Box
+      ref={ref}
+      component="div"
+      px="0"
+      //bg="white"
+      w="100%"
+      pos="sticky"
+      top="0"
+      left="0"
+      right="0"
+      style={{
+        //boxShadow: '0 1px 3px -1px rgba(0, 0, 0, 0.1)',
+        //height: rem(40),
+        zIndex: 1,
+        transform: `translate3d(0, ${pinned ? 0 : width < bpWidth ? rem(-115): 0}, 0)`,
+        transition: 'transform 400ms ease',
+        backgroundColor: 'var(--mantine-color-body)',
+        //borderBottom: '1px solid var(--mantine-color-gray-3)',
+      }}
+    >
+      <MainMenuWrapper mainWidth={width}>
+        <Box>
+          <Group
+            align="center"
+            justify={width < bpWidth ? 'center' : 'flex-start'}
+            pt={layout?.padding?.top}
+            pb={layout?.padding?.bottom}
+          >
+            <Logo logo={props.logo} layout={layout} theme={theme} />
+            <Container
+              ml="xl"
+              styles={{
+                root: {
+                  display: width < bpWidth ? 'none' : 'block',
+                },
+              }}
+            >
+              <MainMenu menu={rootData?.header?.main?.items} />
+            </Container>
+          </Group>
+        </Box>
+        <Group
+          align="center"
+          justify={width < bpWidth ? 'space-between' : 'flex-end'}
+        >
+          <HeaderCtas
+            isLoggedIn={rootData?.isLoggedIn}
+            cart={rootData?.cart}
+            mainWidth={width}
+          />
+        </Group>
+      </MainMenuWrapper>
+      <HeaderScroller scrollBackground={props.scrollBackground} />
     </Box>
   );
 }
 
-function Logo({logo, layout, pinned, theme}: any) {
+function Logo({logo, layout, theme}: any) {
   return (
     <>
       {layout?.logo?.image && (
@@ -175,63 +217,6 @@ function MainMenu({menu}: any) {
         }
       })}
     </Group>
-  );
-}
-
-function HeaderMenu({rootData, props, pinned, mainWidth, layout, theme}: any) {
-  const {ref, height} = useElementSize();
-  return (
-    <Container
-      fluid
-      px="0"
-      //bg="white"
-      w="100%"
-      styles={{
-        root: {
-          transform: `translate3d(0, ${pinned ? 0 : rem(-height)}, 0)`,
-          transition: 'transform 400ms ease',
-        },
-      }}
-    >
-      <MainMenuWrapper mainWidth={mainWidth}>
-        <Box ref={ref}>
-          <Group
-            align="center"
-            justify={mainWidth < bpWidth ? 'center' : 'flex-start'}
-            pt={layout?.padding?.top}
-            pb={layout?.padding?.bottom}
-          >
-            <Logo
-              logo={props.logo}
-              layout={layout}
-              pinned={pinned}
-              theme={theme}
-            />
-            <Container
-              ml="xl"
-              styles={{
-                root: {
-                  display: mainWidth < bpWidth ? 'none' : 'block',
-                },
-              }}
-            >
-              <MainMenu menu={rootData?.header?.main?.items} />
-            </Container>
-          </Group>
-        </Box>
-        <Group
-          align="center"
-          justify={mainWidth < bpWidth ? 'space-between' : 'flex-end'}
-        >
-          <HeaderCtas
-            isLoggedIn={rootData?.isLoggedIn}
-            cart={rootData?.cart}
-            mainWidth={mainWidth}
-          />
-        </Group>
-      </MainMenuWrapper>
-      <HeaderScroller scrollBackground={props.scrollBackground} />
-    </Container>
   );
 }
 

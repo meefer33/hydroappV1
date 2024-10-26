@@ -19,7 +19,6 @@ export function ProductForm({
   variants: Array<ProductVariantFragment>;
 }) {
   const {openDrawer} = useAside();
-  console.log('product', product, product.options, variants);
   const hasVariants =
     product?.variants?.nodes[0]?.selectedOptions[0]?.value === 'Default Title'
       ? false

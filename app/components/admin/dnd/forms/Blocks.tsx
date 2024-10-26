@@ -19,14 +19,12 @@ export default function Blocks() {
       bg: 'primary',
     },
     onValuesChange: async (values) => {
-      console.log(values);
       const data = await saveSettings(item.id, form.getValues());
       setEditorContent(data);
     },
   });
 
   useEffect(() => {
-    console.log('useitem', item);
     loadMeta(item.id, form);
   }, [item]);
 
