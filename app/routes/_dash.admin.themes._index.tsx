@@ -10,14 +10,14 @@ import dayjs from 'dayjs/esm/index.js';
 import {Form, Link, useActionData, useLoaderData} from '@remix-run/react';
 import {RiExternalLinkLine} from '@remixicon/react';
 import {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
-import {GetMetaobject} from '~/graphql/GetMetaobjectsByType';
+import {GetMetaobjectsByType} from '~/graphql/GetMetaobjectsByType';
 import {parseCmsContent} from '~/lib/parseContent';
 import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
 
 export const loader = async ({context}: LoaderFunctionArgs) => {
   const {admin} = context;
 
-  const getMetaobjectTheme = await admin.request(GetMetaobject, {
+  const getMetaobjectTheme = await admin.request(GetMetaobjectsByType, {
     variables: {
       type: 'theme',
     },
@@ -26,7 +26,7 @@ export const loader = async ({context}: LoaderFunctionArgs) => {
     getMetaobjectTheme?.data?.metaobjects?.nodes,
   );
 
-  const getMetaobjectHa = await admin.request(GetMetaobject, {
+  const getMetaobjectHa = await admin.request(GetMetaobjectsByType, {
     variables: {
       type: 'ha_theme_settings',
     },

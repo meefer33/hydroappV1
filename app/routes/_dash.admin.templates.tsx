@@ -12,7 +12,7 @@ import {Form, Link, useActionData, useLoaderData} from '@remix-run/react';
 import {RiExternalLinkLine} from '@remixicon/react';
 import {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
 import {GetMetaobjectsByType} from '~/graphql/GetMetaobjectsByType';
-import {parseCmsContent, parser} from '~/lib/parseContent';
+import {parser} from '~/lib/parseContent';
 import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
 
 export const loader = async ({context}: LoaderFunctionArgs) => {
