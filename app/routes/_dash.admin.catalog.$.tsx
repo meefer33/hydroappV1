@@ -1,25 +1,12 @@
 import {
   ActionIcon,
   Anchor,
-  Box,
   Breadcrumbs,
-  Button,
-  Group,
-  Select,
   Table,
-  TextInput,
 } from '@mantine/core';
-import dayjs from 'dayjs/esm/index.js';
-import {Form, Link, useActionData, useLoaderData} from '@remix-run/react';
+import {Link,  useLoaderData} from '@remix-run/react';
 import {RiExternalLinkLine} from '@remixicon/react';
-import {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
-
-import {parseCmsContent, parseContent} from '~/lib/parseContent';
-import {GetMetaobject} from '~/graphql/GetMetaobjectsByType';
-import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
-import {GetMetafieldsDefinitions} from '~/graphql/admin/GetMetafieldsDefinitions';
-import {GetMenus} from '~/graphql/admin/GetMenus';
-import CatalogMenu from '~/components/CatalogMenu';
+import {LoaderFunctionArgs} from '@remix-run/node';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {GetCollection} from '~/graphql/GetCollection';
 

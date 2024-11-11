@@ -12,13 +12,13 @@ import {RiExternalLinkLine} from '@remixicon/react';
 import {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
 
 import {parseCmsContent, parseContent} from '~/lib/parseContent';
-import {GetMetaobject} from '~/graphql/GetMetaobjectsByType';
+import {GetMetaobjectsByType} from '~/graphql/GetMetaobjectsByType';
 import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
 
 export const loader = async ({context}: LoaderFunctionArgs) => {
   const {admin} = context;
 
-  const getThemeContent = await admin.request(GetMetaobject, {
+  const getThemeContent = await admin.request(GetMetaobjectsByType, {
     variables: {
       type: 'content',
     },
@@ -27,7 +27,7 @@ export const loader = async ({context}: LoaderFunctionArgs) => {
     getThemeContent?.data?.metaobjects?.nodes,
   );
 
-  const getThemeLayouts = await admin.request(GetMetaobject, {
+  const getThemeLayouts = await admin.request(GetMetaobjectsByType, {
     variables: {
       type: 'ha_theme_layouts',
     },

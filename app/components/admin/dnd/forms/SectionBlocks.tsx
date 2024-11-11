@@ -38,7 +38,6 @@ export default function SectionBlocks() {
       const data = await saveSettings(
         item.id,
         form.getValues(),
-        updateMetaVersionId,
       );
       setEditorContent(data);
     },
