@@ -6,12 +6,12 @@ import {defaultTheme} from './theme/lib/theme';
 
 export default function useThemeUtils() {
   const {
-    theme,
-    editorContent,
     setEditorContent,
+    updateMetaVersionId,
     metaData,
     closeModal,
     setItem,
+    setSelectedItem
   }: any = useOutletContext();
 
   const loadMeta = async (selectedItem: any, form: any) => {
@@ -22,13 +22,13 @@ export default function useThemeUtils() {
   };
 
   const updateMetaVersion = async () => {
-    const response = await fetch('/api/UpdateMetaobject', {
+    const response = await fetch('/api/UpdatePage', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        id: editorContent.id,
+        id: updateMetaVersionId,
         metaobject: {
           fields: [
             {
@@ -39,8 +39,8 @@ export default function useThemeUtils() {
         },
       }),
     });
-
     const data: any = await response.json();
+    setEditorContent(data)
     return data;
   };
 
@@ -69,7 +69,7 @@ export default function useThemeUtils() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        handle: editorContent.handle,
+        //handle: editorContent.handle,
         id: id,
         metaobject: {
           fields: [
@@ -97,11 +97,9 @@ export default function useThemeUtils() {
         type: type,
       }),
     });
-
-    //const status = response.status;
     const data: any = await response.json();
-
     const sectionIds: any = [];
+    console.log(metaData)
     metaData?.fields[field]?.map((section: any) => {
       sectionIds.push(section.id);
     });
@@ -114,8 +112,8 @@ export default function useThemeUtils() {
         },
       ],
     });
-
-    setEditorContent(nm);
+    setItem({id:data?.data?.metaobjectCreate?.metaobject?.id,type:type});
+    setSelectedItem(data?.data?.metaobjectCreate?.metaobject?.id);
     closeModal();
   };
 
@@ -143,5 +141,6 @@ export default function useThemeUtils() {
     saveSettings,
     addEditorContent,
     deleteEditorContent,
+    updateMetaVersion
   };
 }

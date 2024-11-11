@@ -1,6 +1,6 @@
 export const GET_LAYOUT = `#graphql
 query settings {
-  metaobject(handle: {handle: "main", type: "ha_theme_layouts"}) {
+  metaobject(handle: {handle: "main", type: "themes"}) {
     layout: field(key: "layout") {
       value
     }

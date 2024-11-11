@@ -1,4 +1,4 @@
-import { MetaFrag } from "./MetaFrag";
+import {MetaFrag} from './MetaFrag';
 
 export const GetMetaobjectById = `#graphql
 query GetMetaobjectById($id: ID!) {

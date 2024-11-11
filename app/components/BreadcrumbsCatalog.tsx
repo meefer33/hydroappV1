@@ -4,7 +4,7 @@ import {Link, useLocation, useMatch, useMatches} from '@remix-run/react';
 export default function BreadcrumbsCatalog({catalogMenu}: any) {
   //const matches = useMatch();
   const location = useLocation();
-  const paths = location.pathname.replace('/collections/', '').split('/');
+  const paths = location.pathname.replace('/catalog/', '').split('/');
   let items = catalogMenu;
   let bc = '/collections';
 

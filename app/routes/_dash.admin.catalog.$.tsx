@@ -15,7 +15,7 @@ import {RiExternalLinkLine} from '@remixicon/react';
 import {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
 
 import {parseCmsContent, parseContent} from '~/lib/parseContent';
-import {GetMetaobject} from '~/graphql/admin/GetMetaobject';
+import {GetMetaobject} from '~/graphql/GetMetaobjectsByType';
 import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
 import {GetMetafieldsDefinitions} from '~/graphql/admin/GetMetafieldsDefinitions';
 import {GetMenus} from '~/graphql/admin/GetMenus';
@@ -53,7 +53,7 @@ export const loader = async ({
 
 export default function CatalogSub() {
   const data: any = useLoaderData<typeof loader>();
-  console.log(data?.collection, data?.breadcrumb);
+ // console.log(data?.collection, data?.breadcrumb);
   const breadcrumbs = data?.breadcrumb.split('/');
   let breadcrumbLink = '/admin/catalog';
   return (

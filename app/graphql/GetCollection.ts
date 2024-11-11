@@ -17,6 +17,10 @@ export const GetCollection = `#graphql
       handle
       title
       description
+      page_content: metafield(key: "page_content", namespace: "custom") {
+        id
+        value
+      }
       products(
         first: $first,
         last: $last,

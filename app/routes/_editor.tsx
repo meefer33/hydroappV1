@@ -8,8 +8,8 @@ import {
 } from '@remix-run/react';
 import {LoaderFunctionArgs, redirect} from '@remix-run/server-runtime';
 import {useState} from 'react';
-import { buildTheme } from '~/components/admin/dnd/theme/lib/theme';
-import {GetMetaobject} from '~/graphql/admin/GetMetaobject';
+import {buildTheme} from '~/components/admin/dnd/theme/lib/theme';
+import {GetMetaobjectsByType} from '~/graphql/GetMetaobjectsByType';
 import {GetCollections} from '~/graphql/GetCollections';
 import {parser} from '~/lib/parseContent';
 
@@ -36,24 +36,25 @@ export const loader = async ({context}: LoaderFunctionArgs) => {
   const {admin, storefront} = context;
 
   //get all themes
-  const getThemes = await admin.request(GetMetaobject, {
+  const getThemes = await storefront.query(GetMetaobjectsByType, {
     variables: {
       type: 'themes',
     },
   });
-  let themes = parser(getThemes?.data?.metaobjects);
+  let themes = parser(getThemes?.metaobjects);
   //if no themes than create default
+  console.log(JSON.stringify(getThemes))
   if (!themes[0]) {
     return redirect('/create-defaults');
   }
 
   //get all layouts
-  const getLayouts = await admin.request(GetMetaobject, {
+  const getLayouts = await storefront.query(GetMetaobjectsByType, {
     variables: {
       type: 'layouts',
     },
   });
-  const layouts = parser(getLayouts?.data?.metaobjects);
+  const layouts = parser(getLayouts?.metaobjects);
   if (!layouts[0]) {
     return redirect('/create-defaults');
   }
@@ -73,6 +74,7 @@ export default function Layout() {
   const [editorContent, setEditorContent]: any = useState();
   const [opened, {open, close}] = useDisclosure(false);
   const [metaData, setMetaData]: any = useState();
+  const [updateMetaVersionId, setUpdateMetaVersionId]: any = useState();
   const [viewport, setViewport] = useState('100%');
   const actionUpdateSettings = useFetcher();
   const saveTheme = (handle: any, theme: any) => {
@@ -144,7 +146,7 @@ export default function Layout() {
         setTheme,
         item,
         setItem,
-        selectedItem, 
+        selectedItem,
         setSelectedItem,
         saveTheme,
         saveLayout,
@@ -158,6 +160,8 @@ export default function Layout() {
         collections,
         viewport,
         setViewport,
+        updateMetaVersionId, 
+        setUpdateMetaVersionId
       }}
     />
   );

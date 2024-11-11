@@ -5,12 +5,14 @@ import Blocks from './Blocks';
 import ImageForm from './ImageForm';
 import RichTextBlock from './RichTextBlock';
 import SectionCollection from './SectionCollection';
+import LayoutGrid from './LayoutGrid';
 
 export default function ShowForm() {
   const {item}: any = useOutletContext();
-  //console.log('item',item)
   const getForm = (type: any) => {
     switch (type) {
+      case 'grids':
+        return <LayoutGrid />;
       case 'section_blocks':
         return <SectionBlocks />;
       case 'blocks':

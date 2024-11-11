@@ -5,7 +5,7 @@ import BlockRichText from './sections/BlockRichText';
 import BlockImage from './sections/BlockImage';
 
 
-export default function MetaContentEditor({content}: any) {
+export default function MetaContent({content}: any) {
   const getType = (item: any) => {
     switch (item.type) {
       case 'section_blocks':

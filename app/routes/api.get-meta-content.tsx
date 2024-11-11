@@ -1,6 +1,4 @@
 import {LoaderFunctionArgs} from '@remix-run/server-runtime';
-import { GetMetaobjectByHandle } from '~/graphql/admin/GetMetaobjectByHandle';
-import { GetMetaobjectById } from '~/graphql/admin/GetMetaobjectById';
 import { GetMetaobjectTypeHandle } from '~/graphql/GetMetaobjectTypeHandle';
 import { parser } from '~/lib/parseContent';
 

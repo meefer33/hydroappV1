@@ -103,7 +103,7 @@ export async function loader(args: LoaderFunctionArgs) {
 async function loadCriticalData({context}: LoaderFunctionArgs) {
   const {storefront} = context;
 
-  const [header, settings] = await Promise.all([
+  const [header] = await Promise.all([
     storefront.query(HEADER_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
@@ -113,13 +113,13 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
       },
     }),
     // get main layout and main theme
-    storefront.query(GET_LAYOUT),
+   // storefront.query(GET_LAYOUT),
   ]);
 
   return {
     header,
-    theme: JSON.parse(settings.metaobject.theme.reference.settings.value),
-    layout: JSON.parse(settings.metaobject.layout.value),
+   // theme: JSON.parse(settings.metaobject.theme.reference.settings.value),
+    //layout: JSON.parse(settings.metaobject.layout.value),
   };
 }
 

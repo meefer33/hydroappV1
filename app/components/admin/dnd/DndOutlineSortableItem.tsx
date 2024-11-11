@@ -27,7 +27,6 @@ export default function DndOutlineSortableItem({id, type, data}: any) {
   const {item, setItem, selectedItem, setSelectedItem}: any =
     useOutletContext();
   const {deleteEditorContent} = useThemeUtils();
-  //const {hovered, ref} = useHover();
   const [hoveredItem, setHoveredItem] = useState(false);
   return (
     <Box
@@ -36,13 +35,14 @@ export default function DndOutlineSortableItem({id, type, data}: any) {
         transform: CSS.Transform.toString(transform),
         transition,
         // border: hovered ? '1px solid blue' : '',
-        opacity: isDragging ? 0.5 : 1,
+        opacity: isDragging ? 0 : 1,
+        height: isDragging ? '50px' : 'auto',
         //border: selectedItem === id ? '2px solid blue' : '',
       }}
       bg={hoveredItem ? 'gray.2' : 'gray.0'}
       bd={selectedItem === id ? '2px solid blue.3' : '2px dashed gray.5'}
-      p={6}
-      mb={12}
+      p={3}
+      mb={6}
     >
       <Group
         pl={4}
@@ -74,12 +74,12 @@ export default function DndOutlineSortableItem({id, type, data}: any) {
               size="sm"
               p="0"
             >
-              {hoveredItem ? <RiDraggable size="24" /> : <Box m="4"></Box>}
+              {hoveredItem ? <RiDraggable size="20" /> : <Box m="2"></Box>}
             </Button>
 
-            <Text size="md">
+            <Text size="xs">
               {type
-                .replaceAll('_', ' ')
+                ?.replaceAll('_', ' ')
                 .replaceAll(/(^\w|\s\w)/g, (firstCharOfWord) =>
                   firstCharOfWord.toUpperCase(),
                 )}
@@ -96,25 +96,29 @@ export default function DndOutlineSortableItem({id, type, data}: any) {
               deleteEditorContent(data.id);
             }}
           >
-            {hoveredItem ? <RiDeleteBinLine size="18" /> : ''}
+            {hoveredItem ? <RiDeleteBinLine size="16" /> : ''}
           </Button>
         </Group>
       </Group>
-      {data.type === 'section_blocks' || data.type === 'blocks' ? (
-        <Box ml={10}>
+      {data.type === 'section_blocks' && (
+        <Box ml={5}>
           <DndOutline
-            content={
-              data.type === 'blocks'
-                ? data?.fields?.block_items
-                : data?.fields?.blocks
-            }
+            content={data?.fields?.blocks}
             id={data?.id}
             updateKey="blocks"
           />
           <ButtonAddSection data={data} />
         </Box>
-      ) : (
-        ''
+      )}
+      {data.type === 'blocks' && (
+        <Box ml={5}>
+          <DndOutline
+            content={data?.fields?.block_items}
+            id={data?.id}
+            updateKey="block_items"
+          />
+          <ButtonAddSection data={data} />
+        </Box>
       )}
     </Box>
   );

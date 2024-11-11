@@ -12,15 +12,14 @@ import DndContentSortableItem from './DndContentSortableItem';
 
 export default function DndContentSortable({
   sections,
-  handlers,
   type,
   zones,
+  loadData,
 }: any) {
-
+  //console.log('blank', type, loadData, sections);
   const displayType = (type: any) => {
     switch (type) {
       case 'single':
-
         return (
           <DropZone>
             {sections?.map((item: any, i: any) => {
@@ -30,8 +29,6 @@ export default function DndContentSortable({
                   id={item.id}
                   type={item.type}
                   data={item}
-                  index={i}
-                  open={open}
                 />
               );
             })}
@@ -52,20 +49,27 @@ export default function DndContentSortable({
             >
               {sections?.map((item: any, i: any) => {
                 return (
-            
                   <DndContentSortableItem
                     key={item.id}
                     id={item.id}
                     type={item.type}
                     data={item}
-                    index={i}
-                    open={open}
                   />
-         
                 );
               })}
-              
             </SimpleGrid>
+          </DropZone>
+        );
+      case 'collection':
+        loadData.type = "collection"
+        return (
+          <DropZone>
+            <DndContentSortableItem
+              key={loadData.collection.id}
+              id={loadData.collection.id}
+              type="collection"
+              data={loadData}
+            />
           </DropZone>
         );
       default:

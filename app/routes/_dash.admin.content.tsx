@@ -12,7 +12,7 @@ import {RiExternalLinkLine} from '@remixicon/react';
 import {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
 
 import {parseCmsContent, parseContent} from '~/lib/parseContent';
-import {GetMetaobject} from '~/graphql/admin/GetMetaobject';
+import {GetMetaobject} from '~/graphql/GetMetaobjectsByType';
 import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
 
 export const loader = async ({context}: LoaderFunctionArgs) => {
@@ -23,7 +23,9 @@ export const loader = async ({context}: LoaderFunctionArgs) => {
       type: 'content',
     },
   });
-  const themeContent = parseCmsContent(getThemeContent?.data?.metaobjects?.nodes);
+  const themeContent = parseCmsContent(
+    getThemeContent?.data?.metaobjects?.nodes,
+  );
 
   const getThemeLayouts = await admin.request(GetMetaobject, {
     variables: {
@@ -62,9 +64,9 @@ export async function action({request, context}: ActionFunctionArgs) {
 
 export default function Layouts() {
   const data: any = useLoaderData<typeof loader>();
-  console.log(data)
+  //(data);
   const actionData = useActionData<typeof action>();
-  const selectLayout = data.themeLayouts.map((layout:any) => ({
+  const selectLayout = data.themeLayouts.map((layout: any) => ({
     value: layout.id,
     label: layout.displayName,
   }));
@@ -104,7 +106,7 @@ export default function Layouts() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {data?.themeContent?.map((content:any) => {
+          {data?.themeContent?.map((content: any) => {
             return (
               <Table.Tr key={content.id}>
                 <Table.Td>{content.displayName}</Table.Td>

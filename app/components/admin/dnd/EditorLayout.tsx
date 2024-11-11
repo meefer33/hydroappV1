@@ -1,14 +1,10 @@
 import {useOutletContext, useRouteLoaderData} from '@remix-run/react';
-import {
-  useDisclosure,
-  useToggle,
-} from '@mantine/hooks';
+import {useDisclosure, useToggle} from '@mantine/hooks';
 import {
   ActionIcon,
   AppShell,
   Box,
   Burger,
-
   Container,
   CSSVariablesResolver,
   Group,
@@ -20,6 +16,7 @@ import {
 import {
   RiComputerLine,
   RiEyeLine,
+  RiLayout4Line,
   RiLayoutGridLine,
   RiSettings2Fill,
   RiSmartphoneLine,
@@ -34,18 +31,13 @@ import ButtonAddSection from './ButtonAddSection';
 import ModalAddSection from './ModalAddSection';
 import {getCssResolve} from './theme/lib/theme';
 import DndOutline from './DndOutline';
+import LayoutGrid from './forms/LayoutGrid';
 
 export default function EditorLayout({children}) {
   const root: any = useRouteLoaderData<RootLoader>('root');
 
-  const {
-    themes,
-    layouts,
-    theme,
-    editorContent,
-    viewport,
-    setViewport,
-  }: any = useOutletContext();
+  const {themes, layouts, theme, editorContent, viewport, setViewport}: any =
+    useOutletContext();
 
   const [mobileOpened, {toggle: toggleMobile}] = useDisclosure();
   const [desktopOpened, {toggle: toggleDesktop}] = useDisclosure(true);
@@ -92,9 +84,7 @@ export default function EditorLayout({children}) {
               <RiSmartphoneLine size="24" />
             </ActionIcon>
             <ActionIcon color="gray.7" size="lg" onClick={toggleDesktop}>
-              <RiEyeLine
-                size="24"
-              />
+              <RiEyeLine size="24" />
             </ActionIcon>
           </ActionIcon.Group>
         </Group>
@@ -117,8 +107,8 @@ export default function EditorLayout({children}) {
             breakpoint: 'sm',
             collapsed: {mobile: !mobileOpened, desktop: !desktopOpened},
           }}
-         p="0"
-         m="0"
+          p="0"
+          m="0"
           bg={'var(--mantine-color-body)'}
         >
           <AppShell.Navbar p="0" component={ScrollArea} bg="gray.3">
@@ -145,23 +135,56 @@ export default function EditorLayout({children}) {
                   value="settings"
                   leftSection={<RiSettings2Fill size={16} />}
                 ></Tabs.Tab>
+                <Tabs.Tab
+                  value="templates"
+                  leftSection={<RiLayout4Line size={16} />}
+                ></Tabs.Tab>
               </Tabs.List>
 
               <Tabs.Panel value="content">
+                TOP
+                <Box p="sm" bg="gray.1">
+                  <DndOutline
+                    content={
+                      editorContent?.fields?.top_content?.fields?.content
+                    }
+                    id={editorContent?.fields?.top_content?.id}
+                    updateKey="content"
+                  />
+                  <ButtonAddSection data={editorContent?.fields?.top_content} />
+                </Box>
+                Bottom
+                <Box p="sm" bg="gray.1">
+                  <DndOutline
+                    content={
+                      editorContent?.fields?.bottom_content?.fields?.content
+                    }
+                    id={editorContent?.fields?.bottom_content?.id}
+                    updateKey="content"
+                  />
+                  <ButtonAddSection
+                    data={editorContent?.fields?.bottom_content}
+                  />
+                </Box>
+                {/*
                 <Box p="sm">
+                 
                   <DndOutline
                     content={editorContent?.fields?.content}
                     id={editorContent?.id}
                     updateKey="content"
                   />
+                  
                 </Box>
                 <ButtonAddSection data={editorContent} />
+                */}
               </Tabs.Panel>
 
               <Tabs.Panel value="settings">
                 <ThemeForm />
                 <LayoutForm />
               </Tabs.Panel>
+              <Tabs.Panel value="templates">Templates</Tabs.Panel>
             </Tabs>
           </AppShell.Navbar>
           <AppShell.Main>

@@ -15,12 +15,8 @@ import {Form, Link, useActionData, useLoaderData} from '@remix-run/react';
 import {RiExternalLinkLine} from '@remixicon/react';
 import {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
 
-import {parseCmsContent, parseContent} from '~/lib/parseContent';
-import {GetMetaobject} from '~/graphql/admin/GetMetaobject';
-import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
-import {GetMetafieldsDefinitions} from '~/graphql/admin/GetMetafieldsDefinitions';
 import {GetMenus} from '~/graphql/admin/GetMenus';
-import CatalogMenu from '~/components/CatalogMenu';
+
 
 export const loader = async ({context}: LoaderFunctionArgs) => {
   const {admin} = context;
@@ -37,7 +33,7 @@ export const loader = async ({context}: LoaderFunctionArgs) => {
 
 export default function Catalog() {
   const data: any = useLoaderData<typeof loader>();
-  console.log(data?.catalog);
+  //console.log(data?.catalog);
   const catalogMenu = data?.catalog[0];
   return (
     <>
@@ -52,7 +48,7 @@ export default function Catalog() {
   );
 }
 
-function Menu({menuItems, variant = 'filled', parent="/admin/catalog"}: any) {
+function Menu({menuItems, variant = 'filled', parent = '/admin/catalog'}: any) {
   return (
     <Accordion variant={variant} chevronPosition="left">
       {menuItems.map((item: any) => {
@@ -62,9 +58,9 @@ function Menu({menuItems, variant = 'filled', parent="/admin/catalog"}: any) {
   );
 }
 
-function MenuList({menu,parent}: any) {
+function MenuList({menu, parent}: any) {
   const handle = menu.url.split('/')[2];
-  console.log(handle);
+  //console.log(handle);
   return (
     <Accordion.Item key={menu.id} value={menu.title}>
       <Center>
@@ -75,16 +71,17 @@ function MenuList({menu,parent}: any) {
           </ActionIcon>
         </ActionIcon>
       </Center>
-      <Accordion.Panel 
+      <Accordion.Panel
         styles={{
           content: {
-            paddingRight:0
-          }
+            paddingRight: 0,
+          },
         }}
       >
-        {menu?.items && <Menu menuItems={menu.items} parent={`${parent}/${handle}`} />}
+        {menu?.items && (
+          <Menu menuItems={menu.items} parent={`${parent}/${handle}`} />
+        )}
       </Accordion.Panel>
     </Accordion.Item>
   );
 }
-

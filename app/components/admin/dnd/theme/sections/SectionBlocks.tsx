@@ -1,4 +1,4 @@
-import {Container, SimpleGrid} from '@mantine/core';
+import {Container} from '@mantine/core';
 
 export default function SectionBlocks({content, children}: any) {
   const settings = content.fields.settings;

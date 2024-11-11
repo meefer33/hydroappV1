@@ -14,7 +14,7 @@ export default function BlockRichText({content}: any) {
   */
   return (
     <TypographyStylesProvider>
-      <div dangerouslySetInnerHTML={{__html: content?.fields?.settings.rte}} />
+      <div dangerouslySetInnerHTML={{__html: content?.fields?.settings?.rte}} />
     </TypographyStylesProvider>
   );
 }

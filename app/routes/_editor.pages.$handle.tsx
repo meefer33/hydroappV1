@@ -2,10 +2,9 @@ import {LoaderFunctionArgs} from '@remix-run/node';
 import {useLoaderData, useOutletContext} from '@remix-run/react';
 import {parser} from '~/lib/parseContent';
 import EditorLayout from '~/components/admin/dnd/EditorLayout';
-import {GetMetaobjectTypeHandle} from '~/graphql/GetMetaobjectTypeHandle';
 import {useEffect} from 'react';
 import {GetPage} from '~/graphql/GetPage';
-import {GetMetaobjectById} from '~/graphql/admin/GetMetaobjectById';
+import {GetMetaobjectById} from '~/graphql/GetMetaobjectById';
 import DndContent from '~/components/admin/dnd/DndContent';
 
 export const loader = async ({context, params}: LoaderFunctionArgs) => {
@@ -32,8 +31,8 @@ export const loader = async ({context, params}: LoaderFunctionArgs) => {
 
 export default function EditContent() {
   const {content, breadcrumb, getContent}: any = useLoaderData<typeof loader>();
-  const {setEditorContent,editorContent}: any = useOutletContext();
-//console.log('page',page)
+  const {setEditorContent, editorContent}: any = useOutletContext();
+  //console.log('page',page)
   useEffect(() => {
     setEditorContent(content);
   }, [content]);

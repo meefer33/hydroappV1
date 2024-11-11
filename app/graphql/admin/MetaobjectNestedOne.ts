@@ -1,4 +1,3 @@
-import {MetaFragCollection} from './MetaFrag';
 import {METAOBJECT_NESTED_TWO} from './MetaobjectNestedTwo';
 
 export const METAOBJECT_NESTED_ONE = `#graphql

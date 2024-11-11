@@ -20,13 +20,11 @@ export interface ItemType {
 }
 
 export default function DndOutline({content, id, updateKey}: any) {
-  const {editorContent, setEditorContent, item}: any = useOutletContext();
-  const [sections, handlers]: any = useListState(content?.fields?.content);
+  const [sections, handlers]: any = useListState(content);
   const [activeItem, setActiveItem] = useState(null);
   const {saveMeta} = useThemeUtils();
 
   useEffect(() => {
-    //console.log('useeffect DNDmeta', content?.fields?.content);
     handlers.setState(content);
   }, [content]);
 
@@ -45,8 +43,6 @@ export default function DndOutline({content, id, updateKey}: any) {
         },
       ],
     });
-
-    setEditorContent(nm);
   };
 
   const onDragOver = ({active, over}: DragOverEvent) => {
@@ -72,10 +68,10 @@ export default function DndOutline({content, id, updateKey}: any) {
       onDragEnd={handleDragEnd}
       collisionDetection={rectIntersection}
     >
-      {sections && (
-        <DndOutlineSortable sections={sections} handlers={handlers} />
-      )}
-  
+      {sections && <DndOutlineSortable sections={sections} />}
+      <DragOverlay>
+        {activeItem ? <Box h={50} bg="blue.2" /> : null}
+      </DragOverlay>
     </DndContext>
   );
 }

@@ -3,6 +3,7 @@ import {
   Button,
   Container,
   Group,
+  Select,
   Table,
   TextInput,
 } from '@mantine/core';
@@ -10,45 +11,37 @@ import dayjs from 'dayjs/esm/index.js';
 import {Form, Link, useActionData, useLoaderData} from '@remix-run/react';
 import {RiExternalLinkLine} from '@remixicon/react';
 import {ActionFunctionArgs, LoaderFunctionArgs} from '@remix-run/node';
-import {GetMetaobject} from '~/graphql/GetMetaobjectsByType';
-import {parseCmsContent} from '~/lib/parseContent';
+import {GetMetaobjectsByType} from '~/graphql/GetMetaobjectsByType';
+import {parseCmsContent, parser} from '~/lib/parseContent';
 import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
 
 export const loader = async ({context}: LoaderFunctionArgs) => {
   const {admin} = context;
 
-  const getMetaobjectTheme = await admin.request(GetMetaobject, {
+  const {metaobjects}: any = await admin.request(GetMetaobjectsByType, {
     variables: {
-      type: 'theme',
+      type: 'templates',
     },
   });
-  const parsedTheme = parseCmsContent(
-    getMetaobjectTheme?.data?.metaobjects?.nodes,
-  );
+  const meta = parser(metaobjects);
 
-  const getMetaobjectHa = await admin.request(GetMetaobject, {
-    variables: {
-      type: 'ha_theme_settings',
-    },
-  });
-  const parsed = parseCmsContent(getMetaobjectHa?.data?.metaobjects?.nodes);
-
-  return {parsed, parsedTheme};
+  return {meta};
 };
 
 export async function action({request, context}: ActionFunctionArgs) {
   const {admin} = context;
   const form = await request.formData();
   const name = form.get('name');
+  const resource = form.get('resource');
 
   const createMetaobject = await admin.request(CreateMetaobject, {
     variables: {
       metaobject: {
-        type: 'ha_theme_settings',
+        type: 'themes',
         handle: name,
         fields: [
           {key: 'name', value: name},
-          //{key: 'settings', value: JSON.stringify(themeSettings)},
+          {key: 'resource', value: resource},
         ],
       },
     },
@@ -60,7 +53,7 @@ export async function action({request, context}: ActionFunctionArgs) {
 export default function Themes() {
   const data: any = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
-  console.log(data);
+  //console.log(data);
   return (
     <Container size="xl">
       <Group grow>
@@ -71,15 +64,21 @@ export default function Themes() {
               name="name"
               label="Name"
               withAsterisk
-              description="Url friendly, no spaces."
+              description=""
               error={
                 !actionData?.data?.metaobjectCreate?.userErrors.length
                   ? false
                   : true
               }
             />
+            <Select
+              label="Resource"
+              placeholder="Pick Resource"
+              name="resource"
+              data={['Collection','Product','Page','Blog']}
+            />
             <Button type="submit" mb="sm">
-              Create Theme
+              Create Template
             </Button>
           </Group>
         </Form>
@@ -94,50 +93,18 @@ export default function Themes() {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {data?.parsedTheme?.map((theme: any) => {
+          {data?.meta?.map((template: any) => {
             return (
-              <Table.Tr key={theme.id}>
-                <Table.Td>{theme.displayName}</Table.Td>
+              <Table.Tr key={template?.id}>
+                <Table.Td>{template?.handle}</Table.Td>
                 <Table.Td>
-                  {dayjs(theme.updatedAt).format('MM-DD-YYYY h:mm a')}
+                  {dayjs(template?.updatedAt).format('MM-DD-YYYY h:mm a')}
                 </Table.Td>
                 <Table.Td>
                   <ActionIcon
                     component={Link}
-                    to={`/admin/themes/${theme.handle}`}
+                    to={`/admin/themes/${template.handle}`}
                     //target="_blank"
-                    size="sm"
-                  >
-                    <RiExternalLinkLine />
-                  </ActionIcon>
-                </Table.Td>
-              </Table.Tr>
-            );
-          })}
-        </Table.Tbody>
-      </Table>
-
-      <Table highlightOnHover>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>Name</Table.Th>
-            <Table.Th>Created At</Table.Th>
-            <Table.Th></Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {data?.parsed?.map((theme: any) => {
-            return (
-              <Table.Tr key={theme.id}>
-                <Table.Td>{theme.displayName}</Table.Td>
-                <Table.Td>
-                  {dayjs(theme.updatedAt).format('MM-DD-YYYY h:mm a')}
-                </Table.Td>
-                <Table.Td>
-                  <ActionIcon
-                    component={Link}
-                    to={`/admin/theme/${theme.handle}`}
-                    target="_blank"
                     size="sm"
                   >
                     <RiExternalLinkLine />

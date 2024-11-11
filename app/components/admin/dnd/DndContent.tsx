@@ -21,7 +21,6 @@ export interface ItemType {
 }
 
 export default function DndContent({content, id, updateKey, type="single", zones={}}: any) {
-  const {editorContent, setEditorContent, item}: any = useOutletContext();
   const [sections, handlers]: any = useListState(content);
   const [activeItem, setActiveItem] = useState(null);
   const {saveMeta} = useThemeUtils();
@@ -32,7 +31,6 @@ export default function DndContent({content, id, updateKey, type="single", zones
 
   const handleDragEnd = async ({active, over}: DragEndEvent) => {
     setActiveItem(null);
-
     const sectionIds: any = [];
     sections.map((section: any) => {
       sectionIds.push(section.id);
@@ -45,8 +43,6 @@ export default function DndContent({content, id, updateKey, type="single", zones
         },
       ],
     });
-
-    setEditorContent(nm);
   };
 
   const onDragOver = ({active, over}: DragOverEvent) => {
@@ -73,7 +69,7 @@ export default function DndContent({content, id, updateKey, type="single", zones
       collisionDetection={closestCorners}
     >
       {sections && (
-        <DndContentSortable sections={sections} handlers={handlers} type={type} zones={zones} />
+        <DndContentSortable sections={sections}  type={type} zones={zones} />
       )}
 
     </DndContext>

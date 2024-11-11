@@ -2,11 +2,21 @@ import {FormProvider, useForm} from '../forms/ContextForm';
 import {nanoid} from 'nanoid';
 import {useOutletContext} from '@remix-run/react';
 import {useEffect} from 'react';
-import TextBox from '../fields/TextBox';
+import NumberSlider from '../fields/NumberSlider';
 import useThemeUtils from '../useEditorUtils';
-import RichTextField from '../fields/RichTextField';
+import SectionGroup from '../fields/SectionGroup';
+import FieldsGroup from '../fields/FieldsGroup';
+import SelectBox from '../fields/SelectBox';
 
-export default function RichTextBlock() {
+export const sectionProps = {
+  padding: {
+    top: 'sm',
+    bottom: 'sm',
+  },
+  bgColor: 'primary',
+};
+
+export default function FormPage() {
   const {item, editorContent, setEditorContent}: any = useOutletContext();
   const {loadMeta, saveSettings} = useThemeUtils();
 
@@ -14,7 +24,9 @@ export default function RichTextBlock() {
     mode: 'controlled',
     initialValues: {
       name: '',
-      rte: 'add text',
+      contentWidth: 'lg',
+      padding: 'xl',
+      bg: 'primary',
     },
     onValuesChange: async (values) => {
       const data = await saveSettings(item.id, form.getValues());
@@ -23,15 +35,17 @@ export default function RichTextBlock() {
   });
 
   useEffect(() => {
-    loadMeta(item.id, form);
+    //loadMeta(item.id, form);
   }, [item]);
 
   return (
     <FormProvider form={form}>
       {item?.fields?.settings?.name || item?.handle}
       <form name={nanoid()}>
-        <TextBox label="Name" field="name" />
-        <RichTextField label="Rich Text" field="rte" />
+        <SectionGroup label="Section" isOpen={true} />
+        <FieldsGroup label="Layout" isOpen={true}>
+          <SelectBox label="Layout" field="layout" data={['h-rs-f','h-ls-f']} />
+        </FieldsGroup>
       </form>
     </FormProvider>
   );

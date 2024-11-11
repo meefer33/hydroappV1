@@ -10,6 +10,7 @@ import SectionCollectionDisplay from './theme/sections/SectionCollectionDisplay'
 import SectionBlocks from './theme/sections/SectionBlocks';
 import DndContent from './DndContent';
 import {useElementSize, useHover} from '@mantine/hooks';
+import LayoutGrid from './theme/sections/LayoutGrid';
 
 export default function DndContentSortableItem({id, type, data}: any) {
   const {attributes, listeners, setNodeRef, transform, transition, isDragging} =
@@ -25,10 +26,14 @@ export default function DndContentSortableItem({id, type, data}: any) {
   const {deleteEditorContent} = useThemeUtils();
   const {hovered, ref} = useHover();
   const {ref: refel, width, height} = useElementSize();
+  
   const changeTypeName = (type: any) => {
+    //console.log('blank', type);
     switch (type) {
       case 'content':
         return true;
+        case 'grids':
+          return true;
       case 'section_blocks':
         return true;
       case 'blocks':
@@ -39,6 +44,10 @@ export default function DndContentSortableItem({id, type, data}: any) {
   };
   const getType = (item: any) => {
     switch (item.type) {
+      case 'collection':
+        return (
+          <LayoutGrid content={item}/>
+        );
       case 'section_blocks':
         return (
           <SectionBlocks content={item}>
@@ -48,10 +57,12 @@ export default function DndContentSortableItem({id, type, data}: any) {
               updateKey="blocks"
               type="simplegrid"
               zones={item?.fields?.settings}
+             
             />
           </SectionBlocks>
         );
       case 'blocks':
+        
         return (
           <Box
             bg={item?.fields?.settings?.bg}
@@ -60,7 +71,7 @@ export default function DndContentSortableItem({id, type, data}: any) {
             <DndContent
               content={item?.fields?.block_items}
               id={item?.id}
-              updateKey="blocks"
+              updateKey="block_items"
             />
           </Box>
         );

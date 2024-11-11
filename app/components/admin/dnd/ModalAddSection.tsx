@@ -20,6 +20,8 @@ export default function ModalAddSection() {
       switch (metaData?.type) {
         case 'content':
           return <AddSection />;
+          case 'grids':
+            return <AddSection />;
         case 'section_blocks':
           return <AddSectionBlocks />;
         case 'blocks':
@@ -46,6 +48,15 @@ const AddSection = () => {
   return (
     <Stack>
       <Box>
+      <Group justify="space-between">
+          <Title order={5}>Layout Grids</Title>
+          <ActionIcon
+            variant="transparent"
+            onClick={() => addEditorContent('grids', 'content')}
+          >
+            <RiAddBoxLine size="24" />
+          </ActionIcon>
+        </Group>
         <Group justify="space-between">
           <Title order={5}>Section Blocks</Title>
           <ActionIcon
@@ -98,6 +109,17 @@ const AddBlockItems = () => {
           <ActionIcon
             variant="transparent"
             onClick={() => addEditorContent('block_image', 'block_items')}
+          >
+            <RiAddBoxLine size="24" />
+          </ActionIcon>
+        </Group>
+      </Box>
+      <Box>
+        <Group justify="space-between">
+          <Title order={5}>Add New Block Rich Text</Title>
+          <ActionIcon
+            variant="transparent"
+            onClick={() => addEditorContent('block_rich_text', 'block_items')}
           >
             <RiAddBoxLine size="24" />
           </ActionIcon>

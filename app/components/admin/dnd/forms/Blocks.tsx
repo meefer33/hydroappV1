@@ -16,7 +16,7 @@ export default function Blocks() {
     initialValues: {
       name: '',
       padding: 'xl',
-      bg: 'primary',
+     // bg: 'primary',
     },
     onValuesChange: async (values) => {
       const data = await saveSettings(item.id, form.getValues());

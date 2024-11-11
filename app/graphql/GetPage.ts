@@ -1,4 +1,4 @@
-import { MetaFrag } from "./admin/MetaFrag";
+import {MetaFrag} from './MetaFrag';
 
 export const GetPage = `#graphql
 query GetPage($handle:String!) { 
@@ -11,6 +11,10 @@ query GetPage($handle:String!) {
     }
     updatedAt
     metafield(key: "content", namespace: "custom") {
+      id
+      value
+    }
+    template: metafield(key: "template", namespace: "custom") {
       id
       value
     }

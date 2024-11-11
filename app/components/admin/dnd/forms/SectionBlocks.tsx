@@ -16,9 +16,10 @@ export const sectionProps = {
 };
 
 export default function SectionBlocks() {
-  const {item, editorContent, setEditorContent}: any = useOutletContext();
+  const {item, editorContent, setEditorContent, updateMetaVersionId}: any =
+    useOutletContext();
   const {loadMeta, saveSettings} = useThemeUtils();
-
+  //console.log('item-sb', item);
   const form = useForm({
     mode: 'controlled',
     initialValues: {
@@ -34,7 +35,11 @@ export default function SectionBlocks() {
       spacing: 'xl',
     },
     onValuesChange: async (values) => {
-      const data = await saveSettings(item.id, form.getValues());
+      const data = await saveSettings(
+        item.id,
+        form.getValues(),
+        updateMetaVersionId,
+      );
       setEditorContent(data);
     },
   });

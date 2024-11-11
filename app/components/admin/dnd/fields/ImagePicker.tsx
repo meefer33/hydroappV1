@@ -11,10 +11,13 @@ import {
   Grid,
 } from '@mantine/core';
 import {useDisclosure} from '@mantine/hooks';
-import {FieldLabel} from '@measured/puck';
 import {useFetcher} from '@remix-run/react';
 import {useEffect, useState} from 'react';
-import {IconUpload, IconPhoto, IconX} from '@tabler/icons-react';
+import {
+  RiCloseLine,
+  RiPictureInPicture2Line,
+  RiUpload2Fill,
+} from '@remixicon/react';
 import {Dropzone, DropzoneProps, IMAGE_MIME_TYPE} from '@mantine/dropzone';
 import {useFormContext} from '../forms/ContextForm';
 import Label from './Label';
@@ -142,7 +145,6 @@ export default function ImagePicker({label = 'Text Box', field}: any) {
   }, [fileCreate.data]);
 
   const setLogo = (logo: any) => {
-  
     form.setFieldValue(field, logo);
   };
 
@@ -182,34 +184,13 @@ export default function ImagePicker({label = 'Text Box', field}: any) {
                 style={{pointerEvents: 'none'}}
               >
                 <Dropzone.Accept>
-                  <IconUpload
-                    style={{
-                      width: rem(52),
-                      height: rem(52),
-                      color: 'var(--mantine-color-blue-6)',
-                    }}
-                    stroke={1.5}
-                  />
+                  <RiUpload2Fill size={40} />
                 </Dropzone.Accept>
                 <Dropzone.Reject>
-                  <IconX
-                    style={{
-                      width: rem(52),
-                      height: rem(52),
-                      color: 'var(--mantine-color-red-6)',
-                    }}
-                    stroke={1.5}
-                  />
+                  <RiCloseLine size={40} />
                 </Dropzone.Reject>
                 <Dropzone.Idle>
-                  <IconPhoto
-                    style={{
-                      width: rem(52),
-                      height: rem(52),
-                      color: 'var(--mantine-color-dimmed)',
-                    }}
-                    stroke={1.5}
-                  />
+                  <RiPictureInPicture2Line size={40} />
                 </Dropzone.Idle>
                 <div>
                   <Text size="xl" inline>
@@ -248,7 +229,6 @@ export default function ImagePicker({label = 'Text Box', field}: any) {
                     onClick={() => {
                       setLogo(file);
                       close();
-                      
                     }}
                   >
                     <Image

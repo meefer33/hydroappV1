@@ -1,7 +1,7 @@
-import {Badge, Button, Card, Group, rem, Text, Title} from '@mantine/core';
+import {Badge, Button, Card, Group, rem, Text, Title, Image} from '@mantine/core';
 import {Link} from '@remix-run/react';
 import {RiHeart3Line} from '@remixicon/react';
-import {Image, Money} from '@shopify/hydrogen';
+import {Money} from '@shopify/hydrogen';
 import {ProductItemFragment} from 'storefrontapi.generated';
 import {useVariantUrl} from '~/lib/variants';
 
@@ -25,12 +25,14 @@ export default function ProductItem({
       <Card.Section>
         {product.featuredImage && (
           <Image
-            alt={product.featuredImage.altText || product.title}
-            aspectRatio="1/3"
-            data={product.featuredImage}
-            loading={loading}
-            sizes="(min-width: 45em) 400px, 100vw"
-            crop="center"
+          src={product.featuredImage.url}
+            //alt={product.featuredImage.altText || product.title}
+            //aspectRatio="3/5"
+            //data={product.featuredImage}
+            //loading={loading}
+            //sizes="(min-width: 45em) 50vw, 100vw"
+            //crop="center"
+            //style={{objectFit:"cover"}}
           />
         )}
       </Card.Section>

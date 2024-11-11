@@ -10,7 +10,6 @@ import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {Container, Grid, Title} from '@mantine/core';
 import {GetCollection} from '~/graphql/GetCollection';
 import ProductItem from '~/components/ProductItem';
-import {GetMetaobjectById} from '~/graphql/GetMetaobjectById';
 import {parser} from '~/lib/parseContent';
 import {useEffect} from 'react';
 import EditorLayout from '~/components/admin/dnd/EditorLayout';
@@ -21,13 +20,14 @@ import DndContent from '~/components/admin/dnd/DndContent';
 import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
 import {UpsertMetaobject} from '~/graphql/admin/UpsertMetaobject';
 import {CollectionUpdate} from '~/graphql/admin/CollectionUpdate';
-import {identity} from 'node_modules/@mantine/core/lib/core/factory/factory';
+import ButtonAddSection from '~/components/admin/dnd/ButtonAddSection';
+import {UpdateMetaobject} from '~/graphql/admin/UpdateMetaobject';
+import {GetMetaobjectByIdPages} from '~/graphql/GetMetaobjectByIdPages';
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   let handle = params['*']?.split('/').pop();
   let name = `catalog/${params['*']}`;
   let slug = `catalog-${params['*'].replaceAll('/', '-')}`;
-  //let {handle} = params;
   const {storefront, admin} = context;
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 8,
@@ -50,14 +50,11 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   //get page in pages metaobject
   let getPage: any = {},
     page: any = {};
-   //console.log('debug pt',collection?.page_template)
-  if (collection?.page_template?.value) {
-    getPage = await admin.request(GetMetaobjectById, {
-      variables: {id: collection?.page_template?.value},
+  if (collection?.page_content?.value) {
+    getPage = await admin.request(GetMetaobjectByIdPages, {
+      variables: {id: collection?.page_content?.value},
     });
-    //console.log('debug',JSON.stringify(getPage))
-    page = parser(getPage?.metaobject);
-    //console.log('debug',JSON.stringify(upsertPage))
+    page = parser(getPage?.data?.metaobject);
   } else {
     //create page in pages metaobject
     const upsertPage = await admin.request(UpsertMetaobject, {
@@ -67,32 +64,69 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
           handle: slug,
         },
         metaobject: {
-          fields: [
-            {key: 'name', value: name},
-            {key: 'slug', value: name},
-          ],
+          fields: [{key: 'name', value: name}],
+          capabilities: {publishable: {status: 'ACTIVE'}},
         },
       },
     });
-   //console.log('debug',JSON.stringify(upsertPage))
+    //console.log('debug',JSON.stringify(upsertPage))
     const pageId = upsertPage?.data?.metaobjectUpsert?.metaobject?.id;
-    page = upsertPage?.data?.metaobjectUpsert?.metaobject
+    //page = parser(upsertPage?.data?.metaobjectUpsert?.metaobject);
     //add page_template metaobject to collection
     const addMetafield = await admin.request(CollectionUpdate, {
       variables: {
         input: {
           id: collection.id,
           metafields: {
-            key: 'page_template',
+            key: 'page_content',
             namespace: 'custom',
             value: pageId,
           },
         },
       },
     });
-  }
 
-  //get collection templates
+    //create content for top
+    const createMetaobject1 = await admin.request(CreateMetaobject, {
+      variables: {
+        metaobject: {
+          type: 'content',
+          capabilities: {publishable: {status: 'ACTIVE'}},
+        },
+      },
+    });
+    const createMetaobject2 = await admin.request(CreateMetaobject, {
+      variables: {
+        metaobject: {
+          type: 'content',
+          capabilities: {publishable: {status: 'ACTIVE'}},
+        },
+      },
+    });
+
+    const response = await admin.request(UpdateMetaobject, {
+      variables: {
+        id: pageId,
+        metaobject: {
+          fields: [
+            {
+              key: 'top_content',
+              value: createMetaobject1.data?.metaobjectCreate?.metaobject?.id,
+            },
+            {
+              key: 'bottom_content',
+              value: createMetaobject2.data?.metaobjectCreate?.metaobject?.id,
+            },
+          ],
+        },
+      },
+    });
+    getPage = await admin.request(GetMetaobjectByIdPages, {
+      variables: {id: pageId},
+    });
+    //console.log('debug',JSON.stringify(getPage))
+    page = parser(getPage?.data?.metaobject);
+  }
 
   return {
     collection,
@@ -102,22 +136,26 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 
 export default function Collection() {
   const {collection, page} = useLoaderData<typeof loader>();
-  const data = useLoaderData<typeof loader>();
-  console.log('collection', collection);
-  console.log('page', page);
-
-  const {setEditorContent, editorContent}: any = useOutletContext();
+  const {setEditorContent, editorContent, setUpdateMetaVersionId}: any =
+    useOutletContext();
   const root: any = useRouteLoaderData<RootLoader>('root');
   const catalogMenu = root?.header?.catalog?.items;
 
   useEffect(() => {
-    //setEditorContent(template.fields?.content);
-  }, []);
+    console.log(page)
+    setEditorContent(page);
+    setUpdateMetaVersionId(page.id);
+  }, [page]);
 
   return (
     <EditorLayout>
-
-      <Container fluid pt="md">
+      <DndContent
+        content={editorContent?.fields?.top_content?.fields?.content}
+        id={editorContent?.fields?.top_content?.id}
+        updateKey="content"
+      />
+      <ButtonAddSection data={editorContent?.fields?.top_content} />
+      <Container size="lg" pt="md">
         <Grid
           type="container"
           breakpoints={{
@@ -129,7 +167,7 @@ export default function Collection() {
           }}
         >
           <Grid.Col span={{base: 12, md: 'content'}}>
-            <CatalogMenu catalogMenu={catalogMenu} breadcrumb="collections" />
+            <CatalogMenu catalogMenu={catalogMenu} breadcrumb="catalog" />
           </Grid.Col>
           <Grid.Col span={{base: 12, md: 'auto'}}>
             <Container size="xl">
@@ -161,7 +199,11 @@ export default function Collection() {
           </Grid.Col>
         </Grid>
       </Container>
-
+      <DndContent
+        content={editorContent?.fields?.bottom_content?.fields?.content}
+        id={editorContent?.fields?.bottom_content?.id}
+        updateKey="content"
+      />
     </EditorLayout>
   );
 }

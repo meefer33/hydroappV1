@@ -18,29 +18,30 @@ import {
   useFetcher,
   useLoaderData,
 } from '@remix-run/react';
-import {GetMetaobjectByHandle} from '~/graphql/admin/GetMetaobjectByHandle';
-
 import {useForm} from '@mantine/form';
 import {useState} from 'react';
-import ImagePicker from '~/components/admin/ImagePicker';
+
 import { parseContent } from '~/lib/parseContent';
 import { LoaderFunctionArgs } from '@remix-run/server-runtime';
+import { GetMetaobjectTypeHandle } from '~/graphql/GetMetaobjectTypeHandle';
+import ImagePicker from '~/components/admin/dnd/fields/ImagePicker';
 
 export const loader = async ({context, params}: LoaderFunctionArgs) => {
   const {admin} = context;
   const {slug} = params;
 
-  const getMetaobjectByHandle = await admin.request(GetMetaobjectByHandle, {
+  const getMetaobjectTypeHandle = await admin.request(GetMetaobjectTypeHandle, {
     variables: {
-      handle: {type: 'theme', handle: slug},
+      handle: {type: 'themes', handle: slug},
     },
   });
 
-  const theme = parseContent(getMetaobjectByHandle?.data?.metaobjectByHandle);
+  const theme = parseContent(getMetaobjectTypeHandle?.data?.metaobjectByHandle);
 
   return {theme};
 };
 
+//NEEDS TO BE REDONE, YOU DELETE THEME META and are using themes in the new editor
 export default function Themes() {
   const {theme}: any = useLoaderData<typeof loader>();
   const settings = theme.fields.settings
