@@ -142,7 +142,6 @@ export default function Collection() {
   const catalogMenu = root?.header?.catalog?.items;
 
   useEffect(() => {
-    console.log(page)
     setEditorContent(page);
     setUpdateMetaVersionId(page.id);
   }, [page]);

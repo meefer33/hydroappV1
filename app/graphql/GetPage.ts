@@ -5,16 +5,13 @@ query GetPage($handle:String!) {
   page(handle: $handle) {
     handle
     title
+    id
     seo {
       description
       title
     }
     updatedAt
-    metafield(key: "content", namespace: "custom") {
-      id
-      value
-    }
-    template: metafield(key: "template", namespace: "custom") {
+    page_content: metafield(key: "page_content", namespace: "custom") {
       id
       value
     }
