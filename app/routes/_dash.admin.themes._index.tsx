@@ -19,7 +19,7 @@ export const loader = async ({context}: LoaderFunctionArgs) => {
 
   const getMetaobjectTheme = await admin.request(GetMetaobjectsByType, {
     variables: {
-      type: 'theme',
+      type: 'themes',
     },
   });
   const parsedTheme = parseCmsContent(

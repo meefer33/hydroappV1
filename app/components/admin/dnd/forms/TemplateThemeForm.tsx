@@ -9,16 +9,16 @@ import {buildTheme} from '../theme/lib/theme';
 import useThemeUtils from '../useEditorUtils';
 import { useEffect } from 'react';
 
-export default function ThemeForm() {
-  const {setTheme, theme, themeId}: any = useOutletContext();
+export default function TemplateThemeForm({template}) {
+  const {setTheme, theme}: any = useOutletContext();
   const {saveMeta} = useThemeUtils();
-  console.log('theme2', theme);
+
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: theme?.other,
     onValuesChange: (values) => {
       setTheme(buildTheme(form.getValues()));
-      saveMeta(themeId, {
+      saveMeta(template?.fields?.theme?.id, {
         fields: [
           {
             key: 'theme',
@@ -26,6 +26,7 @@ export default function ThemeForm() {
           },
         ],
       });
+      console.log('theme2', theme);
     },
   });
 

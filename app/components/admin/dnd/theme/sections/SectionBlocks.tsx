@@ -1,7 +1,7 @@
 import {Container} from '@mantine/core';
 
 export default function SectionBlocks({content, children}: any) {
-  const settings = content.fields.settings;
+  const settings = content?.fields?.settings;
 
   return (
     <Container fluid px={0} py={settings?.padding} bg={settings?.bg}>

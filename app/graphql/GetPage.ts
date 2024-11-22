@@ -6,6 +6,7 @@ query GetPage($handle:String!) {
     handle
     title
     id
+    body
     seo {
       description
       title

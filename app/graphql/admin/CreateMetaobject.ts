@@ -1,9 +1,10 @@
+import { MetaFrag } from "../MetaFrag";
+
 export const CreateMetaobject = `#graphql
 mutation CreateMetaobject($metaobject: MetaobjectCreateInput!) {
     metaobjectCreate(metaobject: $metaobject) {
         metaobject {
-        id
-        handle
+          ...Meta
         }
         userErrors {
         field
@@ -11,4 +12,6 @@ mutation CreateMetaobject($metaobject: MetaobjectCreateInput!) {
         code
         }
   }
-}`;
+}
+${MetaFrag}
+`;

@@ -25,12 +25,12 @@ import Label from './Label';
 
 export default function ImagePicker({label = 'Text Box', field}: any) {
   const form: any = useFormContext();
-
+  const logoImage = form.getInputProps(field);
   const [queryValue, setQueryValue] = useState<string>('');
   const [opened, {open, close}] = useDisclosure(false);
   // const [listFiles, setListFiles] = useState<String[] | any>([]);
   const [tempFiles, setTempFiles] = useState([]);
-  const [fileUrl, setFileUrl] = useState<string>('');
+  const [fileUrl, setFileUrl] = useState();
   const [filesToUpload, setFilesToUpload] = useState<String[] | any>([]);
   const fetcher = useFetcher();
   const stagedUploadsCreate: any = useFetcher();
@@ -60,6 +60,10 @@ export default function ImagePicker({label = 'Text Box', field}: any) {
       },
     );
   };
+  useEffect(() => {
+    const logoImageUrl = form.getInputProps(field);
+    setFileUrl(logoImageUrl?.defaultValue?.image)
+  },[logoImage])
 
   useEffect(() => {
     if (stagedUploadsCreate.data) {
@@ -145,12 +149,14 @@ export default function ImagePicker({label = 'Text Box', field}: any) {
   }, [fileCreate.data]);
 
   const setLogo = (logo: any) => {
+    console.log(logo);
     form.setFieldValue(field, logo);
+    setFileUrl(logo?.image);
   };
 
   return (
     <>
-      {/*value && <Image src={value?.url} alt={value?.alt} h={50} />*/}
+      {fileUrl && <Image src={fileUrl?.url} alt={fileUrl?.alt} w={100} />}
       <Button
         onClick={() => {
           open();

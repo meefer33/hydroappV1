@@ -64,42 +64,44 @@ export const buildTheme = (themeSettings: any = defaultTheme) => {
     );
     newColors[key] = generatedColorsArray;
   }
-
+console.log('headings gonts',themeSettings?.fonts?.bodyClass)
   const newTheme = createTheme({
     primaryColor: 'primary',
     colors: newColors,
+    //fontFamily: themeSettings?.fonts?.bodyClass || DEFAULT_THEME.fontFamily,
+
     other: themeSettings,
   });
   const mt = mergeMantineTheme(DEFAULT_THEME, newTheme);
   return mt;
 };
 
-export const getCssResolve = (themes: any) => {
+export const getCssResolve = (theme: any) => {
   const cssResolve = {
     variables: {
       '--mantine-color-body':
-        themes[0]?.fields?.theme?.colorScheme === 'dark'
-          ? themes[0]?.fields?.theme?.themes?.dark?.bgColor
-          : themes[0]?.fields?.theme?.themes?.light?.bgColor,
+        theme?.colorScheme === 'dark'
+          ? theme?.themes?.dark?.bgColor
+          : theme?.themes?.light?.bgColor,
       '--mantine-color-text':
-        themes[0]?.fields?.theme.colorScheme === 'dark'
-          ? themes[0]?.fields?.theme?.themes?.dark?.textColor
-          : themes[0]?.fields?.theme?.themes?.light?.textColor,
+        theme.colorScheme === 'dark'
+          ? theme?.themes?.dark?.textColor
+          : theme?.themes?.light?.textColor,
       '--divider-color':
-        themes[0]?.fields?.theme?.colorScheme === 'dark'
+        theme?.colorScheme === 'dark'
           ? '--mantine-color-dark-4'
           : '--mantine-color-dark-4',
     },
     light: {
       '--mantine-color-body':
-        themes[0]?.fields?.theme?.themes?.light?.bgColor,
+        theme?.themes?.light?.bgColor,
       '--mantine-color-text':
-        themes[0]?.fields?.theme?.themes?.light?.textColor,
+        theme?.themes?.light?.textColor,
     },
     dark: {
-      '--mantine-color-body': themes[0]?.fields?.theme?.themes?.dark?.bgColor,
+      '--mantine-color-body': theme?.themes?.dark?.bgColor,
       '--mantine-color-text':
-        themes[0]?.fields?.theme?.themes?.dark?.textColor,
+        theme?.themes?.dark?.textColor,
     },
   };
   return cssResolve;

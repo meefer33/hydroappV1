@@ -6,6 +6,7 @@ import ImageForm from './ImageForm';
 import RichTextBlock from './RichTextBlock';
 import SectionCollection from './SectionCollection';
 import LayoutGrid from './LayoutGrid';
+import HeaderDefaultForm from './HeaderDefaultForm';
 
 export default function ShowForm() {
   const {item}: any = useOutletContext();
@@ -23,6 +24,8 @@ export default function ShowForm() {
         return <RichTextBlock />;
       case 'section_collection':
         return <SectionCollection />;
+      case 'headers':
+        return <HeaderDefaultForm />;
       default:
         return null;
     }

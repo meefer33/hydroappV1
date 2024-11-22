@@ -23,6 +23,7 @@ import {CollectionUpdate} from '~/graphql/admin/CollectionUpdate';
 import ButtonAddSection from '~/components/admin/dnd/ButtonAddSection';
 import {UpdateMetaobject} from '~/graphql/admin/UpdateMetaobject';
 import {GetMetaobjectByIdPages} from '~/graphql/GetMetaobjectByIdPages';
+import SectionBlocks from '~/components/admin/dnd/theme/sections/SectionBlocks';
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   let handle = params['*']?.split('/').pop();
@@ -147,14 +148,15 @@ export default function Collection() {
   }, [page]);
 
   return (
-    <EditorLayout>
+    <EditorLayout type="collection">
       <DndContent
         content={editorContent?.fields?.top_content?.fields?.content}
         id={editorContent?.fields?.top_content?.id}
         updateKey="content"
       />
       <ButtonAddSection data={editorContent?.fields?.top_content} />
-      <Container size="lg" pt="md">
+
+      <SectionBlocks content={editorContent}>
         <Grid
           type="container"
           breakpoints={{
@@ -197,7 +199,7 @@ export default function Collection() {
             </Container>
           </Grid.Col>
         </Grid>
-      </Container>
+      </SectionBlocks>
       <DndContent
         content={editorContent?.fields?.bottom_content?.fields?.content}
         id={editorContent?.fields?.bottom_content?.id}

@@ -35,6 +35,19 @@ export const meta: MetaFunction<typeof loader> = ({data}) => {
 export const loader = async ({context}: LoaderFunctionArgs) => {
   const {admin, storefront} = context;
 
+    //get all templates
+    const getTemplates = await storefront.query(GetMetaobjectsByType, {
+      variables: {
+        type: 'templates',
+      },
+    });
+    let templates = parser(getTemplates?.metaobjects);
+    //if no themes than create default
+    console.log('templates',JSON.stringify(getTemplates))
+    if (!templates[0]) {
+      return redirect('/create-defaults');
+    }
+
   //get all themes
   const getThemes = await storefront.query(GetMetaobjectsByType, {
     variables: {
@@ -63,12 +76,13 @@ export const loader = async ({context}: LoaderFunctionArgs) => {
   const getCollections = await storefront.query(GetCollections);
   const collections = parser(getCollections?.collections);
 
-  return {themes, layouts, collections};
+  return {templates, themes, layouts, collections};
 };
 
 export default function Layout() {
-  const {themes, layouts, collections}: any = useLoaderData<typeof loader>();
+  const {templates, themes, layouts, collections}: any = useLoaderData<typeof loader>();
   const [theme, setTheme] = useState(buildTheme(themes[0]?.fields?.theme));
+  const [layout, setLayout] = useState(layouts[0]?.fields?.layout);
   const [item, setItem]: any = useState();
   const [selectedItem, setSelectedItem] = useState(null);
   const [editorContent, setEditorContent]: any = useState();
@@ -76,80 +90,21 @@ export default function Layout() {
   const [metaData, setMetaData]: any = useState();
   const [updateMetaVersionId, setUpdateMetaVersionId]: any = useState();
   const [viewport, setViewport] = useState('100%');
-  const actionUpdateSettings = useFetcher();
-  const saveTheme = (handle: any, theme: any) => {
-    actionUpdateSettings.submit(
-      {
-        handle: {
-          type: 'themes',
-          handle: handle,
-        },
-        metaobject: {
-          fields: [
-            {
-              key: 'name',
-              value: handle,
-            },
-            {
-              key: 'theme',
-              value: JSON.stringify(theme),
-            },
-          ],
-        },
-      },
-      {
-        method: 'PUT',
-        action: '/api/upsertMetaobject',
-        encType: 'application/json',
-      },
-    );
-  };
-
-  const saveLayout = (handle: any, Layout: any) => {
-    actionUpdateSettings.submit(
-      {
-        handle: {
-          type: 'layouts',
-          handle: handle,
-        },
-        metaobject: {
-          fields: [
-            {
-              key: 'name',
-              value: handle,
-            },
-            {
-              key: 'layout',
-              value: JSON.stringify(Layout),
-            },
-            {
-              key: 'theme',
-              value: themes[0].id,
-            },
-          ],
-        },
-      },
-      {
-        method: 'PUT',
-        action: '/api/upsertMetaobject',
-        encType: 'application/json',
-      },
-    );
-  };
 
   return (
     <Outlet
       context={{
-        themes,
-        layouts,
+        templates,
+        themeId: themes[0]?.id,
+        layoutId: layouts[0]?.id,
+        layout, 
+        setLayout,
         theme,
         setTheme,
         item,
         setItem,
         selectedItem,
         setSelectedItem,
-        saveTheme,
-        saveLayout,
         editorContent,
         setEditorContent,
         modalIsOpen: opened,

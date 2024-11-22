@@ -32,31 +32,31 @@ import ModalAddSection from './ModalAddSection';
 import {getCssResolve} from './theme/lib/theme';
 import DndOutline from './DndOutline';
 import LayoutGrid from './forms/LayoutGrid';
+import FormPage from './forms/FormPage';
 
-export default function EditorLayout({children}) {
+export default function EditorLayout({type,children}) {
   const root: any = useRouteLoaderData<RootLoader>('root');
 
-  const {themes, layouts, theme, editorContent, viewport, setViewport}: any =
+  const {theme, layout, editorContent, viewport, setViewport}: any =
     useOutletContext();
 
   const [mobileOpened, {toggle: toggleMobile}] = useDisclosure();
   const [desktopOpened, {toggle: toggleDesktop}] = useDisclosure(true);
 
   const [viewportColor, toggle] = useToggle([true, false]);
-  const cssResolver: CSSVariablesResolver = (theme) => getCssResolve(themes);
+  const cssResolver: CSSVariablesResolver = (theme) => getCssResolve(theme.other);
   //console.log('metaData', editorContent);
   return (
     <MantineProvider
       theme={theme}
       forceColorScheme={theme?.other?.colorScheme}
-      cssVariablesResolver={cssResolver}
+     cssVariablesResolver={cssResolver}
     >
       <Container
         pos="fixed"
         top="0"
-        //right="0"
-        w="100%"
-        fluid
+        right="0"
+ 
         style={{
           zIndex: 999,
         }}
@@ -142,6 +142,7 @@ export default function EditorLayout({children}) {
               </Tabs.List>
 
               <Tabs.Panel value="content">
+                {editorContent?.id && <FormPage  />}
                 TOP
                 <Box p="sm" bg="gray.1">
                   <DndOutline
@@ -195,14 +196,14 @@ export default function EditorLayout({children}) {
                 width: viewport,
                 transform: `scaleX(${viewport})`,
                 transition: 'width 400ms ease',
-                fontFamily: themes[0].fields?.theme.fonts.bodyClass,
+                fontFamily: theme?.fonts?.bodyClass,
                 bgColor: 'var(--mantine-color-body)',
               }}
             >
               <Box bg={'var(--mantine-color-body)'}>
                 <ThemeHeader
-                  layout={layouts[0].fields?.layout}
-                  theme={themes[0].fields?.theme}
+                  layout={layout}
+                  theme={theme}
                 />
                 {children}
               </Box>

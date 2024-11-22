@@ -12,6 +12,7 @@ import {PageUpdate} from '~/graphql/admin/PageUpdate';
 import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
 import {UpdateMetaobject} from '~/graphql/admin/UpdateMetaobject';
 import ButtonAddSection from '~/components/admin/dnd/ButtonAddSection';
+import SectionBlocks from '~/components/admin/dnd/theme/sections/SectionBlocks';
 
 export const loader = async ({context, params}: LoaderFunctionArgs) => {
   const {admin} = context;
@@ -123,21 +124,23 @@ export default function EditContent() {
   const {storePage, page}: any = useLoaderData<typeof loader>();
   const {setEditorContent, editorContent, setUpdateMetaVersionId}: any =
     useOutletContext();
-  //console.log('page',page)
+  console.log('page', page);
   useEffect(() => {
     setEditorContent(page);
     setUpdateMetaVersionId(page.id);
   }, [page]);
 
   return (
-    <EditorLayout>
+    <EditorLayout type="page">
       <DndContent
         content={editorContent?.fields?.top_content?.fields?.content}
         id={editorContent?.fields?.top_content?.id}
         updateKey="content"
       />
       <ButtonAddSection data={editorContent?.fields?.top_content} />
-      Page info
+      <SectionBlocks content={editorContent}>
+        <main dangerouslySetInnerHTML={{__html: storePage.body}} />
+      </SectionBlocks>
       <DndContent
         content={editorContent?.fields?.bottom_content?.fields?.content}
         id={editorContent?.fields?.bottom_content?.id}

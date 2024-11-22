@@ -11,6 +11,7 @@ import SectionBlocks from './theme/sections/SectionBlocks';
 import DndContent from './DndContent';
 import {useElementSize, useHover} from '@mantine/hooks';
 import LayoutGrid from './theme/sections/LayoutGrid';
+import Headers from './theme/sections/Headers';
 
 export default function DndContentSortableItem({id, type, data}: any) {
   const {attributes, listeners, setNodeRef, transform, transition, isDragging} =
@@ -22,18 +23,21 @@ export default function DndContentSortableItem({id, type, data}: any) {
     setSelectedItem,
     openModal,
     setMetaData,
+    theme,
   }: any = useOutletContext();
   const {deleteEditorContent} = useThemeUtils();
   const {hovered, ref} = useHover();
   const {ref: refel, width, height} = useElementSize();
-  
+
   const changeTypeName = (type: any) => {
     //console.log('blank', type);
     switch (type) {
+      case 'headers':
+        return true;
       case 'content':
         return true;
-        case 'grids':
-          return true;
+      case 'grids':
+        return true;
       case 'section_blocks':
         return true;
       case 'blocks':
@@ -44,10 +48,10 @@ export default function DndContentSortableItem({id, type, data}: any) {
   };
   const getType = (item: any) => {
     switch (item.type) {
+      case 'headers':
+        return <Headers content={item} theme={theme} />;
       case 'collection':
-        return (
-          <LayoutGrid content={item}/>
-        );
+        return <LayoutGrid content={item} />;
       case 'section_blocks':
         return (
           <SectionBlocks content={item}>
@@ -57,12 +61,10 @@ export default function DndContentSortableItem({id, type, data}: any) {
               updateKey="blocks"
               type="simplegrid"
               zones={item?.fields?.settings}
-             
             />
           </SectionBlocks>
         );
       case 'blocks':
-        
         return (
           <Box
             bg={item?.fields?.settings?.bg}
@@ -97,7 +99,7 @@ export default function DndContentSortableItem({id, type, data}: any) {
       bd={selectedItem === id ? '2px solid gray.7' : '0px'}
       pos="relative"
     >
-      <Box pos="relative" ref={refel} bd={hovered ? '2px solid gray.7' : '0px'}>
+      <Box pos="relative" ref={refel} bd={hovered ? '1px solid gray.7' : '0px'}>
         <Box
           pos="absolute"
           top={-20}
