@@ -10,7 +10,6 @@ import SectionCollectionDisplay from './theme/sections/SectionCollectionDisplay'
 import SectionBlocks from './theme/sections/SectionBlocks';
 import DndContent from './DndContent';
 import {useElementSize, useHover} from '@mantine/hooks';
-import LayoutGrid from './theme/sections/LayoutGrid';
 import Headers from './theme/sections/Headers';
 
 export default function DndContentSortableItem({id, type, data}: any) {
@@ -29,17 +28,11 @@ export default function DndContentSortableItem({id, type, data}: any) {
   const {hovered, ref} = useHover();
   const {ref: refel, width, height} = useElementSize();
 
-  const changeTypeName = (type: any) => {
-    //console.log('blank', type);
+  const hasInnerContent = (type: any) => {
     switch (type) {
-      case 'headers':
-        return true;
       case 'content':
-        return true;
       case 'grids':
-        return true;
       case 'section_blocks':
-        return true;
       case 'blocks':
         return true;
       default:
@@ -49,12 +42,10 @@ export default function DndContentSortableItem({id, type, data}: any) {
   const getType = (item: any) => {
     switch (item.type) {
       case 'headers':
-        return <Headers content={item} theme={theme} />;
-      case 'collection':
-        return <LayoutGrid content={item} />;
+        return <Headers settings={item?.fields?.settings} theme={theme} />;
       case 'section_blocks':
         return (
-          <SectionBlocks content={item}>
+          <SectionBlocks settings={item?.fields?.settings}>
             <DndContent
               content={item?.fields?.blocks}
               id={item?.id}
@@ -132,7 +123,7 @@ export default function DndContentSortableItem({id, type, data}: any) {
                 </ActionIcon>
                 <ActionIcon
                   color="gray.7"
-                  w={100}
+                  w="auto"
                   size="lg"
                   aria-label="Settings"
                   onClick={() => {
@@ -148,7 +139,7 @@ export default function DndContentSortableItem({id, type, data}: any) {
                       )}
                   </Text>
                 </ActionIcon>
-                {changeTypeName(data.type) && (
+                {hasInnerContent(data.type) && (
                   <ActionIcon
                     color="gray.7"
                     size="lg"

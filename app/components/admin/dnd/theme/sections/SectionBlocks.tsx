@@ -1,11 +1,11 @@
 import {Container} from '@mantine/core';
+import { DefaultSectionBlocks,defaultSectionBlocks } from '../lib/metaTypes';
 
-export default function SectionBlocks({content, children}: any) {
-  const settings = content?.fields?.settings;
-
+export default function SectionBlocks({settings, children}:{settings:DefaultSectionBlocks,children:any}) {
+  const display = settings || defaultSectionBlocks
   return (
-    <Container fluid px={0} py={settings?.padding} bg={settings?.bg}>
-      <Container size={settings?.contentWidth}>{children}</Container>
+    <Container fluid px={0} py={display?.padding} bg={display?.bg}>
+      <Container size={display?.contentWidth}>{children}</Container>
     </Container>
   );
 }

@@ -64,7 +64,7 @@ export const buildTheme = (themeSettings: any = defaultTheme) => {
     );
     newColors[key] = generatedColorsArray;
   }
-console.log('headings gonts',themeSettings?.fonts?.bodyClass)
+
   const newTheme = createTheme({
     primaryColor: 'primary',
     colors: newColors,

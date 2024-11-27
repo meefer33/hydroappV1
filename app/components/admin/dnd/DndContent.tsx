@@ -69,7 +69,7 @@ export default function DndContent({content, id, updateKey, type="single", zones
       collisionDetection={closestCorners}
     >
       {sections && (
-        <DndContentSortable sections={sections}  type={type} zones={zones} />
+        <DndContentSortable sections={sections} type={type} zones={zones} />
       )}
 
     </DndContext>

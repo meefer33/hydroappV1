@@ -6,43 +6,23 @@ import FieldsGroup from '../fields/FieldsGroup';
 import TextBox from '../fields/TextBox';
 import {useOutletContext} from '@remix-run/react';
 import useThemeUtils from '../useEditorUtils';
-import {useEffect} from 'react';
+
+import {DefaultHeader, defaultHeader} from '../theme/lib/metaTypes';
+import ColorPicker from '../fields/ColorPicker';
 
 export default function HeaderDefaultForm() {
   const {setEditorContent, item}: any = useOutletContext();
-  const {saveMeta,loadMeta} = useThemeUtils();
-
+  const {saveMeta} = useThemeUtils();
+console.log('item',item)
   const form = useForm({
     mode: 'uncontrolled',
-    initialValues: {
-      padding: {
-        top: 'sm',
-        bottom: 'sm',
-        left: 'sm',
-        right: 'sm',
-      },
-      logo: {
-        image: '',
-        width: '',
-      },
-      heading: {
-        text: '',
-        textSpacing: '',
-        textColor: '',
-        subText: '',
-        subTextSpacing: '',
-        subTextColor: '',
-      },
-      scrollMenu: {
-        scrollBg: '',
-      },
-    },
-    onValuesChange: async (values: any) => {
+    initialValues: item?.fields?.settings || defaultHeader,
+    onValuesChange: async (values: DefaultHeader) => {
       const data = await saveMeta(item.id, {
         fields: [
           {
             key: 'name',
-            value: values.name || item?.handle,
+            value: values.name,
           },
           {
             key: 'settings',
@@ -54,20 +34,27 @@ export default function HeaderDefaultForm() {
     },
   });
 
-  useEffect(() => {
-    loadMeta(item.id, form);
-  }, [item]);
-
-
   return (
     <FormProvider form={form}>
       <form>
-      <TextBox label="Name" field="name" value={item?.fields?.settings?.name || item?.handle} />
-        <Padding label="Padding" />
-        <Heading label="Brand Name" />
-        <FieldsGroup label="Logo">
-          <TextBox label="width" field="logo.width" />
-          <ImagePicker label="Pick Logo" field="logo.image" />
+        <FieldsGroup label="Header" isOpen="true">
+          <TextBox
+            label="Name"
+            field="name"
+            value={item?.fields?.settings?.name || item?.handle}
+          />
+          <Padding label="Padding" />
+          <Heading label="Brand Name" />
+          <FieldsGroup label="Logo">
+            <TextBox label="width" field="logo.width" />
+            <ImagePicker label="Pick Logo" field="logo.image" />
+          </FieldsGroup>
+          <FieldsGroup label="Scroller">
+            <ColorPicker
+              label="Scroller Background"
+              field="scrollMenu.scrollBg"
+            />
+          </FieldsGroup>
         </FieldsGroup>
       </form>
     </FormProvider>

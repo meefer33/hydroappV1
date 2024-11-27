@@ -1,8 +1,7 @@
-import {MantineProvider} from '@mantine/core';
+import {MantineProvider,DEFAULT_THEME} from '@mantine/core';
 import {Outlet, useLoaderData} from '@remix-run/react';
 import {LoaderFunctionArgs, redirect} from '@remix-run/server-runtime';
 import {DashboardLayout} from '~/components/admin/DashboardLayout';
-import {mainTheme} from '~/components/admin/mainTheme';
 import {GetMetaobjectDefinitionByType} from '~/graphql/admin/GetMetaobjectDefinitionByType';
 import  '@mantine/core/styles.css';
 import { GetMenus } from '~/graphql/admin/GetMenus';
@@ -28,7 +27,7 @@ export default function Dash({children}: {children?: React.ReactNode}) {
   console.log(data)
 
   return (
-    <MantineProvider theme={mainTheme} defaultColorScheme="dark">
+    <MantineProvider theme={DEFAULT_THEME} defaultColorScheme="dark">
       <DashboardLayout>
         <Outlet />
       </DashboardLayout>
