@@ -13,6 +13,10 @@ export const loader = async ({request, context}: LoaderFunctionArgs) => {
     variables: {
       id: id,
     },
+    cache: storefront.CacheCustom({
+      mode: 'must-revalidate, no-store',
+      maxAge: 1,
+    })
   });
 
   return parser(response?.metaobject);

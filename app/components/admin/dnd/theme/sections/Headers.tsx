@@ -11,8 +11,8 @@ import {
   SimpleGrid,
   Title,
 } from '@mantine/core';
-import {useElementSize, useHeadroom, useViewportSize} from '@mantine/hooks';
-import {Await, NavLink, useRouteLoaderData} from '@remix-run/react';
+import {useElementSize, useHeadroom} from '@mantine/hooks';
+import {NavLink, useRouteLoaderData} from '@remix-run/react';
 import {
   RiArrowDownSLine,
   RiSearchLine,
@@ -21,21 +21,27 @@ import {
   RiUserLine,
 } from '@remixicon/react';
 import {CartViewPayload, Image, useAnalytics} from '@shopify/hydrogen';
-import {Suspense} from 'react';
 import {useAside} from '~/components/layout/Aside';
 import {RootLoader} from '~/root';
+import {defaultHeader, DefaultHeader} from '../lib/metaTypes';
 
 const bpWidth = 992;
 
-export default function Headers({content, theme}: any) {
+export default function Headers({
+  settings,
+  theme,
+}: {
+  settings: DefaultHeader;
+  theme: any;
+}) {
   const rootData = useRouteLoaderData<RootLoader>('root');
   const pinned = useHeadroom({fixedAt: 120});
+  const layout = settings || defaultHeader;
 
-  //console.log('width',width)
   return (
     <HeaderMenu
       rootData={rootData}
-      layout={content?.fields?.settings}
+      layout={layout}
       theme={theme}
       pinned={pinned}
     />
@@ -44,7 +50,7 @@ export default function Headers({content, theme}: any) {
 
 function HeaderMenu({rootData, layout, theme, pinned}: any) {
   const {ref, width, height} = useElementSize();
-    return (
+  return (
     <Box
       ref={ref}
       component="div"
@@ -59,7 +65,9 @@ function HeaderMenu({rootData, layout, theme, pinned}: any) {
         //boxShadow: '0 1px 3px -1px rgba(0, 0, 0, 0.1)',
         //height: rem(40),
         zIndex: 1,
-        transform: `translate3d(0, ${pinned ? 0 : width < bpWidth ? rem(-115): 0}, 0)`,
+        transform: `translate3d(0, ${
+          pinned ? 0 : width < bpWidth ? rem(-115) : 0
+        }, 0)`,
         transition: 'transform 400ms ease',
         backgroundColor: 'var(--mantine-color-body)',
         //borderBottom: '1px solid var(--mantine-color-gray-3)',
@@ -97,7 +105,7 @@ function HeaderMenu({rootData, layout, theme, pinned}: any) {
           />
         </Group>
       </MainMenuWrapper>
-      <HeaderScroller scrollBackground={layout.scrollMenu.scrollBg} />
+      <HeaderScroller scrollBackground={layout?.scrollMenu?.scrollBg} />
     </Box>
   );
 }
@@ -240,7 +248,7 @@ function HeaderScroller({scrollBackground}: any) {
     <Box
       w="100%"
       p={'2px'}
-      bg={scrollBackground}
+      bg={scrollBackground ? scrollBackground : 'gray-1'}
       style={{
         borderBottom: '1px solid var(--mantine-color-gray-3)',
         borderTop: '1px solid var(--mantine-color-gray-3)',

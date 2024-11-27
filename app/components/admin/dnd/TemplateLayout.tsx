@@ -5,40 +5,29 @@ import {
   AppShell,
   Box,
   Burger,
-  Container,
   CSSVariablesResolver,
   Group,
   MantineProvider,
   ScrollArea,
-  Tabs,
 } from '@mantine/core';
 
 import {
   RiComputerLine,
   RiEyeLine,
-  RiLayout4Line,
-  RiLayoutGridLine,
-  RiSettings2Fill,
   RiSmartphoneLine,
 } from '@remixicon/react';
-import ThemeForm from '~/components/admin/dnd/forms/ThemeForm';
-import LayoutForm from '~/components/admin/dnd/forms/LayoutForm';
-import ThemeHeader from '~/components/admin/dnd/Header';
 import ShowForm from '~/components/admin/dnd/forms/ShowForm';
 import {Aside} from '~/components/layout/Aside';
 import {RootLoader} from '~/root';
-import ButtonAddSection from './ButtonAddSection';
 import ModalAddSection from './ModalAddSection';
 import {getCssResolve} from './theme/lib/theme';
-import DndOutline from './DndOutline';
-import LayoutGrid from './forms/LayoutGrid';
-import FormPage from './forms/FormPage';
+
 import TemplateThemeForm from './forms/TemplateThemeForm';
 
 export default function TemplateLayout({template, children}) {
   const root: any = useRouteLoaderData<RootLoader>('root');
 
-  const {theme, layout, editorContent, viewport, setViewport}: any =
+  const {theme, viewport, setViewport}: any =
     useOutletContext();
 
   const [mobileOpened, {toggle: toggleMobile}] = useDisclosure();
@@ -132,7 +121,7 @@ export default function TemplateLayout({template, children}) {
               <Box bg={'var(--mantine-color-body)'}>{children}</Box>
             </Box>
           </AppShell.Main>
-          <AppShell.Aside pt="20" component={ScrollArea} bg="gray.3" >
+          <AppShell.Aside  component={ScrollArea} bg="gray.3" >
             <ShowForm />
           </AppShell.Aside>
         </AppShell>

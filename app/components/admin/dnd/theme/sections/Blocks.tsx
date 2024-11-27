@@ -1,7 +1,6 @@
 import {Container, SimpleGrid} from '@mantine/core';
 
-export default function Blocks({content,children}: any) {
-  const settings = content.fields.settings;
+export default function Blocks({settings,children}: any) {
 
   return (
 

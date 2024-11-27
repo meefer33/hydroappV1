@@ -13,11 +13,12 @@ import {CreateMetaobject} from '~/graphql/admin/CreateMetaobject';
 import {UpdateMetaobject} from '~/graphql/admin/UpdateMetaobject';
 import ButtonAddSection from '~/components/admin/dnd/ButtonAddSection';
 import SectionBlocks from '~/components/admin/dnd/theme/sections/SectionBlocks';
+import {buildTheme} from '~/components/admin/dnd/theme/lib/theme';
+import {GetMetaobjectTypeHandle} from '~/graphql/GetMetaobjectTypeHandle';
+import { createMetaobject, getMetaobjectTypeHandle } from '~/lib/metaLoaderUtils';
 
 export const loader = async ({context, params}: LoaderFunctionArgs) => {
-  const {admin} = context;
-  //let breadcrumb = params['*'];
-  //let handle = params['*']?.split('/').pop();
+  const {admin, storefront} = context;
   let handle = params['*']?.split('/').pop();
   let name = `pages/${params['*']}`;
   let slug = `pages-${params['*'].replaceAll('/', '-')}`;
@@ -56,8 +57,7 @@ export const loader = async ({context, params}: LoaderFunctionArgs) => {
         },
       },
     });
-    console.log('debug', JSON.stringify(upsertPage));
-    console.log('debug', upsertPage?.data?.metaobjectUpsert?.metaobject?.id);
+
     const pageId = upsertPage?.data?.metaobjectUpsert?.metaobject?.id;
     //page = parser(upsertPage?.data?.metaobjectUpsert?.metaobject);
     //add page_template metaobject to collection
@@ -73,25 +73,12 @@ export const loader = async ({context, params}: LoaderFunctionArgs) => {
         },
       },
     });
-    console.log('debug', JSON.stringify(addMetafield));
 
+    //get default template
+    const templateId = await getMetaobjectTypeHandle({storefront,handle:'default-template',type:'templates'})
     //create content for top
-    const createMetaobject1 = await admin.request(CreateMetaobject, {
-      variables: {
-        metaobject: {
-          type: 'content',
-          capabilities: {publishable: {status: 'ACTIVE'}},
-        },
-      },
-    });
-    const createMetaobject2 = await admin.request(CreateMetaobject, {
-      variables: {
-        metaobject: {
-          type: 'content',
-          capabilities: {publishable: {status: 'ACTIVE'}},
-        },
-      },
-    });
+    const metaContent1 = await createMetaobject({admin})
+    const metaContent2 = await createMetaobject({admin})
 
     const response = await admin.request(UpdateMetaobject, {
       variables: {
@@ -99,12 +86,16 @@ export const loader = async ({context, params}: LoaderFunctionArgs) => {
         metaobject: {
           fields: [
             {
+              key: 'template',
+              value: templateId?.data?.metaobject?.id,
+            },
+            {
               key: 'top_content',
-              value: createMetaobject1.data?.metaobjectCreate?.metaobject?.id,
+              value: metaContent1.data?.metaobjectCreate?.metaobject?.id,
             },
             {
               key: 'bottom_content',
-              value: createMetaobject2.data?.metaobjectCreate?.metaobject?.id,
+              value: metaContent2.data?.metaobjectCreate?.metaobject?.id,
             },
           ],
         },
@@ -120,25 +111,36 @@ export const loader = async ({context, params}: LoaderFunctionArgs) => {
   return {storePage, page};
 };
 
-export default function EditContent() {
+export default function EditPages() {
   const {storePage, page}: any = useLoaderData<typeof loader>();
-  const {setEditorContent, editorContent, setUpdateMetaVersionId}: any =
-    useOutletContext();
-  console.log('page', page);
+  const {
+    templates,
+    setTheme,
+    setEditorContent,
+    editorContent,
+    setUpdateMetaVersionId,
+  }: any = useOutletContext();
+
+  //if it does not exist than use default template or dont load until picked
+  const pageTemplate = page?.fields?.template;
+
   useEffect(() => {
+    //set and build the theme here with
+    //setTheme(buildTheme(pageTemplate?.fields?.theme?.fields?.theme));
     setEditorContent(page);
     setUpdateMetaVersionId(page.id);
   }, [page]);
 
   return (
     <EditorLayout type="page">
+      {/* load template top content here */}
       <DndContent
         content={editorContent?.fields?.top_content?.fields?.content}
         id={editorContent?.fields?.top_content?.id}
         updateKey="content"
       />
       <ButtonAddSection data={editorContent?.fields?.top_content} />
-      <SectionBlocks content={editorContent}>
+      <SectionBlocks content={editorContent.fields?.settings}>
         <main dangerouslySetInnerHTML={{__html: storePage.body}} />
       </SectionBlocks>
       <DndContent

@@ -1,23 +1,22 @@
-import {FormProvider, useForm} from '../forms/ContextForm';
+import {FormProvider, useForm} from './ContextForm';
 import {useOutletContext} from '@remix-run/react';
-import TextBox from '../fields/TextBox';
-import ImagePicker from '../fields/ImagePicker';
 import {useEffect} from 'react';
+import TextBox from '../fields/TextBox';
 import useThemeUtils from '../useEditorUtils';
-import {Image} from '@shopify/hydrogen';
-import {defaultImage, DefaultImage} from '../theme/lib/metaTypes';
+import RichTextField from '../fields/RichTextField';
+import {
+  DefaultRichTextEditor,
+  defaultRichTextEditor,
+} from '../theme/lib/metaTypes';
 
-export default function ImageForm() {
+export default function RichTextBlock() {
   const {item, setEditorContent}: any = useOutletContext();
   const {loadMeta, saveMeta} = useThemeUtils();
 
   const form = useForm({
     mode: 'controlled',
-    initialValues: defaultImage,
-    onValuesChange: async (values: DefaultImage) => {
-      console.log(values?.image?.id);
-      const v = form.getValues();
-
+    initialValues: defaultRichTextEditor,
+    onValuesChange: async (values: DefaultRichTextEditor) => {
       const data = await saveMeta(item.id, {
         fields: [
           {
@@ -27,10 +26,6 @@ export default function ImageForm() {
           {
             key: 'settings',
             value: JSON.stringify(values),
-          },
-          {
-            key: 'image',
-            value: values?.image?.id,
           },
         ],
       });
@@ -50,17 +45,8 @@ export default function ImageForm() {
           field="name"
           value={item?.fields?.settings?.name || item?.handle}
         />
-        <TextBox label="width" field="width" />
-        <ImagePicker label="Pick Image" field="image" />
+        <RichTextField label="Rich Text" field="rte" />
       </form>
-      {item?.fields?.image?.url && (
-        <Image
-          sizes="(min-width: 45em) 50vw, 100vw"
-          data={item?.fields?.image}
-          //aspectRatio="1/1"
-          style={{objectFit: 'contain'}}
-        />
-      )}
     </FormProvider>
   );
 }

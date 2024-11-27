@@ -11,7 +11,7 @@ export default function useThemeUtils() {
     metaData,
     closeModal,
     setItem,
-    setSelectedItem
+    setSelectedItem,
   }: any = useOutletContext();
 
   const loadMeta = async (selectedItem: any, form: any) => {
@@ -40,7 +40,7 @@ export default function useThemeUtils() {
       }),
     });
     const data: any = await response.json();
-    setEditorContent(data)
+    setEditorContent(data);
     return data;
   };
 
@@ -99,7 +99,7 @@ export default function useThemeUtils() {
     });
     const data: any = await response.json();
     const sectionIds: any = [];
-    console.log(metaData)
+    console.log(metaData);
     metaData?.fields[field]?.map((section: any) => {
       sectionIds.push(section.id);
     });
@@ -112,7 +112,7 @@ export default function useThemeUtils() {
         },
       ],
     });
-    setItem({id:data?.data?.metaobjectCreate?.metaobject?.id,type:type});
+    setItem({id: data?.data?.metaobjectCreate?.metaobject?.id, type: type});
     setSelectedItem(data?.data?.metaobjectCreate?.metaobject?.id);
     closeModal();
   };
@@ -141,6 +141,6 @@ export default function useThemeUtils() {
     saveSettings,
     addEditorContent,
     deleteEditorContent,
-    updateMetaVersion
+    updateMetaVersion,
   };
 }

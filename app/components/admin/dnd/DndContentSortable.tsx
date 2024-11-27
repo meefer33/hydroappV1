@@ -16,7 +16,7 @@ export default function DndContentSortable({
   zones,
   loadData,
 }: any) {
-  //console.log('blank', type, loadData, sections);
+
   const displayType = (type: any) => {
     switch (type) {
       case 'single':

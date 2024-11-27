@@ -1,4 +1,4 @@
-import {FormProvider, useForm} from '../forms/ContextForm';
+import {FormProvider, useForm} from './ContextForm';
 import {nanoid} from 'nanoid';
 import {useOutletContext} from '@remix-run/react';
 import {useEffect} from 'react';
@@ -6,14 +6,10 @@ import SelectBox from '../fields/SelectBox';
 import useThemeUtils from '../useEditorUtils';
 import SectionGroup from '../fields/SectionGroup';
 import FieldsGroup from '../fields/FieldsGroup';
-
-export const sectionProps = {
-  padding: {
-    top: 'sm',
-    bottom: 'sm',
-  },
-  bgColor: 'primary',
-};
+import {
+  DefaultSectionCollection,
+  defaultSectionCollection,
+} from '../theme/lib/metaTypes';
 
 export default function SectionCollection() {
   const {item, editorContent, setEditorContent, collections}: any =
@@ -25,17 +21,8 @@ export default function SectionCollection() {
   }));
   const form = useForm({
     mode: 'controlled',
-    initialValues: {
-      name: '',
-      padding: 'xl',
-      bg: '',
-      slides: {
-        spacing: 'md',
-        tablet: '50%',
-        desktop: '25%',
-      },
-    },
-    onValuesChange: async (values: any) => {
+    initialValues: defaultSectionCollection,
+    onValuesChange: async (values: DefaultSectionCollection) => {
       const data = await saveMeta(item.id, {
         fields: [
           {
@@ -53,7 +40,7 @@ export default function SectionCollection() {
   });
 
   useEffect(() => {
-    loadMeta(item.id, form);
+    item.settings && loadMeta(item.id, form);
   }, [item]);
 
   return (

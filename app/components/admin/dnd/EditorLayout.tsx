@@ -10,20 +10,13 @@ import {
   Group,
   MantineProvider,
   ScrollArea,
-  Tabs,
 } from '@mantine/core';
 
 import {
   RiComputerLine,
   RiEyeLine,
-  RiLayout4Line,
-  RiLayoutGridLine,
-  RiSettings2Fill,
   RiSmartphoneLine,
 } from '@remixicon/react';
-import ThemeForm from '~/components/admin/dnd/forms/ThemeForm';
-import LayoutForm from '~/components/admin/dnd/forms/LayoutForm';
-import ThemeHeader from '~/components/admin/dnd/Header';
 import ShowForm from '~/components/admin/dnd/forms/ShowForm';
 import {Aside} from '~/components/layout/Aside';
 import {RootLoader} from '~/root';
@@ -31,32 +24,30 @@ import ButtonAddSection from './ButtonAddSection';
 import ModalAddSection from './ModalAddSection';
 import {getCssResolve} from './theme/lib/theme';
 import DndOutline from './DndOutline';
-import LayoutGrid from './forms/LayoutGrid';
-import FormPage from './forms/FormPage';
+import TemplateThemeForm from './forms/TemplateThemeForm';
 
-export default function EditorLayout({type,children}) {
+export default function EditorLayout({template = {}, children}) {
   const root: any = useRouteLoaderData<RootLoader>('root');
 
-  const {theme, layout, editorContent, viewport, setViewport}: any =
-    useOutletContext();
+  const {theme, editorContent, viewport, setViewport}: any = useOutletContext();
 
   const [mobileOpened, {toggle: toggleMobile}] = useDisclosure();
   const [desktopOpened, {toggle: toggleDesktop}] = useDisclosure(true);
 
   const [viewportColor, toggle] = useToggle([true, false]);
-  const cssResolver: CSSVariablesResolver = (theme) => getCssResolve(theme.other);
+  const cssResolver: CSSVariablesResolver = (theme) =>
+    getCssResolve(theme.other);
   //console.log('metaData', editorContent);
   return (
     <MantineProvider
       theme={theme}
       forceColorScheme={theme?.other?.colorScheme}
-     cssVariablesResolver={cssResolver}
+      cssVariablesResolver={cssResolver}
     >
       <Container
         pos="fixed"
         top="0"
         right="0"
- 
         style={{
           zIndex: 999,
         }}
@@ -96,7 +87,7 @@ export default function EditorLayout({type,children}) {
           publicStoreDomain={root.publicStoreDomain}
         />
         <AppShell
-          layout="alt"
+          header={{height: 40}}
           navbar={{
             width: 300,
             breakpoint: 'sm',
@@ -111,6 +102,35 @@ export default function EditorLayout({type,children}) {
           m="0"
           bg={'var(--mantine-color-body)'}
         >
+          <AppShell.Header bg="gray.4" style={{zIndex: 0}}>
+            <Group pt="2" justify="center">
+              <ActionIcon.Group>
+                <ActionIcon
+                  color="gray.7"
+                  size="lg"
+                  onClick={() => {
+                    setViewport('100%');
+                    toggle();
+                  }}
+                >
+                  <RiComputerLine size="24" />
+                </ActionIcon>
+                <ActionIcon
+                  color="gray.7"
+                  size="lg"
+                  onClick={() => {
+                    setViewport('24.375rem');
+                    toggle();
+                  }}
+                >
+                  <RiSmartphoneLine size="24" />
+                </ActionIcon>
+                <ActionIcon color="gray.7" size="lg" onClick={toggleDesktop}>
+                  <RiEyeLine size="24" />
+                </ActionIcon>
+              </ActionIcon.Group>
+            </Group>
+          </AppShell.Header>
           <AppShell.Navbar p="0" component={ScrollArea} bg="gray.3">
             <Group>
               <Burger
@@ -120,29 +140,11 @@ export default function EditorLayout({type,children}) {
                 size="sm"
               />
             </Group>
-            <Tabs
-              variant="pills"
-              defaultValue="content"
-              radius="0"
-              color="gray.7"
-            >
-              <Tabs.List>
-                <Tabs.Tab
-                  value="content"
-                  leftSection={<RiLayoutGridLine size={16} />}
-                ></Tabs.Tab>
-                <Tabs.Tab
-                  value="settings"
-                  leftSection={<RiSettings2Fill size={16} />}
-                ></Tabs.Tab>
-                <Tabs.Tab
-                  value="templates"
-                  leftSection={<RiLayout4Line size={16} />}
-                ></Tabs.Tab>
-              </Tabs.List>
-
-              <Tabs.Panel value="content">
-                {editorContent?.id && <FormPage  />}
+            {template ? (
+              <TemplateThemeForm template={template} />
+            ) : (
+              <>
+                {/*editorContent?.id && <FormPage />*/}
                 TOP
                 <Box p="sm" bg="gray.1">
                   <DndOutline
@@ -167,26 +169,8 @@ export default function EditorLayout({type,children}) {
                     data={editorContent?.fields?.bottom_content}
                   />
                 </Box>
-                {/*
-                <Box p="sm">
-                 
-                  <DndOutline
-                    content={editorContent?.fields?.content}
-                    id={editorContent?.id}
-                    updateKey="content"
-                  />
-                  
-                </Box>
-                <ButtonAddSection data={editorContent} />
-                */}
-              </Tabs.Panel>
-
-              <Tabs.Panel value="settings">
-                <ThemeForm />
-                <LayoutForm />
-              </Tabs.Panel>
-              <Tabs.Panel value="templates">Templates</Tabs.Panel>
-            </Tabs>
+              </>
+            )}
           </AppShell.Navbar>
           <AppShell.Main>
             <Box
@@ -200,17 +184,10 @@ export default function EditorLayout({type,children}) {
                 bgColor: 'var(--mantine-color-body)',
               }}
             >
-              <Box bg={'var(--mantine-color-body)'}>
-                <ThemeHeader
-                  layout={layout}
-                  theme={theme}
-                />
-                {children}
-              </Box>
+              <Box bg={'var(--mantine-color-body)'}>{children}</Box>
             </Box>
           </AppShell.Main>
           <AppShell.Aside p="0" component={ScrollArea} bg="gray.3" c="dark">
-            Active Item
             <ShowForm />
           </AppShell.Aside>
         </AppShell>

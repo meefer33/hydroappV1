@@ -156,7 +156,7 @@ export default function Collection() {
       />
       <ButtonAddSection data={editorContent?.fields?.top_content} />
 
-      <SectionBlocks content={editorContent}>
+      <SectionBlocks content={editorContent.fields?.settings}>
         <Grid
           type="container"
           breakpoints={{
