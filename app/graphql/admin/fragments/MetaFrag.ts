@@ -73,6 +73,31 @@ fragment Meta on Metaobject
                                   }
                                 }
                               }
+                              references(first: 10) {
+                                  nodes {
+                                    ... on Metaobject {
+                                      id
+                                      handle
+                                      type
+                                      fields {
+                                        type
+                                        value
+                                        key
+                                        reference {
+                                          ... on MediaImage {
+                                            id
+                                            image {
+                                              url
+                                              width
+                                              height
+                                              altText
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
                             }
                           }
                         }

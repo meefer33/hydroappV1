@@ -56,7 +56,7 @@ export const loader = async ({context, params}: LoaderFunctionArgs) => {
 
 export default function EditContent() {
   const {template}: any = useLoaderData<typeof loader>();
-
+console.log(template)
   const {
     setEditorContent,
     setUpdateMetaVersionId,

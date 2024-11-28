@@ -1,4 +1,4 @@
-import {MetaFrag} from './MetaFrag';
+import { MetaFrag } from "./admin/fragments/MetaFrag";
 
 export const GetMetaobjectsByType = `#graphql
 query GetMetaobjectsByType($type: String!) {

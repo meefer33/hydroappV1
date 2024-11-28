@@ -1,4 +1,5 @@
-import {MetaFrag} from '../MetaFrag';
+import { MetaFrag } from "./fragments/MetaFrag";
+
 export const UpsertMetaobject = `#graphql
 mutation UpsertMetaobject($handle: MetaobjectHandleInput!, $metaobject: MetaobjectUpsertInput!) {
   metaobjectUpsert(

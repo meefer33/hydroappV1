@@ -10,7 +10,7 @@ export default function MetaContent({content}: any) {
     switch (item.type) {
       case 'section_blocks':
         return (
-          <SectionBlocks content={item.fields?.settings}>
+          <SectionBlocks settings={item.fields?.settings}>
             {item?.map((blocks: any) => {
               const settings = blocks?.fields?.settings;
               const items = blocks?.fields?.block_items;

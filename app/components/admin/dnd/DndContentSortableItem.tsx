@@ -11,6 +11,7 @@ import SectionBlocks from './theme/sections/SectionBlocks';
 import DndContent from './DndContent';
 import {useElementSize, useHover} from '@mantine/hooks';
 import Headers from './theme/sections/Headers';
+import Blocks from './theme/sections/Blocks';
 
 export default function DndContentSortableItem({id, type, data}: any) {
   const {attributes, listeners, setNodeRef, transform, transition, isDragging} =
@@ -57,16 +58,13 @@ export default function DndContentSortableItem({id, type, data}: any) {
         );
       case 'blocks':
         return (
-          <Box
-            bg={item?.fields?.settings?.bg}
-            p={item?.fields?.settings?.padding}
-          >
+          <Blocks settings={item?.fields?.settings}>
             <DndContent
               content={item?.fields?.block_items}
               id={item?.id}
               updateKey="block_items"
             />
-          </Box>
+          </Blocks>
         );
       case 'block_rich_text':
         return <BlockRichText key={item.id} content={item} />;

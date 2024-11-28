@@ -1,4 +1,5 @@
-import {MetaFrag} from '../MetaFrag';
+import { MetaFrag } from "./fragments/MetaFrag";
+
 
 export const UpdateMetaobject = `#graphql
 mutation UpdateMetaobject($id: ID!, $metaobject: MetaobjectUpdateInput!) {

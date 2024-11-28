@@ -3,6 +3,7 @@ import {createTheme, DEFAULT_THEME, mergeMantineTheme} from '@mantine/core';
 import {useOutletContext} from '@remix-run/react';
 import {nanoid} from 'nanoid';
 import {defaultTheme} from './theme/lib/theme';
+import { useForm } from '@mantine/form';
 
 export default function useThemeUtils() {
   const {
@@ -10,6 +11,7 @@ export default function useThemeUtils() {
     updateMetaVersionId,
     metaData,
     closeModal,
+    item,
     setItem,
     setSelectedItem,
   }: any = useOutletContext();
@@ -20,6 +22,28 @@ export default function useThemeUtils() {
     ).then((res) => res.json());
     form.setValues(values?.fields?.settings);
   };
+
+  const getForm = (initFormValues) => {
+    return useForm({
+      mode: 'controlled',
+      initialValues: item?.fields?.settings || initFormValues,
+      onValuesChange: async (values: any) => {
+        const data = await saveMeta(item.id, {
+          fields: [
+            {
+              key: 'name',
+              value: values.name,
+            },
+            {
+              key: 'settings',
+              value: JSON.stringify(values),
+            },
+          ],
+        });
+        setEditorContent(data);
+      },
+    });
+  }
 
   const updateMetaVersion = async () => {
     const response = await fetch('/api/UpdatePage', {
@@ -112,7 +136,7 @@ export default function useThemeUtils() {
         },
       ],
     });
-    setItem({id: data?.data?.metaobjectCreate?.metaobject?.id, type: type});
+    setItem(data?.data?.metaobjectCreate?.metaobject);
     setSelectedItem(data?.data?.metaobjectCreate?.metaobject?.id);
     closeModal();
   };
@@ -137,6 +161,7 @@ export default function useThemeUtils() {
 
   return {
     loadMeta,
+    getForm,
     saveMeta,
     saveSettings,
     addEditorContent,
