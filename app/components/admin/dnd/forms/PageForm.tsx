@@ -19,7 +19,7 @@ export const sectionProps = {
 
 export default function FormPage() {
   const {item, editorContent, setEditorContent}: any = useOutletContext();
-  const {loadMeta, saveSettings} = useThemeUtils();
+  const {saveSettings} = useThemeUtils();
   //const [page,setPage] = useState(true)
 
   const form = useForm({

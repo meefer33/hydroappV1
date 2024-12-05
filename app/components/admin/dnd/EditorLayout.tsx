@@ -5,18 +5,16 @@ import {
   AppShell,
   Box,
   Burger,
+  Button,
   Container,
   CSSVariablesResolver,
   Group,
   MantineProvider,
   ScrollArea,
+  Stack,
 } from '@mantine/core';
 
-import {
-  RiComputerLine,
-  RiEyeLine,
-  RiSmartphoneLine,
-} from '@remixicon/react';
+import {RiComputerLine, RiEyeLine, RiSmartphoneLine} from '@remixicon/react';
 import ShowForm from '~/components/admin/dnd/forms/ShowForm';
 import {Aside} from '~/components/layout/Aside';
 import {RootLoader} from '~/root';
@@ -25,11 +23,21 @@ import ModalAddSection from './ModalAddSection';
 import {getCssResolve} from './theme/lib/theme';
 import DndOutline from './DndOutline';
 import TemplateThemeForm from './forms/TemplateThemeForm';
+import ChooseTemplateForm from './forms/ChooseTemplateForm';
+import useThemeUtils from './useEditorUtils';
+import AppNavbarPage from './AppNavbarPage';
+import AppNavbarTemplate from './AppNavbarTemplate';
 
-export default function EditorLayout({template = {}, children}) {
+export default function EditorLayout({
+  template = {},
+  type = 'template',
+  pageId = '',
+  children,
+}) {
   const root: any = useRouteLoaderData<RootLoader>('root');
 
-  const {theme, editorContent, viewport, setViewport}: any = useOutletContext();
+  const {theme, editorContent, viewport, setViewport, templates}: any =
+    useOutletContext();
 
   const [mobileOpened, {toggle: toggleMobile}] = useDisclosure();
   const [desktopOpened, {toggle: toggleDesktop}] = useDisclosure(true);
@@ -37,7 +45,7 @@ export default function EditorLayout({template = {}, children}) {
   const [viewportColor, toggle] = useToggle([true, false]);
   const cssResolver: CSSVariablesResolver = (theme) =>
     getCssResolve(theme.other);
-  //console.log('metaData', editorContent);
+  const {addContent} = useThemeUtils();
   return (
     <MantineProvider
       theme={theme}
@@ -140,36 +148,12 @@ export default function EditorLayout({template = {}, children}) {
                 size="sm"
               />
             </Group>
-            {template ? (
-              <TemplateThemeForm template={template} />
-            ) : (
-              <>
-                {/*editorContent?.id && <FormPage />*/}
-                TOP
-                <Box p="sm" bg="gray.1">
-                  <DndOutline
-                    content={
-                      editorContent?.fields?.top_content?.fields?.content
-                    }
-                    id={editorContent?.fields?.top_content?.id}
-                    updateKey="content"
-                  />
-                  <ButtonAddSection data={editorContent?.fields?.top_content} />
-                </Box>
-                Bottom
-                <Box p="sm" bg="gray.1">
-                  <DndOutline
-                    content={
-                      editorContent?.fields?.bottom_content?.fields?.content
-                    }
-                    id={editorContent?.fields?.bottom_content?.id}
-                    updateKey="content"
-                  />
-                  <ButtonAddSection
-                    data={editorContent?.fields?.bottom_content}
-                  />
-                </Box>
-              </>
+            {type === 'page' && (
+              <AppNavbarPage pageId={pageId}/>
+            )}
+
+            {type === 'template' && (
+              <AppNavbarTemplate template={template}/>
             )}
           </AppShell.Navbar>
           <AppShell.Main>

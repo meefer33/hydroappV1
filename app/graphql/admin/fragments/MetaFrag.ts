@@ -19,6 +19,56 @@ fragment Meta on Metaobject
               value
               key
               reference {
+                ... on Metaobject {
+                  id
+                  type
+                  handle
+                  fields {      
+                    type
+                      value
+                      key  
+                      references(first: 10) {
+                        nodes {
+                          ... on Metaobject {
+                            id
+                            handle
+                            type
+                            fields {
+                              type
+                              value
+                              key 
+                              references(first: 10) {
+                                nodes {
+                                  ... on Metaobject {
+                                    id
+                                    handle
+                                    type
+                                    fields {
+                                      type
+                                      value
+                                      key 
+                                      references(first: 10) {
+                                        nodes {
+                                          ... on Metaobject {
+                                            id
+                                            handle
+                                            type
+                                            fields {
+                                              type
+                                              value
+                                              key 
+                                            }}
+                                        }
+                                      }
+                                    }}
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                  }
+                }
                 ... on Collection {
                   handle
                   id
@@ -58,6 +108,7 @@ fragment Meta on Metaobject
                           ... on Metaobject {
                             id
                             type
+                            handle
                             fields {
                               type
                               value
@@ -159,6 +210,7 @@ fragment Meta on Metaobject
                           ... on Metaobject {
                             id
                             type
+                            handle
                             fields {
                               type
                               value
@@ -187,4 +239,4 @@ fragment Meta on Metaobject
         }
       }
     }
-  }` as const
+  }` as const;

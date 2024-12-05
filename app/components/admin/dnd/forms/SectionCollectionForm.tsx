@@ -2,9 +2,9 @@ import {useOutletContext} from '@remix-run/react';
 import SelectBox from '../fields/SelectBox';
 import SectionGroup from '../fields/SectionGroup';
 import FieldsGroup from '../fields/FieldsGroup';
-import {FormProvider} from './ContextForm';
+import {FormProvider, useForm} from './ContextForm';
 import useThemeUtils from '../useEditorUtils';
-import { defaultSectionCollection } from '../theme/lib/metaTypes';
+import { DefaultSectionCollection, defaultSectionCollection } from '../theme/lib/metaTypes';
 
 export default function SectionCollection() {
   const {collections}: any = useOutletContext();
@@ -14,8 +14,28 @@ export default function SectionCollection() {
     label: collection.title,
   }));
 
-  const {getForm} = useThemeUtils();
-  const form = getForm(defaultSectionCollection)
+  const {setEditorContent, item}: any = useOutletContext();
+  const {saveMeta} = useThemeUtils();
+
+  const form = useForm({
+    mode: 'controlled',
+    initialValues: item?.fields?.settings || defaultSectionCollection,
+    onValuesChange: async (values: DefaultSectionCollection) => {
+      const data = await saveMeta(item.id, {
+        fields: [
+          {
+            key: 'name',
+            value: values.name,
+          },
+          {
+            key: 'settings',
+            value: JSON.stringify(values),
+          },
+        ],
+      });
+      setEditorContent(data);
+    },
+  });
 
   return (
     <FormProvider form={form}>

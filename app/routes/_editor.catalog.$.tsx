@@ -22,8 +22,8 @@ import {UpsertMetaobject} from '~/graphql/admin/UpsertMetaobject';
 import {CollectionUpdate} from '~/graphql/admin/CollectionUpdate';
 import ButtonAddSection from '~/components/admin/dnd/ButtonAddSection';
 import {UpdateMetaobject} from '~/graphql/admin/UpdateMetaobject';
-import {GetMetaobjectByIdPages} from '~/graphql/GetMetaobjectByIdPages';
 import SectionBlocks from '~/components/admin/dnd/theme/sections/SectionBlocks';
+import { GetMetaobjectById } from '~/graphql/GetMetaobjectById';
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   let handle = params['*']?.split('/').pop();
@@ -52,7 +52,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   let getPage: any = {},
     page: any = {};
   if (collection?.page_content?.value) {
-    getPage = await admin.request(GetMetaobjectByIdPages, {
+    getPage = await admin.request(GetMetaobjectById, {
       variables: {id: collection?.page_content?.value},
     });
     page = parser(getPage?.data?.metaobject);
@@ -122,7 +122,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
         },
       },
     });
-    getPage = await admin.request(GetMetaobjectByIdPages, {
+    getPage = await admin.request(GetMetaobjectById, {
       variables: {id: pageId},
     });
     //console.log('debug',JSON.stringify(getPage))

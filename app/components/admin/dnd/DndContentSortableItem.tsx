@@ -1,6 +1,6 @@
 import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
-import {ActionIcon, Box, Text} from '@mantine/core';
+import {ActionIcon, Box, Container, Text} from '@mantine/core';
 import {RiAddLine, RiDeleteBinLine, RiDraggable} from '@remixicon/react';
 import {useOutletContext} from '@remix-run/react';
 import useThemeUtils from './useEditorUtils';
@@ -45,16 +45,19 @@ export default function DndContentSortableItem({id, type, data}: any) {
       case 'headers':
         return <Headers settings={item?.fields?.settings} theme={theme} />;
       case 'section_blocks':
+        //does not use the <SectionBlocks> theme component due to embedded editor controls
         return (
-          <SectionBlocks settings={item?.fields?.settings}>
-            <DndContent
-              content={item?.fields?.blocks}
-              id={item?.id}
-              updateKey="blocks"
-              type="simplegrid"
-              zones={item?.fields?.settings}
-            />
-          </SectionBlocks>
+          <Container fluid px={0} py={item?.fields?.settings?.padding} bg={item?.fields?.settings?.bg}>
+            <Container size={item?.fields?.settings?.contentWidth}>
+              <DndContent
+                content={item?.fields?.blocks}
+                id={item?.id}
+                updateKey="blocks"
+                type="simplegrid"
+                zones={item?.fields?.settings}
+              />
+            </Container>
+          </Container>
         );
       case 'blocks':
         return (

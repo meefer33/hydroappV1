@@ -27,5 +27,5 @@ export default function ShowForm() {
     }
   };
 
-  return getForm(item?.type);
+  return <>{getForm(item?.type)}</>;
 }

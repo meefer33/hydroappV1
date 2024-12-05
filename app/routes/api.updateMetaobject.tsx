@@ -12,6 +12,6 @@ export async function action({request, context}: ActionFunctionArgs) {
       metaobject: data.metaobject,
     },
   });
-  console.log('um',JSON.stringify(response))
+
   return parser(response?.data?.metaobjectUpdate?.metaobject) || null;
 }

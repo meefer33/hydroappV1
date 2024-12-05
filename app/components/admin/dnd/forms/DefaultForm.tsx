@@ -12,7 +12,7 @@ import SectionBlocksForm from './SectionBlocksForm';
 
 export default function DefaultForm({initFormValues}) {
   const {item, setEditorContent}: any = useOutletContext();
-  const {saveMeta,loadMeta} = useThemeUtils();
+  const {saveMeta} = useThemeUtils();
 
   const form = useForm({
     mode: 'controlled',
@@ -36,7 +36,6 @@ export default function DefaultForm({initFormValues}) {
 
   useEffect(() => {
     form.setFieldValue('name', item?.fields?.name || item?.handle);
-    loadMeta(item.id,form)
   }, [item.id]);
 
   const getForm = (type: any) => {

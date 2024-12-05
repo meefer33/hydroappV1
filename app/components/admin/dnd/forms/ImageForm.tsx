@@ -3,13 +3,19 @@ import TextBox from '../fields/TextBox';
 import ImagePicker from '../fields/ImagePicker';
 import {Image} from '@shopify/hydrogen';
 import {FormProvider} from './ContextForm';
-import { defaultImage } from '../theme/lib/metaTypes';
+import {defaultImage} from '../theme/lib/metaTypes';
 import useThemeUtils from '../useEditorUtils';
+import {useEffect} from 'react';
 
 export default function ImageForm() {
   const {item}: any = useOutletContext();
-  const {getForm} = useThemeUtils();
-  const form = getForm(defaultImage)
+  const {getForm, getFormInitValues} = useThemeUtils();
+
+  const form = getForm(defaultImage);
+
+  useEffect(() => {
+    form.setValues(getFormInitValues(defaultImage));
+  }, [item.id]);
 
   return (
     <FormProvider form={form}>
