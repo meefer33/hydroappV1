@@ -1,7 +1,7 @@
-import { MetaFragLevelUp } from "./MetaFragLevelUp";
+import { MetaFragLevelThree } from "./MetaFragLevelThree";
 
-export const MetaFragLevel = `#graphql
-fragment MetaLevel on Metaobject
+export const MetaFragLevelTwo = `#graphql
+fragment MetaFragLevelTwo on Metaobject
 {
   id
   type
@@ -43,7 +43,7 @@ fragment MetaLevel on Metaobject
             }
           }
         }
-        ...MetaFragLevelUp
+    
       }
       references(first: 100) {
         nodes {
@@ -79,10 +79,10 @@ fragment MetaLevel on Metaobject
             }
           }
         }
-        ...MetaFragLevelUp
+
       }
     }
   }
 }
-${MetaFragLevelUp}
+
 ` as const;

@@ -1,43 +1,27 @@
-import {FormProvider, useForm} from './ContextForm';
+import { useOutletContext } from '@remix-run/react';
 import ColorPicker from '../fields/ColorPicker';
-import {useOutletContext} from '@remix-run/react';
 import SelectBox from '../fields/SelectBox';
 import TextBox from '../fields/TextBox';
+import { DefaultBlocks, defaultBlocks } from '../theme/lib/metaTypes';
 import useThemeUtils from '../useEditorUtils';
-import {DefaultBlocks, defaultBlocks} from '../theme/lib/metaTypes';
+import {FormProvider, useForm} from './ContextForm';
+import { useEffect } from 'react';
+import { nanoid } from 'nanoid';
 
-export default function Blocks() {
-  const {item, setEditorContent}: any = useOutletContext();
-  const {saveMeta} = useThemeUtils();
+export default function BlocksForm() {
+  const {item}: any = useOutletContext();
+  const {getForm,getFormInitValues} = useThemeUtils();
 
-  const form = useForm({
-    mode: 'controlled',
-    initialValues: item?.fields?.settings || defaultBlocks,
-    onValuesChange: async (values: DefaultBlocks) => {
-      const data = await saveMeta(item.id, {
-        fields: [
-          {
-            key: 'name',
-            value: values.name,
-          },
-          {
-            key: 'settings',
-            value: JSON.stringify(values),
-          },
-        ],
-      });
-      setEditorContent(data);
-    },
-  });
+  const form = getForm(defaultBlocks)
 
+  useEffect(() => {
+    form.setValues(getFormInitValues(defaultBlocks))
+  }, [item.id]);
+  
   return (
     <FormProvider form={form}>
-      <form>
-        <TextBox
-          label="Name"
-          field="name"
-          value={item?.fields?.settings?.name || item?.handle}
-        />
+      <form name={nanoid()}>
+        <TextBox label="Name" field="name" />
         <SelectBox label="Padding" field="padding" />
         <ColorPicker label="Section Background" field="bg" />
       </form>

@@ -44,7 +44,7 @@ export default function RichTextField({label = 'Rich Text', field}: any) {
           close();
         }}
         title="Rich Text Editor"
-        fullScreen
+        //fullScreen
         radius={0}
         transitionProps={{transition: 'fade', duration: 200}}
         trapFocus={true}

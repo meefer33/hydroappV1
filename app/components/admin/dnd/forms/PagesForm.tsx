@@ -9,7 +9,7 @@ import SelectBox from '../fields/SelectBox';
 
 export default function PagesForm() {
   const {item, templates, editorContent, setEditorContent}: any = useOutletContext();
-  const {loadMeta, saveSettings} = useThemeUtils();
+  const {saveSettings} = useThemeUtils();
 
   const templatesList = templates?.map((template: any) => ({
     value: template.id,
@@ -29,7 +29,7 @@ export default function PagesForm() {
   });
 
   useEffect(() => {
-    loadMeta(item.id, form);
+    
   }, [item]);
 
   return (

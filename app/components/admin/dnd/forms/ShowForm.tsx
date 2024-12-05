@@ -1,11 +1,10 @@
 import {useOutletContext} from '@remix-run/react';
-import SectionBlocksForm from './SectionBlocksForm';
-import {Box} from '@mantine/core';
-import Blocks from './BlocksForm';
-import ImageForm from './ImageForm';
-import RichTextBlock from './RichTextBlockForm';
-import SectionCollection from './SectionCollectionForm';
 import HeaderDefaultForm from './HeaderDefaultForm';
+import SectionBlocksForm from './SectionBlocksForm';
+import BlocksForm from './BlocksForm';
+import ImageForm from './ImageForm';
+import RichTextBlockForm from './RichTextBlockForm';
+import SectionCollection from './SectionCollectionForm';
 
 export default function ShowForm() {
   const {item}: any = useOutletContext();
@@ -14,11 +13,11 @@ export default function ShowForm() {
       case 'section_blocks':
         return <SectionBlocksForm />;
       case 'blocks':
-        return <Blocks />;
+        return <BlocksForm />;
       case 'block_image':
         return <ImageForm />;
       case 'block_rich_text':
-        return <RichTextBlock />;
+        return <RichTextBlockForm />;
       case 'section_collection':
         return <SectionCollection />;
       case 'headers':
@@ -28,5 +27,5 @@ export default function ShowForm() {
     }
   };
 
-  return <Box>{getForm(item?.type)}</Box>;
+  return <>{getForm(item?.type)}</>;
 }

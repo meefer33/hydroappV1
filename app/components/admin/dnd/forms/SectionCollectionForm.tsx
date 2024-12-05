@@ -1,37 +1,35 @@
-import {FormProvider, useForm} from './ContextForm';
-import {nanoid} from 'nanoid';
 import {useOutletContext} from '@remix-run/react';
-import {useEffect} from 'react';
 import SelectBox from '../fields/SelectBox';
-import useThemeUtils from '../useEditorUtils';
 import SectionGroup from '../fields/SectionGroup';
 import FieldsGroup from '../fields/FieldsGroup';
-import {
-  DefaultSectionCollection,
-  defaultSectionCollection,
-} from '../theme/lib/metaTypes';
+import {FormProvider, useForm} from './ContextForm';
+import useThemeUtils from '../useEditorUtils';
+import { DefaultSectionCollection, defaultSectionCollection } from '../theme/lib/metaTypes';
 
 export default function SectionCollection() {
-  const {item, editorContent, setEditorContent, collections}: any =
-    useOutletContext();
-  const {saveMeta, loadMeta} = useThemeUtils();
+  const {collections}: any = useOutletContext();
+
   const selectCollectionList = collections?.map((collection: any) => ({
     value: collection.id,
     label: collection.title,
   }));
+
+  const {setEditorContent, item}: any = useOutletContext();
+  const {saveMeta} = useThemeUtils();
+
   const form = useForm({
     mode: 'controlled',
-    initialValues: defaultSectionCollection,
+    initialValues: item?.fields?.settings || defaultSectionCollection,
     onValuesChange: async (values: DefaultSectionCollection) => {
       const data = await saveMeta(item.id, {
         fields: [
           {
-            key: 'settings',
-            value: JSON.stringify(values),
+            key: 'name',
+            value: values.name,
           },
           {
-            key: 'collection',
-            value: values?.collection,
+            key: 'settings',
+            value: JSON.stringify(values),
           },
         ],
       });
@@ -39,14 +37,9 @@ export default function SectionCollection() {
     },
   });
 
-  useEffect(() => {
-    item.settings && loadMeta(item.id, form);
-  }, [item]);
-
   return (
     <FormProvider form={form}>
-      {item?.fields?.settings?.name || item?.handle}
-      <form name={nanoid()}>
+      <form>
         <SectionGroup label="Section" isOpen={true} />
         <FieldsGroup label="Slides" isOpen={true}>
           <SelectBox label="Slides Spacing" field="slides.spacing" />

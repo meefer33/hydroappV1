@@ -1,6 +1,6 @@
 import {useSortable} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
-import {ActionIcon, Box, Text} from '@mantine/core';
+import {ActionIcon, Box, Container, Text} from '@mantine/core';
 import {RiAddLine, RiDeleteBinLine, RiDraggable} from '@remixicon/react';
 import {useOutletContext} from '@remix-run/react';
 import useThemeUtils from './useEditorUtils';
@@ -11,6 +11,7 @@ import SectionBlocks from './theme/sections/SectionBlocks';
 import DndContent from './DndContent';
 import {useElementSize, useHover} from '@mantine/hooks';
 import Headers from './theme/sections/Headers';
+import Blocks from './theme/sections/Blocks';
 
 export default function DndContentSortableItem({id, type, data}: any) {
   const {attributes, listeners, setNodeRef, transform, transition, isDragging} =
@@ -44,29 +45,29 @@ export default function DndContentSortableItem({id, type, data}: any) {
       case 'headers':
         return <Headers settings={item?.fields?.settings} theme={theme} />;
       case 'section_blocks':
+        //does not use the <SectionBlocks> theme component due to embedded editor controls
         return (
-          <SectionBlocks settings={item?.fields?.settings}>
-            <DndContent
-              content={item?.fields?.blocks}
-              id={item?.id}
-              updateKey="blocks"
-              type="simplegrid"
-              zones={item?.fields?.settings}
-            />
-          </SectionBlocks>
+          <Container fluid px={0} py={item?.fields?.settings?.padding} bg={item?.fields?.settings?.bg}>
+            <Container size={item?.fields?.settings?.contentWidth}>
+              <DndContent
+                content={item?.fields?.blocks}
+                id={item?.id}
+                updateKey="blocks"
+                type="simplegrid"
+                zones={item?.fields?.settings}
+              />
+            </Container>
+          </Container>
         );
       case 'blocks':
         return (
-          <Box
-            bg={item?.fields?.settings?.bg}
-            p={item?.fields?.settings?.padding}
-          >
+          <Blocks settings={item?.fields?.settings}>
             <DndContent
               content={item?.fields?.block_items}
               id={item?.id}
               updateKey="block_items"
             />
-          </Box>
+          </Blocks>
         );
       case 'block_rich_text':
         return <BlockRichText key={item.id} content={item} />;

@@ -43,6 +43,7 @@ export const loader = async ({context}: LoaderFunctionArgs) => {
 export default function Layout() {
   const {templates, themes, collections}: any = useLoaderData<typeof loader>();
   const [theme, setTheme] = useState(null);
+  const [page, setPage] = useState(null);
   const [item, setItem]: any = useState();
   const [selectedItem, setSelectedItem] = useState(null);
   const [editorContent, setEditorContent]: any = useState();
@@ -59,6 +60,8 @@ export default function Layout() {
         collections,
         theme,
         setTheme,
+        page, 
+        setPage,
         item,
         setItem,
         selectedItem,

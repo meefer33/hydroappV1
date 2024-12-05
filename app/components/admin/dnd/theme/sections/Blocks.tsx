@@ -1,21 +1,17 @@
-import {Container, SimpleGrid} from '@mantine/core';
+import {Box} from '@mantine/core';
+import {defaultBlocks, DefaultBlocks} from '../lib/metaTypes';
 
-export default function Blocks({settings,children}: any) {
-
+export default function Blocks({
+  settings,
+  children,
+}: {
+  settings: DefaultBlocks;
+  children: any;
+}) {
+  const display = settings || defaultBlocks;
   return (
-
-        <SimpleGrid
-          type="container"
-          cols={{
-            base: settings?.cols?.mobile,
-            '36em': settings?.cols?.tablet,
-            '48em': settings?.cols?.desktop,
-          }}
-          spacing={settings?.spacing}
-          //verticalSpacing={settings?.spacing}
-        >
-          {children}
-        </SimpleGrid>
-
+    <Box bg={display?.bg} p={display?.padding}>
+      {children}
+    </Box>
   );
 }

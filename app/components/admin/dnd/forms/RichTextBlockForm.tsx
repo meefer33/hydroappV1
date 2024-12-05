@@ -1,50 +1,25 @@
-import {FormProvider, useForm} from './ContextForm';
+import TextBox from '../fields/TextBox';
+import RichTextField from '../fields/RichTextField';
+import {FormProvider} from './ContextForm';
+import useThemeUtils from '../useEditorUtils';
+import {defaultRichTextEditor} from '../theme/lib/metaTypes';
 import {useOutletContext} from '@remix-run/react';
 import {useEffect} from 'react';
-import TextBox from '../fields/TextBox';
-import useThemeUtils from '../useEditorUtils';
-import RichTextField from '../fields/RichTextField';
-import {
-  DefaultRichTextEditor,
-  defaultRichTextEditor,
-} from '../theme/lib/metaTypes';
 
-export default function RichTextBlock() {
-  const {item, setEditorContent}: any = useOutletContext();
-  const {loadMeta, saveMeta} = useThemeUtils();
+export default function RichTextBlockForm() {
+  const {item}: any = useOutletContext();
+  const {getForm, getFormInitValues} = useThemeUtils();
 
-  const form = useForm({
-    mode: 'controlled',
-    initialValues: defaultRichTextEditor,
-    onValuesChange: async (values: DefaultRichTextEditor) => {
-      const data = await saveMeta(item.id, {
-        fields: [
-          {
-            key: 'name',
-            value: values.name || item?.handle,
-          },
-          {
-            key: 'settings',
-            value: JSON.stringify(values),
-          },
-        ],
-      });
-      setEditorContent(data);
-    },
-  });
+  const form = getForm(defaultRichTextEditor);
 
   useEffect(() => {
-    item.settings && loadMeta(item.id, form);
-  }, [item]);
+    form.setValues(getFormInitValues(defaultRichTextEditor));
+  }, [item.id]);
 
   return (
     <FormProvider form={form}>
       <form>
-        <TextBox
-          label="Name"
-          field="name"
-          value={item?.fields?.settings?.name || item?.handle}
-        />
+        <TextBox label="Name" field="name" />
         <RichTextField label="Rich Text" field="rte" />
       </form>
     </FormProvider>
