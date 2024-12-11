@@ -5,25 +5,18 @@ import {
   AppShell,
   Box,
   Burger,
-  Button,
-  Container,
   CSSVariablesResolver,
   Group,
   MantineProvider,
   ScrollArea,
-  Stack,
 } from '@mantine/core';
 
 import {RiComputerLine, RiEyeLine, RiSmartphoneLine} from '@remixicon/react';
 import ShowForm from '~/components/admin/dnd/forms/ShowForm';
 import {Aside} from '~/components/layout/Aside';
 import {RootLoader} from '~/root';
-import ButtonAddSection from './ButtonAddSection';
 import ModalAddSection from './ModalAddSection';
 import {getCssResolve} from './theme/lib/theme';
-import DndOutline from './DndOutline';
-import TemplateThemeForm from './forms/TemplateThemeForm';
-import ChooseTemplateForm from './forms/ChooseTemplateForm';
 import useThemeUtils from './useEditorUtils';
 import AppNavbarPage from './AppNavbarPage';
 import AppNavbarTemplate from './AppNavbarTemplate';
@@ -52,42 +45,6 @@ export default function EditorLayout({
       forceColorScheme={theme?.other?.colorScheme}
       cssVariablesResolver={cssResolver}
     >
-      <Container
-        pos="fixed"
-        top="0"
-        right="0"
-        style={{
-          zIndex: 999,
-        }}
-      >
-        <Group pt="2" justify="center">
-          <ActionIcon.Group>
-            <ActionIcon
-              color="gray.7"
-              size="lg"
-              onClick={() => {
-                setViewport('100%');
-                toggle();
-              }}
-            >
-              <RiComputerLine size="24" />
-            </ActionIcon>
-            <ActionIcon
-              color="gray.7"
-              size="lg"
-              onClick={() => {
-                setViewport('24.375rem');
-                toggle();
-              }}
-            >
-              <RiSmartphoneLine size="24" />
-            </ActionIcon>
-            <ActionIcon color="gray.7" size="lg" onClick={toggleDesktop}>
-              <RiEyeLine size="24" />
-            </ActionIcon>
-          </ActionIcon.Group>
-        </Group>
-      </Container>
       <Aside.Provider>
         <Aside
           cart={root.cart}

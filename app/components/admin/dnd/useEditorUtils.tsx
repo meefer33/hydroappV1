@@ -1,6 +1,6 @@
 import {useOutletContext} from '@remix-run/react';
 import {nanoid} from 'nanoid';
-import { useForm } from '@mantine/form';
+import {useForm} from '@mantine/form';
 
 export default function useThemeUtils() {
   const {
@@ -11,11 +11,11 @@ export default function useThemeUtils() {
     item,
     setItem,
     setSelectedItem,
-    setPage
+    setPage,
   }: any = useOutletContext();
 
   const getFormInitValues = (initFormValues: any) => {
-    return item?.fields?.settings || {...initFormValues,name: item?.handle}
+    return item?.fields?.settings || {...initFormValues, name: item?.handle};
   };
 
   const getForm = (initFormValues) => {
@@ -37,7 +37,7 @@ export default function useThemeUtils() {
         });
       },
     });
-  }
+  };
 
   const updateMetaVersion = async () => {
     const response = await fetch('/api/UpdateMetaobject', {
@@ -146,7 +146,7 @@ export default function useThemeUtils() {
     return true;
   };
 
-  const addContent = async (id:any,field:any) => {
+  const addContent = async (id: any, field: any) => {
     const response = await fetch('/api/create-metaobject', {
       method: 'POST',
       headers: {
@@ -161,12 +161,41 @@ export default function useThemeUtils() {
       fields: [
         {
           key: field,
-          value:data?.data?.metaobjectCreate?.metaobject?.id,
+          value: data?.data?.metaobjectCreate?.metaobject?.id,
         },
       ],
     });
-    setPage(nm)
-  }
+    setPage(nm);
+  };
+
+  const createTheme = async (name) => {
+    const response = await fetch('/api/create-theme', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: name,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  };
+
+  const createTemplate = async (name, theme) => {
+    const response = await fetch('/api/create-template', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: name,
+        themeId: theme,
+      }),
+    });
+    const data = await response.json();
+    return data;
+  };
 
   return {
     getFormInitValues,
@@ -176,6 +205,8 @@ export default function useThemeUtils() {
     addEditorContent,
     deleteEditorContent,
     updateMetaVersion,
-    addContent
+    addContent,
+    createTheme,
+    createTemplate,
   };
 }
