@@ -26,7 +26,6 @@ export default function ChooseTemplateForm({pageId}) {
             },
           ],
         });
-        console.log('data temp',data)
         setPage(data);
       //}
     },

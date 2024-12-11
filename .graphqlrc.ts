@@ -1,5 +1,6 @@
 import type {IGraphQLConfig} from 'graphql-config';
 import {getSchema} from '@shopify/hydrogen-codegen';
+import { ApiType, shopifyApiProject } from '@shopify/api-codegen-preset';
 
 /**
  * GraphQL Config
@@ -21,6 +22,13 @@ export default {
       schema: getSchema('customer-account'),
       documents: ['./app/graphql/customer-account/*.{ts,tsx,js,jsx}'],
     },
+
+    
+    admin: shopifyApiProject({
+			apiType: ApiType.Admin,
+			apiVersion: '2024-10',
+			documents: ['./app/graphql/admin/**/*.{ts,tsx,js,jsx}'],
+		}),
 
     // Add your own GraphQL projects here for CMS, Shopify Admin API, etc.
   },

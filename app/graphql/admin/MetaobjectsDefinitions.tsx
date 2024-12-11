@@ -1,5 +1,5 @@
 export const METAOBJECTS_DEFINITIONS =  `#graphql
-query {
+query MetaDefs {
     metaobjectDefinitions(first: 100) {
       nodes {
         name

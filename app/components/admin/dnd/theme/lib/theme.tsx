@@ -1,57 +1,6 @@
 import { generateColors } from "@mantine/colors-generator";
 import { createTheme, DEFAULT_THEME, mergeMantineTheme } from "@mantine/core";
-
-export const defaultTheme = {
-  colorScheme: 'light',
-  themes: {
-    light: {
-      bgColor: '#f8f9fa',
-      textColor: '#3b3b3b',
-    },
-    dark: {
-      bgColor: '#2e2e2e',
-      textColor: '#c9c9c9',
-    },
-  },
-  colors: {
-    primary: '#228be6',
-    accent: '#868e96',
-    negative: '#fa5252',
-    positive: '#40c057',
-    notice: '#fab005',
-    info: '#e64980',
-  },
-  fonts: {
-    bodyClass: '',
-    bodyUrl: '',
-    headingsClass: '',
-    headingsUrl: '',
-  },
-};
-
-export const defaultLayout = {
-  padding: {
-    top: 'sm',
-    bottom: 'sm',
-    left: 'sm',
-    right: 'sm',
-  },
-  logo: {
-    image: '',
-    width: '',
-  },
-  heading: {
-    text: '',
-    textSpacing: '',
-    textColor: '',
-    subText: '',
-    subTextSpacing: '',
-    subTextColor: '',
-  },
-  scrollMenu: {
-    scrollBg: '',
-  },
-};
+import { defaultTheme } from "./metaTypes";
 
 export const buildTheme = (themeSettings: any = defaultTheme) => {
   //generate colors

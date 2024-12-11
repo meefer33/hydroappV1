@@ -239,4 +239,4 @@ fragment Meta on Metaobject
         }
       }
     }
-  }` as const;
+  }` ;

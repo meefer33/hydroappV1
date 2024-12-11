@@ -50,14 +50,12 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   //get page in pages metaobject
   let getPage: any = {},
     page: any = {};
-   //console.log('debug pt',collection?.page_template)
   if (collection?.page_template?.value) {
     getPage = await admin.request(GetMetaobjectById, {
       variables: {id: collection?.page_template?.value},
     });
-    //console.log('debug',JSON.stringify(getPage))
+
     page = parser(getPage?.metaobject);
-    //console.log('debug',JSON.stringify(upsertPage))
   } else {
     //create page in pages metaobject
     const upsertPage = await admin.request(UpsertMetaobject, {
@@ -74,7 +72,6 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
         },
       },
     });
-   //console.log('debug',JSON.stringify(upsertPage))
     const pageId = upsertPage?.data?.metaobjectUpsert?.metaobject?.id;
     page = upsertPage?.data?.metaobjectUpsert?.metaobject
     //add page_template metaobject to collection
@@ -103,8 +100,6 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 export default function Collection() {
   const {collection, page} = useLoaderData<typeof loader>();
   const data = useLoaderData<typeof loader>();
-  console.log('collection', collection);
-  console.log('page', page);
 
   const {setEditorContent, editorContent}: any = useOutletContext();
   const root: any = useRouteLoaderData<RootLoader>('root');

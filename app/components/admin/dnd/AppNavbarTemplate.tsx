@@ -3,6 +3,9 @@ import {useOutletContext} from '@remix-run/react';
 import TemplateThemeForm from './forms/TemplateThemeForm';
 import DndOutline from './DndOutline';
 import ButtonAddSection from './ButtonAddSection';
+import CreateNewTemplateForm from './forms/CreateNewTemplateForm';
+import SelectTemplate from './SelectTemplate';
+import CreateNewThemeForm from './forms/CreateNewThemeForm';
 
 export default function AppNavbarTemplate({template}) {
   const {editorContent}: any = useOutletContext();
@@ -10,7 +13,12 @@ export default function AppNavbarTemplate({template}) {
   return (
     <>
       {template ? (
-        <TemplateThemeForm template={template} />
+        <>
+          <CreateNewThemeForm />
+          <SelectTemplate />
+          <CreateNewTemplateForm />
+          <TemplateThemeForm template={template} />
+        </>
       ) : (
         <>
           {/*editorContent?.id && <FormPage />*/}

@@ -11,6 +11,11 @@ import ButtonAddSection from '~/components/admin/dnd/ButtonAddSection';
 import {GetMetaobjectTypeHandle} from '~/graphql/GetMetaobjectTypeHandle';
 import {buildTheme} from '~/components/admin/dnd/theme/lib/theme';
 import EditorLayout from '~/components/admin/dnd/EditorLayout';
+import {
+  createTemplate,
+  createTheme,
+  getMetaobjectTypeHandle,
+} from '~/lib/metaLoaderUtils';
 
 export const meta: MetaFunction<typeof loader> = ({data}: any) => {
   const loadFonts = [];
@@ -33,30 +38,29 @@ export const meta: MetaFunction<typeof loader> = ({data}: any) => {
 };
 
 export const loader = async ({context, params}: LoaderFunctionArgs) => {
-  const {storefront} = context;
+  const {storefront, admin} = context;
   let handle = params['*']?.split('/').pop();
 
-  const getTemplate = await storefront.query(GetMetaobjectTypeHandle, {
-    variables: {handle: handle, type: 'templates'},
-    cache: storefront.CacheCustom({
-      mode: 'must-revalidate, no-store',
-      maxAge: 1,
-    })
+  let template = await getMetaobjectTypeHandle({
+    storefront,
+    handle: handle,
+    type: 'templates',
   });
-  if (!getTemplate?.metaobject) {
-    if(handle === 'default-template'){
-      return redirect('/setup');
+
+  if (!template?.id) {
+    if (handle === 'default-template') {
+      template = await createTemplate({admin,name:handle,themeName:'default-theme'});
+      return {template};
     }
     return redirect('/templates');
   }
 
-  const template = parser(getTemplate?.metaobject);
   return {template};
 };
 
 export default function EditContent() {
   const {template}: any = useLoaderData<typeof loader>();
-//console.log(template)
+  
   const {
     setEditorContent,
     setUpdateMetaVersionId,
@@ -66,10 +70,12 @@ export default function EditContent() {
   }: any = useOutletContext();
 
   useEffect(() => {
+    setTheme(null)
     setTheme(buildTheme(template?.fields?.theme?.fields?.theme));
     setEditorContent(template);
     setUpdateMetaVersionId(template.id);
-  }, []);
+    console.log('template', template);
+  }, [template]);
 
   return (
     <>

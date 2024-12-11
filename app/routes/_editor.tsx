@@ -28,7 +28,7 @@ export const loader = async ({context}: LoaderFunctionArgs) => {
     },
     cache: storefront.CacheCustom({
       mode: 'must-revalidate, no-store',
-      maxAge: 1,
+      maxAge: -1,
     })
   });
   let themes = parser(getThemes?.metaobjects);
@@ -42,6 +42,7 @@ export const loader = async ({context}: LoaderFunctionArgs) => {
 
 export default function Layout() {
   const {templates, themes, collections}: any = useLoaderData<typeof loader>();
+  console.log('themes',themes)
   const [theme, setTheme] = useState(null);
   const [page, setPage] = useState(null);
   const [item, setItem]: any = useState();

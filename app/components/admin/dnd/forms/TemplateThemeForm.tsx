@@ -9,6 +9,7 @@ import {buildTheme} from '../theme/lib/theme';
 import useThemeUtils from '../useEditorUtils';
 import {useEffect} from 'react';
 import { defaultTheme, DefaultTheme } from '../theme/lib/metaTypes';
+import { nanoid } from 'nanoid';
 
 export default function TemplateThemeForm({template}) {
   const {setTheme, theme}: any = useOutletContext();
@@ -16,9 +17,9 @@ export default function TemplateThemeForm({template}) {
   const tempMeta = template?.fields?.theme
   const setInitForm = theme?.other || defaultTheme
   const initFormValues:DefaultTheme = {
+    ...setInitForm,
     name:
     tempMeta?.fields?.name || tempMeta?.handle,
-    ...setInitForm,
   }
 
   const form = useForm({
@@ -43,10 +44,10 @@ export default function TemplateThemeForm({template}) {
 
   return (
     <FormProvider form={form}>
-      <form>
+      <form name={nanoid()}>
         <FieldsGroup label="Theme" isOpen={true}>
           <TextBox label="Name" field="name" />
-          <FieldsGroup label="Colors" isOpen={true}>
+          <FieldsGroup label="Colors" isOpen={false}>
             <SegmentControl
               label="Color Scheme"
               field="colorScheme"
@@ -70,7 +71,7 @@ export default function TemplateThemeForm({template}) {
             <ColorPicker label="Notice" field="colors.notice" />
             <ColorPicker label="Info" field="colors.info" />
           </FieldsGroup>
-          <FieldsGroup label="Fonts">
+          <FieldsGroup label="Fonts" isOpen={false}>
             <TextBox label="Body Class" field="fonts.bodyClass" />
             <TextBox label="Body Url" field="fonts.bodyUrl" />
             <TextBox label="Headings Class" field="fonts.headingsClass" />
