@@ -7,19 +7,17 @@ import FieldsGroup from '../fields/FieldsGroup';
 import {useOutletContext} from '@remix-run/react';
 import {buildTheme} from '../theme/lib/theme';
 import useThemeUtils from '../useEditorUtils';
-import {useEffect} from 'react';
-import { defaultTheme, DefaultTheme } from '../theme/lib/metaTypes';
 import { nanoid } from 'nanoid';
+import { DefaultTheme } from '../theme/lib/metaTypes';
 
-export default function TemplateThemeForm({template}) {
-  const {setTheme, theme}: any = useOutletContext();
+export default function ThemeForm({editTheme}) {
+  const {setTheme}: any = useOutletContext();
   const {saveMeta} = useThemeUtils();
-  const tempMeta = template?.fields?.theme
-  const setInitForm = theme?.other || defaultTheme
+  const tempMeta = editTheme?.fields?.theme
   const initFormValues:DefaultTheme = {
-    ...setInitForm,
+    ...tempMeta,
     name:
-    tempMeta?.fields?.name || tempMeta?.handle,
+    editTheme?.fields?.name || editTheme?.handle,
   }
 
   const form = useForm({
@@ -27,7 +25,7 @@ export default function TemplateThemeForm({template}) {
     initialValues: initFormValues,
     onValuesChange: (values:DefaultTheme) => {
       setTheme(buildTheme(values));
-      saveMeta(tempMeta?.id, {
+      saveMeta(editTheme?.id, {
         fields: [
           {
             key: 'name',
@@ -47,7 +45,7 @@ export default function TemplateThemeForm({template}) {
       <form name={nanoid()}>
         <FieldsGroup label="Theme" isOpen={true}>
           <TextBox label="Name" field="name" />
-          <FieldsGroup label="Colors" isOpen={false}>
+          <FieldsGroup label="Colors" isOpen={true}>
             <SegmentControl
               label="Color Scheme"
               field="colorScheme"

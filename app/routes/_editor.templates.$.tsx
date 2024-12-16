@@ -4,18 +4,12 @@ import {
   MetaFunction,
 } from '@remix-run/node';
 import {redirect, useLoaderData, useOutletContext} from '@remix-run/react';
-import {parser} from '~/lib/parseContent';
 import {useEffect} from 'react';
 import DndContent from '~/components/admin/dnd/DndContent';
 import ButtonAddSection from '~/components/admin/dnd/ButtonAddSection';
-import {GetMetaobjectTypeHandle} from '~/graphql/GetMetaobjectTypeHandle';
 import {buildTheme} from '~/components/admin/dnd/theme/lib/theme';
 import EditorLayout from '~/components/admin/dnd/EditorLayout';
-import {
-  createTemplate,
-  createTheme,
-  getMetaobjectTypeHandle,
-} from '~/lib/metaLoaderUtils';
+import {createTemplate, getMetaobjectTypeHandle} from '~/lib/metaLoaderUtils';
 
 export const meta: MetaFunction<typeof loader> = ({data}: any) => {
   const loadFonts = [];
@@ -41,46 +35,52 @@ export const loader = async ({context, params}: LoaderFunctionArgs) => {
   const {storefront, admin} = context;
   let handle = params['*']?.split('/').pop();
 
-  let template = await getMetaobjectTypeHandle({
+  let templateHandle = await getMetaobjectTypeHandle({
     storefront,
     handle: handle,
     type: 'templates',
   });
 
-  if (!template?.id) {
+  if (!templateHandle?.id) {
     if (handle === 'default-template') {
-      template = await createTemplate({admin,name:handle,themeName:'default-theme'});
-      return {template};
+      templateHandle = await createTemplate({
+        admin,
+        name: handle,
+        themeName: 'default-theme',
+      });
+      return {templateHandle};
     }
     return redirect('/templates');
   }
 
-  return {template};
+  return {templateHandle};
 };
 
 export default function EditContent() {
-  const {template}: any = useLoaderData<typeof loader>();
-  
+  const {templateHandle}: any = useLoaderData<typeof loader>();
+
   const {
     setEditorContent,
     setUpdateMetaVersionId,
     setTheme,
     theme,
     editorContent,
+    template,setTemplate,
   }: any = useOutletContext();
 
   useEffect(() => {
-    setTheme(null)
-    setTheme(buildTheme(template?.fields?.theme?.fields?.theme));
-    setEditorContent(template);
-    setUpdateMetaVersionId(template.id);
-    console.log('template', template);
-  }, [template]);
+    //setTheme(null);
+    setTheme(buildTheme(templateHandle?.fields?.theme?.fields?.theme));
+    setEditorContent(templateHandle);
+    setUpdateMetaVersionId(templateHandle.id);
+    setTemplate(templateHandle)
+    console.log('template', templateHandle);
+  }, [templateHandle]);
 
   return (
     <>
-      {theme && (
-        <EditorLayout template={template}>
+      {template && (
+        <EditorLayout type="template">
           <DndContent
             content={editorContent?.fields?.top?.fields?.content}
             id={editorContent?.fields?.top?.id}

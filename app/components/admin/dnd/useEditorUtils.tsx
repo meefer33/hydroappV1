@@ -128,7 +128,7 @@ export default function useThemeUtils() {
     closeModal();
   };
 
-  const deleteEditorContent = async (id: any) => {
+  const deleteMetaobject = async (id: any) => {
     setItem(null);
     const response = await fetch('/api/delete-metaobject', {
       method: 'POST',
@@ -141,8 +141,10 @@ export default function useThemeUtils() {
     });
 
     await response.json();
-    const data: any = await updateMetaVersion();
-    setEditorContent(data);
+    if (updateMetaVersionId) {
+      const data: any = await updateMetaVersion();
+      setEditorContent(data);
+    }
     return true;
   };
 
@@ -171,6 +173,7 @@ export default function useThemeUtils() {
   const createTheme = async (name) => {
     const response = await fetch('/api/create-theme', {
       method: 'POST',
+      cache: "no-store",
       headers: {
         'Content-Type': 'application/json',
       },
@@ -185,6 +188,7 @@ export default function useThemeUtils() {
   const createTemplate = async (name, theme) => {
     const response = await fetch('/api/create-template', {
       method: 'POST',
+      cache: "no-store",
       headers: {
         'Content-Type': 'application/json',
       },
@@ -197,16 +201,23 @@ export default function useThemeUtils() {
     return data;
   };
 
+  const getMetatype = async (type) => {
+    const response = await fetch(`/api/get-metatype/${type}`, {cache: "no-store"});
+    const data = await response.json();
+    return data;
+  }
+
   return {
     getFormInitValues,
     getForm,
     saveMeta,
     saveContent,
     addEditorContent,
-    deleteEditorContent,
+    deleteMetaobject,
     updateMetaVersion,
     addContent,
     createTheme,
     createTemplate,
+    getMetatype
   };
 }

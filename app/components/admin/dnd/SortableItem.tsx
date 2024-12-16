@@ -27,7 +27,7 @@ export default function SortableItem({id, type, data}: any) {
     useSortable({id});
   const {item, setItem, selectedItem, setSelectedItem}: any =
     useOutletContext();
-  const {deleteEditorContent} = useThemeUtils();
+  const {deleteMetaobject} = useThemeUtils();
   //const {hovered, ref} = useHover();
   const [hoveredItem, setHoveredItem] = useState(false);
   return (
@@ -80,7 +80,7 @@ export default function SortableItem({id, type, data}: any) {
             color="negative"
             size="xs"
             onClick={() => {
-              deleteEditorContent(data.id);
+              deleteMetaobject(data.id);
             }}
           >
             <RiDeleteBinLine size="16" />

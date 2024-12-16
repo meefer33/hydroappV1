@@ -7,6 +7,22 @@ import {GetMetaobjectById} from '~/graphql/GetMetaobjectById';
 import {UpsertMetaobject} from '~/graphql/admin/UpsertMetaobject';
 import {CollectionUpdate} from '~/graphql/admin/CollectionUpdate';
 import {PageUpdate} from '~/graphql/admin/PageUpdate';
+import { GetMetaobjectsByType } from '~/graphql/GetMetaobjectsByType';
+
+export const getMetaobjectsByType = async ({storefront,type}:any) => {
+  const meta = await storefront.query(GetMetaobjectsByType, {
+    variables: {
+      type: type,
+    },
+    cache: storefront.CacheCustom({
+      mode: 'must-revalidate, no-store',
+      maxAge: 0,
+      sMaxAge: 0
+    })
+  });
+  console.log(JSON.stringify(meta))
+  return parser(meta?.metaobjects);
+}
 
 //get default template
 export const getMetaobjectTypeHandle = async ({

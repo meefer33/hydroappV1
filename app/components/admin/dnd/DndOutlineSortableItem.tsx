@@ -26,7 +26,7 @@ export default function DndOutlineSortableItem({id, type, data}: any) {
     useSortable({id});
   const {item, setItem, selectedItem, setSelectedItem}: any =
     useOutletContext();
-  const {deleteEditorContent} = useThemeUtils();
+  const {deleteMetaobject} = useThemeUtils();
   const [hoveredItem, setHoveredItem] = useState(false);
   return (
     <Box
@@ -93,7 +93,7 @@ export default function DndOutlineSortableItem({id, type, data}: any) {
             color="red"
             size="xs"
             onClick={() => {
-              deleteEditorContent(data.id);
+              deleteMetaobject(data.id);
             }}
           >
             {hoveredItem ? <RiDeleteBinLine size="16" /> : ''}

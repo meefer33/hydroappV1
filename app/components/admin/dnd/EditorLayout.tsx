@@ -20,16 +20,18 @@ import {getCssResolve} from './theme/lib/theme';
 import useThemeUtils from './useEditorUtils';
 import AppNavbarPage from './AppNavbarPage';
 import AppNavbarTemplate from './AppNavbarTemplate';
+import AppNavbarTheme from './AppNavbarTheme';
+import ThemeForm from './forms/ThemeForm';
 
 export default function EditorLayout({
-  template = {},
   type = 'template',
   pageId = '',
+  editTheme = {},
   children,
 }) {
   const root: any = useRouteLoaderData<RootLoader>('root');
 
-  const {theme, editorContent, viewport, setViewport, templates}: any =
+  const {theme, editorContent, viewport, setViewport, templates, template}: any =
     useOutletContext();
 
   const [mobileOpened, {toggle: toggleMobile}] = useDisclosure();
@@ -108,9 +110,11 @@ export default function EditorLayout({
             {type === 'page' && (
               <AppNavbarPage pageId={pageId}/>
             )}
-
+            {type === 'theme' && (
+              <AppNavbarTheme editTheme={editTheme}/>
+            )}
             {type === 'template' && (
-              <AppNavbarTemplate template={template}/>
+              <AppNavbarTemplate/>
             )}
           </AppShell.Navbar>
           <AppShell.Main>
@@ -130,6 +134,7 @@ export default function EditorLayout({
           </AppShell.Main>
           <AppShell.Aside p="0" component={ScrollArea} bg="gray.3" c="dark">
             <ShowForm />
+            {type === 'theme' && (<ThemeForm editTheme={editTheme} />)}
           </AppShell.Aside>
         </AppShell>
       </Aside.Provider>

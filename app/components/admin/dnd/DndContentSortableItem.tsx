@@ -25,7 +25,7 @@ export default function DndContentSortableItem({id, type, data}: any) {
     setMetaData,
     theme,
   }: any = useOutletContext();
-  const {deleteEditorContent} = useThemeUtils();
+  const {deleteMetaobject} = useThemeUtils();
   const {hovered, ref} = useHover();
   const {ref: refel, width, height} = useElementSize();
 
@@ -158,7 +158,7 @@ export default function DndContentSortableItem({id, type, data}: any) {
                   size="lg"
                   aria-label="Likes"
                   onClick={() => {
-                    deleteEditorContent(data.id);
+                    deleteMetaobject(data.id);
                   }}
                 >
                   <RiDeleteBinLine size="18" />

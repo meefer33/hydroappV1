@@ -1,4 +1,4 @@
-import {type UIMatch, Link, useMatches} from '@remix-run/react';
+import {type UIMatch, Link, useMatches, useOutletContext} from '@remix-run/react';
 import {
   ActionIcon,
   Anchor,
@@ -20,6 +20,7 @@ export function DashboardLayout({children = null}: {children: any}) {
   const {setColorScheme, toggleColorScheme} = useMantineColorScheme();
 
   return (
+    <>
     <AppShell
       navbar={{width: 200, breakpoint: 'sm', collapsed: {mobile: !opened}}}
       padding="sm"
@@ -60,5 +61,6 @@ export function DashboardLayout({children = null}: {children: any}) {
         <Box p="sm">{children}</Box>
       </AppShell.Main>
     </AppShell>
+    </>
   );
 }

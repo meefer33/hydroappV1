@@ -5,15 +5,15 @@ import FieldsGroup from '../fields/FieldsGroup';
 import {useNavigate, useOutletContext} from '@remix-run/react';
 import useThemeUtils from '../useEditorUtils';
 
-export default function CreateNewThemeForm() {
-  const {themes, setThemes}: any = useOutletContext();
-  const {createTheme, getMetatype} = useThemeUtils();
+export default function EditThemeFormAdmin() {
+  const {themes, setThemes, metaData,closeModal}: any = useOutletContext();
+  const {saveContent} = useThemeUtils();
   const navigate = useNavigate();
 
   const form = useForm({
     mode: 'controlled',
     initialValues: {
-      name: '',
+      name: metaData?.fields.name,
     },
     validate: {
       name: (value) =>
@@ -24,15 +24,28 @@ export default function CreateNewThemeForm() {
   });
 
   const onHandleSubmit = async (values: any) => {
-    const newTheme: any = await createTheme(values.name);
-    setThemes([...themes,newTheme]);
-    form.reset();
+    const updateTheme = await saveContent(metaData?.id, {
+      fields: [
+        {
+          key: 'name',
+          value: values.name,
+        },
+      ],
+    });
+    const newThemes = themes.map((theme)=>{
+      if(theme.id === metaData?.id){
+        return updateTheme
+      }
+      return theme
+    })
+    setThemes([...newThemes]);
+    closeModal();
   };
 
   return (
     <FormProvider form={form}>
       <form onSubmit={form.onSubmit(onHandleSubmit)}>
-        <FieldsGroup label="Create New Theme" isOpen={false}>
+        <FieldsGroup label="Edit Theme" isOpen={true}>
           <TextBox label="Theme Name" field="name" />
           <Button type="submit" color="gray.7">
             Submit

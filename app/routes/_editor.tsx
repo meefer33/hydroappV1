@@ -5,44 +5,29 @@ import {useState} from 'react';
 import {GetMetaobjectsByType} from '~/graphql/GetMetaobjectsByType';
 import {GetCollections} from '~/graphql/GetCollections';
 import {parser} from '~/lib/parseContent';
+import { getMetaobjectsByType } from '~/lib/metaLoaderUtils';
 
 export const loader = async ({context}: LoaderFunctionArgs) => {
   const {admin, storefront} = context;
 
   //get all templates
-  const getTemplates = await storefront.query(GetMetaobjectsByType, {
-    variables: {
-      type: 'templates',
-    },
-    cache: storefront.CacheCustom({
-      mode: 'must-revalidate, no-store',
-      maxAge: 1,
-    })
-  });
-  let templates = parser(getTemplates?.metaobjects);
+  const getTemplates = await getMetaobjectsByType({storefront,type:'templates'});
 
   //get all themes
-  const getThemes = await storefront.query(GetMetaobjectsByType, {
-    variables: {
-      type: 'themes',
-    },
-    cache: storefront.CacheCustom({
-      mode: 'must-revalidate, no-store',
-      maxAge: -1,
-    })
-  });
-  let themes = parser(getThemes?.metaobjects);
+  const getThemes = await getMetaobjectsByType({storefront,type:'themes'});
 
   //get all collections
   const getCollections = await storefront.query(GetCollections);
   const collections = parser(getCollections?.collections);
 
-  return {templates, themes, collections};
+  return {getTemplates, getThemes, collections};
 };
 
 export default function Layout() {
-  const {templates, themes, collections}: any = useLoaderData<typeof loader>();
-  console.log('themes',themes)
+  const {getTemplates, getThemes, collections}: any = useLoaderData<typeof loader>();
+  const [templates,setTemplates] = useState(getTemplates)
+  const [template,setTemplate] = useState(null)
+  const [themes,setThemes] = useState(getThemes)
   const [theme, setTheme] = useState(null);
   const [page, setPage] = useState(null);
   const [item, setItem]: any = useState();
@@ -57,7 +42,11 @@ export default function Layout() {
     <Outlet
       context={{
         templates,
+        setTemplates,
+        template,
+        setTemplate,
         themes,
+        setThemes,
         collections,
         theme,
         setTheme,

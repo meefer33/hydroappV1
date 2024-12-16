@@ -12,7 +12,7 @@ import {defaultTheme, DefaultTheme} from '../theme/lib/metaTypes';
 import SelectBox from '../fields/SelectBox';
 
 export default function CreateNewTemplateForm() {
-  const {themes}: any = useOutletContext();
+  const {themes,templates,setTemplates}: any = useOutletContext();
   const {createTemplate} = useThemeUtils();
   const navigate = useNavigate();
   
@@ -23,7 +23,7 @@ export default function CreateNewTemplateForm() {
   selectThemeList.push({value: '0', label: 'New Theme'});
 
   const form = useForm({
-    mode: 'uncontrolled',
+    mode: 'controlled',
     //initialValues: initFormValues,
     validate: {
       name: (value) =>  (/^[A-Za-z0-9 ]+(?:-[A-Za-z0-9 ]+)*$/.test(value)) ? null : 'Template name is not a valid slug' ,
@@ -32,7 +32,8 @@ export default function CreateNewTemplateForm() {
 
   const onHandleSubmit = async (values:any) => {
     const newTemplate:any = await createTemplate(values.name,values.theme)
-    return navigate(`/templates/${newTemplate?.handle}`)
+    setTemplates([...templates,newTemplate]);
+    form.reset();
   };
 
   return (
