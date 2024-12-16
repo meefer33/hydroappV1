@@ -36,8 +36,8 @@ export default function DashboardMainMenu() {
       />
       <Mnav
         component={NavLink}
-        to="/admin/layouts"
-        label="Layouts"
+        to="/admin/templates"
+        label="Templates"
         leftSection={<RiLayoutFill size="1.5rem" />}
         variant="light"
         fz="xl"

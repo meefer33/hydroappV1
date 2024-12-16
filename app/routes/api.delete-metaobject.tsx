@@ -9,7 +9,7 @@ export async function action({request, context}: ActionFunctionArgs) {
   const response = await admin.request(DeleteMetaobject, {
     variables: {
       id: data.id,
-    },
+    }
   });
 
   return response;

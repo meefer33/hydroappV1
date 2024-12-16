@@ -1,23 +1,30 @@
-import {Box} from '@mantine/core';
-import {useOutletContext} from '@remix-run/react';
-import TemplateThemeForm from './forms/TemplateThemeForm';
+import {Box, Button, Stack} from '@mantine/core';
+import {Link, useOutletContext} from '@remix-run/react';
 import DndOutline from './DndOutline';
 import ButtonAddSection from './ButtonAddSection';
-import CreateNewTemplateForm from './forms/CreateNewTemplateForm';
 import SelectTemplate from './SelectTemplate';
-import CreateNewThemeForm from './forms/CreateNewThemeForm';
+import ThemeFormTemplate from './forms/ThemeFormTemplate';
+import EditTemplateFormEditor from './forms/EditTemplateFormEditor';
 
-export default function AppNavbarTemplate({template}) {
-  const {editorContent}: any = useOutletContext();
+export default function AppNavbarTemplate() {
+  const {editorContent, template}: any = useOutletContext();
+
+  console.log('template', template);
 
   return (
     <>
       {template ? (
         <>
-          <CreateNewThemeForm />
-          <SelectTemplate />
-          <CreateNewTemplateForm />
-          <TemplateThemeForm template={template} />
+          <Stack gap="sm" p="sm">
+            <Button component={Link} to="/admin/templates" color="gray.7">
+              Manage Templates
+            </Button>
+            <Box bg="gray.0">
+              <SelectTemplate />
+            </Box>
+            <EditTemplateFormEditor />
+          </Stack>
+          <ThemeFormTemplate />
         </>
       ) : (
         <>
